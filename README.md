@@ -29,6 +29,9 @@ We are grateful to:
  - NLnet Foundation's sponsorship (https://nlnet.nl), which opened the gates for working on this novel gateware for video security and openXC7 enhancements
 
     ![logo_nlnet](https://github.com/chili-chips-ba/openeye/assets/67533663/18e7db5c-8c52-406b-a58e-8860caa327c2)
+
+    ![NGI0Entrust_tag](https://github.com/chili-chips-ba/openeye/assets/67533663/19e919e3-6888-43e8-88b3-0a2ff447a80b)
+
    
  - StereoNinjaFPGA (https://github.com/StereoNinja/StereoNinjaFPGA), whose pioneering work has set the stage for this major expansion
 
