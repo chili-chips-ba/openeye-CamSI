@@ -1,0 +1,10 @@
+*.*~
+*.bak
+*.log
+
+*output*
+
+#*impl*
+*pnr*
+*temp*
+

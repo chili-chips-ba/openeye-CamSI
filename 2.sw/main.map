@@ -1,0 +1,96 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x0000000000100000 0x0000000000400000 xr
+RAM              0x0000000000000000 0x0000000000008000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+
+.text           0x0000000000100000     0x4380
+                0x0000000000100000                . = ALIGN (0x4)
+ *(.text)
+ .text          0x0000000000100000       0xd4 /tmp/cctP5Rbt.o
+ .text          0x00000000001000d4     0x40e4 /tmp/cc98f0vv.o
+                0x00000000001026f8                DrawDigit
+                0x0000000000102e3c                DisplayScore
+                0x0000000000103440                xorshift32
+                0x00000000001034bc                generateRandomBinary
+                0x00000000001034ec                generateRandomNumber
+                0x0000000000103550                main
+ .text          0x00000000001041b8      0x120 /tmp/cc4DAriw.o
+                0x00000000001041b8                putchar
+                0x0000000000104208                print
+                0x000000000010425c                print_hex
+ *(.text*)
+ *(.rodata)
+ .rodata        0x00000000001042d8       0x93 /tmp/cc98f0vv.o
+ *fill*         0x000000000010436b        0x1 
+ .rodata        0x000000000010436c       0x11 /tmp/cc4DAriw.o
+ *(.rodata*)
+ *(.srodata)
+ *(.srodata*)
+                0x0000000000104380                . = ALIGN (0x4)
+ *fill*         0x000000000010437d        0x3 
+                0x0000000000104380                _etext = .
+                0x0000000000104380                _sidata = _etext
+
+.rela.dyn       0x0000000000104380        0x0
+ .rela.text     0x0000000000104380        0x0 /tmp/cctP5Rbt.o
+
+.data           0x0000000000000000       0x7c load address 0x0000000000104380
+                0x0000000000000000                . = ALIGN (0x4)
+                0x0000000000000000                _sdata = .
+                0x0000000000000000                _ram_start = .
+                0x0000000000000000                . = ALIGN (0x4)
+ *(.data)
+ .data          0x0000000000000000        0x0 /tmp/cctP5Rbt.o
+ .data          0x0000000000000000       0x70 /tmp/cc98f0vv.o
+ .data          0x0000000000000070        0x0 /tmp/cc4DAriw.o
+ *(.data*)
+ *(.sdata)
+ .sdata         0x0000000000000070        0xc /tmp/cc98f0vv.o
+ *(.sdata*)
+                0x000000000000007c                . = ALIGN (0x4)
+                0x000000000000007c                _edata = .
+
+.bss            0x000000000000007c      0x4b4 load address 0x00000000001043fc
+                0x000000000000007c                . = ALIGN (0x4)
+                0x000000000000007c                _sbss = .
+ *(.bss)
+ .bss           0x000000000000007c        0x0 /tmp/cctP5Rbt.o
+ .bss           0x000000000000007c      0x4b0 /tmp/cc98f0vv.o
+ .bss           0x000000000000052c        0x0 /tmp/cc4DAriw.o
+ *(.bss*)
+ *(.sbss)
+ .sbss          0x000000000000052c        0x1 /tmp/cc98f0vv.o
+                0x000000000000052c                buttons
+ *(.sbss*)
+ *(COMMON)
+                0x0000000000000530                . = ALIGN (0x4)
+ *fill*         0x000000000000052d        0x3 
+                0x0000000000000530                _ebss = .
+
+.heap           0x0000000000000530        0x0
+                0x0000000000000530                . = ALIGN (0x4)
+                0x0000000000000530                _heap_start = .
+LOAD /tmp/cctP5Rbt.o
+LOAD /tmp/cc98f0vv.o
+LOAD /tmp/cc4DAriw.o
+OUTPUT(main.elf elf32-littleriscv)
+
+.riscv.attributes
+                0x0000000000000000       0x21
+ .riscv.attributes
+                0x0000000000000000       0x1f /tmp/cctP5Rbt.o
+ .riscv.attributes
+                0x000000000000001f       0x21 /tmp/cc98f0vv.o
+ .riscv.attributes
+                0x0000000000000040       0x21 /tmp/cc4DAriw.o
+
+.comment        0x0000000000000000       0x15
+ .comment       0x0000000000000000       0x15 /tmp/cc98f0vv.o
+                                         0x16 (size before relaxing)
+ .comment       0x0000000000000015       0x16 /tmp/cc4DAriw.o

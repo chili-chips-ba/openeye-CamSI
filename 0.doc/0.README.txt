@@ -1,0 +1,27 @@
+Our Inspiration:
+   https://github.com/StereoNinja/StereoNinjaFPGA
+   
+---------------------------------------------------------------
+Our Cards:
+  
+  Carrier
+    https://shop.trenz-electronic.de/de/TEB0707-02-Trenz-Electronic-4-x-5-Modul-Carrier-fuer-CRUVI-Erweiterungsboards
+
+  FPGA-SOM
+    https://shop.trenz-electronic.de/de/TE0711-01-35-2C-High-IO-AMD-Artix-7-35T-Module-mit-Speedgrade-2C-und-USB
+
+Trenz support:
+   antti.lukats@trenz-electronic.de
+   support@trenz-electronic.de
+
+---------------------------------------------------------------
+Our 4-lane sensor
+   https://www.willwhang.dev/OneInchEye
+
+Our RPI camera
+   https://docs.arducam.com/Raspberry-Pi-Camera/Native-camera/16MP-IMX519/
+
+---------------------------------------------------------------
+Migen + Proprietary PHY
+   https://antmicro.com/blog/2023/10/fully-open-source-fpga-design-for-sdi-mipi-video-converter
+---------------------------------------------------------------
