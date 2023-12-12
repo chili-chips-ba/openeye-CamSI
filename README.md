@@ -18,7 +18,7 @@ It is important to emphasize that, in its current state, our tool is still rathe
 
 Luckily, another project is underway with goal to tackle this major STA gap. Sadly, this enhancement won't be ready in time for our Phase1. 
 
-We therefore have Phase2 and, as needed, Phase3 in the plans, looking to be the first to try this new timing prowess in open-source Xilinx tools, squeezing the ultimate performance from our image sensor with it. We may at that time introduce some image processing complexities, such as video compression, to allow passing higher-res content through the same old 1Gbps Ethernet link. 
+We therefore have Phase2 and, as needed, Phase3 in the plans, looking to be the first to try this new timing prowess in open-source Xilinx tools, using it to squeeze the Fmax performance from our FPGA and camera chip. We may at that time introduce some image processing, such as video compression, to allow passing higher-res content through the same old 1Gbps Ethernet link. 
 
 To create the starter design framework for our target boards will also require a good amount of work. The boards we've selected for the project are rather unpopular, hardly used in the open-source community, and don't come with support collateral that developers are accustomed to. Still, since they are an EU product, this extra effort is for a good cause, to increase their visibility and introduce them to the open makers.
       ![our-board](https://github.com/chili-chips-ba/openeye/assets/67533663/12fe4ac5-299f-4040-aa67-dc022124908a)
