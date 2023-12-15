@@ -21,7 +21,23 @@ Our 4-lane sensor
 Our RPI camera
    https://docs.arducam.com/Raspberry-Pi-Camera/Native-camera/16MP-IMX519/
 
+Person working with IMX283 sensor
+   https://x.com/kieranbingham/status/1720936625725677835?s=20
+
 ---------------------------------------------------------------
-Migen + Proprietary PHY
+Migen + Proprietary D-PHY
    https://antmicro.com/blog/2023/10/fully-open-source-fpga-design-for-sdi-mipi-video-converter
+---------------------------------------------------------------
+
+Xilinx I/OSERDESE2 examples:
+ 
+1) LiteDRAM: https://github.com/enjoy-digital/litedram/blob/master/litedram/phy/s7ddrphy.py
+
+2) HDMI Core: https://github.com/litex-hub/litevideo/blob/master/litevideo/output/hdmi/s7.py
+
+Hans: Both of those cores have been tested working. I did not do any Fmax tests. Your mileage may vary.
+---------------------------------------------------------------
+
+@Yimin Gu made a CRUVI to Flatflex adapter for the Oneincheye sensor.
+BEWARE: This adapter was never used / tested, and it could be buggy.
 ---------------------------------------------------------------
