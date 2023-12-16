@@ -10,6 +10,25 @@ Our Cards:
   FPGA-SOM
     https://shop.trenz-electronic.de/de/TE0711-01-35-2C-High-IO-AMD-Artix-7-35T-Module-mit-Speedgrade-2C-und-USB
 
+  CRUVI PSRAM extension board
+    https://shop.trenz-electronic.de/en/CR00045-01-0-CRUVI-AP-Memory-x8/x16-Xccela-PSRAM-Board
+
+  CRUVI breakout for debug
+    https://shop.trenz-electronic.de/en/CR00026-01-A-CRUVI-Signal-breakout-debug-adapter
+
+  CRUVI 1000/100/100 Ethernet PHY
+    https://shop.trenz-electronic.de/en/CR00200-01-CRUVI-HS-Ethernet-PHY-Adapter
+
+  CRUVI Loopback Board
+    https://shop.trenz-electronic.de/en/CR00091-01-CRUVI-Loopback-adapter
+
+  CRUVI CSI Camera (pinout for RPi Camera)
+    https://vhdplus.com/docs/components/overview/#camera-extension
+
+  CRUVI IAS Camera (for OnSemi Camera)
+    https://vhdplus.com/docs/components/overview/#ias-camera-extension
+
+
 Trenz support:
    antti.lukats@trenz-electronic.de
    support@trenz-electronic.de
@@ -18,8 +37,8 @@ Trenz support:
 Our 4-lane sensor
    https://www.willwhang.dev/OneInchEye
 
-Our RPI camera
-   https://docs.arducam.com/Raspberry-Pi-Camera/Native-camera/16MP-IMX519/
+Our RPI camera - ArduCam IMX519
+   https://docs.arducam.com/Raspberry-Pi-Camera/Native-camera/16MP-IMX519
 
 Person working with IMX283 sensor
    https://x.com/kieranbingham/status/1720936625725677835?s=20
