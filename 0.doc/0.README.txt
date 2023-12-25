@@ -34,13 +34,12 @@ Trenz support:
    support@trenz-electronic.de
 
 ---------------------------------------------------------------
-Our 4-lane sensor
-   https://www.willwhang.dev/OneInchEye
-
-Our RPI camera - ArduCam IMX519
+Our 2-lane 16MP RPI camera - ArduCam IMX519
    https://docs.arducam.com/Raspberry-Pi-Camera/Native-camera/16MP-IMX519
+   https://www.raspberrypi.com/documentation/computers/raspberry-pi-5.html#using-non-raspberry-pi-devices
 
-Person working with IMX283 sensor
+Our 4-lane sensor: IMX283
+   https://www.willwhang.dev/OneInchEye
    https://x.com/kieranbingham/status/1720936625725677835?s=20
 
 ---------------------------------------------------------------
