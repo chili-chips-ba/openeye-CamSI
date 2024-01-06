@@ -1,6 +1,8 @@
 # OpenEye-CSI 
 # * WORK IN PROGRESS * UNDER CONSTRUCTION *
-# * DONT EXPECT THE CHECKED-IN DESIGN FILES TO DO WHAT THEY SAY WHILE THIS NOTICE IS PRESENT *
+<b><u>* DONT EXPECT THE CHECKED-IN DESIGN, SIM, OR ANY OTHER FILES TO DO WHAT THEY SAY WHILE THIS NOTICE IS PRESENT *</b></u>
+<b>_____________________________________________________________________________________________________________________________________________</b>
+
 Our OpenEye-CSI is about making a truly open-source (hence accessible and trustworthy), <b>C</b>amera <b>S</b>erial <b>I</b>nterface (CSI) for a hi-res image sensor from Sony. Our goal is to do it with a mature and affordable Series7 (Artix7) FPGA, without resorting to the Multi-Gigabit Transceivers (MGT, aka "full/analog SerDes"). Instead, we intend to implement it with a much simpler <b>IOSERDES</b> primitive, which is available in all IOBs, and already supported by open-source implementation tools for Xilinx devices. 
 
 As a matter of fact, we intend to utilize openXC7 (https://github.com/openXC7) toolkit, including its web-based CI/CD flow that's currently in development. That's both for the security of images taken by our CSI interface, and to help openXC7 attain the level of robustness found in the commercial / proprietary CAE tools. In that sense, OpenEye-CSI is the continuation of our TetriSaraj (https://github.com/chili-chips-ba/openXC7-TetriSaraj), which was the first openXC7 test case for a design more complex than a mere blinky. 
