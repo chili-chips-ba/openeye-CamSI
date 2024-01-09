@@ -1,6 +1,6 @@
 # OpenEye-CSI 
 ## * WORK IN PROGRESS * UNDER CONSTRUCTION *
-><b>* WHILE THIS NOTICE IS PRESENT, DON'T EXPECT DESIGN, SIM, OR ANY OTHER FILE IN HERE 2BE DOIN' WHAT THEY'RE SAYIN' *</b>
+><b>* WHILE THIS NOTICE IS PRESENT, DON'T EXPECT DESIGN, SIM, OR ANY OTHER FILE IN HERE 2BE DOIN' WHAT IT'S SAYIN' *</b>
 
 Our OpenEye-CSI is about making a truly open-source (hence accessible and trustworthy), <b>C</b>amera <b>S</b>erial <b>I</b>nterface (CSI) for a hi-res image sensor from Sony. Our goal is to do it with a mature and affordable Series7 (Artix7) FPGA, without resorting to the Multi-Gigabit Transceivers (MGT, aka "full/analog SerDes"). Instead, we intend to implement it with a much simpler <b>IOSERDES</b> primitive, which is available in all IOBs, and already supported by open-source implementation tools for Xilinx devices. 
 
