@@ -59,3 +59,11 @@ Hans: Both of those cores have been tested working. I did not do any Fmax tests.
 @Yimin Gu made a CRUVI to Flatflex adapter for the Oneincheye sensor.
 BEWARE: This adapter was never used / tested, and it could be buggy.
 ---------------------------------------------------------------
+
+Sonix WebCam chip
+   https://www.sonix.com.tw/article-en-995-7860
+---------------------------------------------------------------
+
+Good ISP Read:
+   https://www.eecs.yorku.ca/~mbrown/ICCV19_Tutorial_MSBrown.pdf
+---------------------------------------------------------------
