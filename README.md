@@ -17,7 +17,7 @@ The VLC (https://www.videolan.org) is to be hosted on a PC with standard LCD mon
 
 Essentially, the plan and objective for the first phase is to <b>resolve the fundamental challenges of working with IOSERDES and openXC7 at higher frequencies</b>. 
 
-It is important to emphasize that, in its current state, our tool is still rather immature, without even the basic timing awareness, yet alone timing-driven optimizations -- <b>As-is openXC7 is simply not adequate for proper timing closure</b>. While another project is underway aiming to bridge this major STA gap, this enhancement won't be ready in time for our Phase1. 
+It is important to emphasize that, in its current state, our tool is still rather immature, without even the basic timing awareness, yet alone timing-driven optimizations -- <b>As-is openXC7 is simply not adequate for proper timing closure</b>. While another project is underway, aiming to bridge this major STA gap, it won't be ready in time for our Phase1. 
 
 We therefore have Phase2 and, as needed, Phase3 in the plans, looking to be the first to try this new timing prowess in open-source tools for Xilinx FPGAs, using it to squeeze most Fmax from our target device and camera chips. We may at that time introduce some image processing, such as video compression, to allow passing higher-rez content through the same old 1Gbps Ethernet link. 
 
