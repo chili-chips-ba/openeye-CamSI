@@ -1,6 +1,7 @@
-Our Inspiration:
+Our Inspirations:
    https://github.com/StereoNinja/StereoNinjaFPGA
-   
+   https://github.com/ryuz/jelly/blob/master/projects/zybo_z7/zybo_z7_imx219/README.md   
+
 ---------------------------------------------------------------
 Our Cards:
   
