@@ -1,4 +1,4 @@
-#___CPLD Design Descriptio:
+#___CPLD Design Description:
 https://wiki.trenz-electronic.de/display/PD/TEB0707+MAX10+CPLD
 
 
@@ -8,3 +8,4 @@ https://wiki.trenz-electronic.de/display/PD/TEB0707+CPLD+Firmware
 
 #___Sources were downloaded from:
 https://shop.trenz-electronic.de/en/TEB0707-02-Trenz-Electronic-4-x-5-Module-Carrier-for-CRUVI-Extension-Boards?path=Trenz_Electronic/Modules_and_Module_Carriers/4x5/4x5_Carriers/TEB0707/REV02/Firmware
+
