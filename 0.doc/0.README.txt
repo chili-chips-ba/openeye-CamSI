@@ -25,6 +25,8 @@ Our Cards:
 
   CRUVI CSI Camera (pinout for RPi Camera)
     https://vhdplus.com/docs/components/overview/#camera-extension
+    https://vhdplus.com/docs/components/camera
+    for questions please use sales@vhdplus.com
 
   CRUVI IAS Camera (for OnSemi Camera)
     https://vhdplus.com/docs/components/overview/#ias-camera-extension
