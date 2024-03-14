@@ -5,11 +5,11 @@
 //----------------------------------------------------------------------------------
 
 module fpga_pll (
-   input  logic clk_in,   // 200MHz
+   input  logic clk_in,   // 100MHz
 
    output logic srst_n,
    output logic clk_out0, // 228MHz
-   output logic clk_out1  // 200MHz
+   output logic clk_out1  // 200MHz (for IDELAY REFCLK)
 );
 
    logic pll_lock;
