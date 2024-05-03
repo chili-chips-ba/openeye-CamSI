@@ -27,7 +27,7 @@ To create the starter design for our target boards will also require a fair amou
 **First work package**
 In this first work package, we are using the system shown in the image:
 
-![test slika](Images\system_no_background.png)
+![test slika](Images/system_no_background.png)
 
 In the image, there is a Trenz carrier board, a Trenz 4x5 SoM with Artix-7 FPGA and WHDPlus HDMI + CSI Camera adapter, and lastly, there is a Raspberry Pi camera V2 module.
 
