@@ -22,7 +22,6 @@ It is important to emphasize that, in its current state, our tool is still rathe
 We therefore have Phase2 and, as needed, Phase3 in the plans, looking to be the first to try this new timing prowess in open-source tools for Xilinx FPGAs, using it to squeeze most Fmax from our target device and camera chips. We may at that time introduce some image processing, such as video compression, to allow passing higher-rez content through the same old 1Gbps Ethernet link. 
 
 To create the starter design for our target boards will also require a fair amount of work. The boards we've selected for the project are hardly used in the open-source community, and don't come with support collateral that developers are accustomed to. Still, since they are an EU product, this extra effort is for a good cause, to increase their visibility and introduce them to the open makers.
-      ![our-board](https://github.com/chili-chips-ba/openeye/assets/67533663/12fe4ac5-299f-4040-aa67-dc022124908a)
 
 **First work package**
 In this first work package, we are using the system shown in the image:
