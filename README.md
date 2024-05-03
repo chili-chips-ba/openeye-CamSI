@@ -13,8 +13,7 @@ Our stated deliverable is to:
 
 The VLC (https://www.videolan.org) is to be hosted on a PC with standard LCD monitor. We intend to demo it at Maker Faire Wien + Sarajevo 2024, and elsewhere.                
 
-   ![OpenEye](https://github.com/chili-chips-ba/openeye/assets/67533663/07cb0f47-c9c7-483e-a028-0066342f5023)
-
+<img src="[Resistors_on_VHDPlus.jpg](https://github.com/chili-chips-ba/openeye/assets/67533663/07cb0f47-c9c7-483e-a028-0066342f5023)" width="250">
 Essentially, the plan and objective for the first phase is to <b>resolve the fundamental challenges of working with IOSERDES and openXC7 at higher frequencies</b>. 
 
 It is important to emphasize that, in its current state, our tool is still rather immature, without even the basic timing awareness, yet alone timing-driven optimizations -- <b>As-is openXC7 is simply not adequate for proper timing closure</b>. While another project is underway, aiming to bridge this major STA gap, it won't be ready in time for our Phase1. 
@@ -42,12 +41,12 @@ Test pattern image 720p@60Hz:
 
 ### *Camera Configuration*
 There are plenty of configurabile registers on the IMX219 camera sensor. On the issue **add issue** you can see what registers we configured in order to make whole system works as expected. Camera is configured to output 720p@60Hz, but in order to configure registers of the camera sensor, I2C comunication protcol was written and the nex image shows some data beenig written on the camera sensor.
-<img src="I2C_sim.png" width="500">
+<img src="I2C_sim.png" width="700">
 ### *Image acquisition*
 Sony [IMX219](0.doc/Sensor.2-lane.RPi2.1/IMX219PQ.Datasheet.pdf) camera sensor is used for Image acquisition. Camera sensor is connected with FPGA with a flex cable through [VHDPlus](https://vhdplus.com/docs/components/camera/) CRUVI module. 
 
-On the VHDPlus CRUVI module, there are termination resistors shown in the image:
-<img src="Resistors_on_VHDPlus.jpg" width="300">
+On the VHDPlus CRUVI module, there are termination resistors shown in the image: <img src="Resistors_on_VHDPlus.jpg" width="300"> <br />
+
 Termination resistors circled in the image pose a major problem to the signal integration. This is because termination resistors are supposed to be as close to the end of the line as possible, but in our case, there are two connections between termination resistors and IO pins of FPGA (the first one is the connection between VHDPlus CRUVI Module and CRUVI connector on the carrier board, and again between CRVU connection with carrier board and FPGA SOM.). That is why we desoldered termination resistors on the VHDPlus CRUVI Module and instead used internal termination resistors in the FPGA. More about this in the issue **write issue about this**
 
 When using an FPGA internal termination resistor on LVDS_25 IOSTANDARD, it is important to set the voltage of the VCCIO bank to 2.5V to ensure that the resistance of termination resistors is 100 Ohm. We do that by switching DIP 2 to ON state to set IOV = 2.5V and using Jumpers J14, J16, and J17 to connect VCCIO to IOV. More on this on the issue **create issue**
