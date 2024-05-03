@@ -33,7 +33,7 @@ In the image, there is a Trenz carrier board, a Trenz 4x5 SoM with Artix-7 FPGA 
 The main goal is to acquire an image/video from the camera sensor on the Raspberry Pi camera (Sony IMX219) and display the captured image through HDMI output on the monitor.
 
 **HDMI output**
-HDMI source code located in the **location of the source code** supports:
+HDMI source code located in the [folder](1.hw/ip.hdmi) supports:
 - 720p@60Hz
 - 1080p@30Hz
 More about HDMI options and limitations in the issue (**add issue regarding this**), but main liminig factor of HDMI output is bandwidth of the FPGA (1080p@60Hz not possible)
