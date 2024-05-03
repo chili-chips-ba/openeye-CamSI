@@ -31,7 +31,7 @@ The main goal is to acquire an image/video from the camera sensor on the Raspber
 HDMI source code located in the [folder](1.hw/ip.hdmi) supports:
 - 720p@60Hz
 - 1080p@30Hz
-More about HDMI options and limitations in the issue (**add issue regarding this**), but main liminig factor of HDMI output is speed of the FPGA (1080p@60Hz not possible)
+More about HDMI options and limitations in the [HDMI issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/1#issue-2278453405).
 Test pattern image 720p@60Hz:
 **add image of test test patern**
 
