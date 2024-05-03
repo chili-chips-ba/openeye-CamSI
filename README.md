@@ -6,15 +6,11 @@ Our OpenEye-CamSI is about delivering a truly open-source (hence accessible and 
 
 As a matter of fact, we intend to utilize openXC7 (https://github.com/openXC7) toolkit, including its web-based CI/CD flow that's currently in development. That's both for the security of images taken, and to help openXC7 attain the level of robustness found in the commercial / proprietary CAE tools. In that sense, OpenEye-CamSI is the continuation of our TetriSaraj (https://github.com/chili-chips-ba/openXC7-TetriSaraj), which was the first openXC7 test case for a design more complex than a mere blinky. 
 
-OpenEye-CamSI is also the continuation of <i>StereoNinjaFPGA</i> development track, but now aiming for higher performance, and targeting Xilinx instead of Lattice. The latter is the most popular open-source FPGA family, ubiquitous to the point of monopoly. Yet, the monopoly is against the spirit of openness. Moreover, being so well documented and supported in the open-source circles, Lattice does not entice the same fun nor challenge to work with. We therefore intend to bring some balance to the Lattice-dominated open-source FPGA world 😂.
-
 Our stated deliverable is to:
- - <b>showcase real-time video streaming through FPGA, from Camera to VLC, via UDP Ethernet packets</b>.
-
-The VLC (https://www.videolan.org) is to be hosted on a PC with standard LCD monitor. We intend to demo it at Maker Faire Wien + Sarajevo 2024, and elsewhere.                
+ - <b>showcase real-time video streaming through FPGA, from Camera to VLC, via UDP Ethernet packets</b>.             
 
 <img src="https://github.com/chili-chips-ba/openeye/assets/67533663/07cb0f47-c9c7-483e-a028-0066342f5023" width="250">
-Essentially, the plan and objective for the first phase is to <b>resolve the fundamental challenges of working with IOSERDES and openXC7 at higher frequencies</b>. 
+<br />Essentially, the plan and objective for the first phase is to <b>resolve the fundamental challenges of working with IOSERDES and openXC7 at higher frequencies</b>. 
 
 It is important to emphasize that, in its current state, our tool is still rather immature, without even the basic timing awareness, yet alone timing-driven optimizations -- <b>As-is openXC7 is simply not adequate for proper timing closure</b>. While another project is underway, aiming to bridge this major STA gap, it won't be ready in time for our Phase1. 
 
@@ -45,7 +41,7 @@ There are plenty of configurabile registers on the IMX219 camera sensor. On the 
 ### *Image acquisition*
 Sony [IMX219](0.doc/Sensor.2-lane.RPi2.1/IMX219PQ.Datasheet.pdf) camera sensor is used for Image acquisition. Camera sensor is connected with FPGA with a flex cable through [VHDPlus](https://vhdplus.com/docs/components/camera/) CRUVI module. 
 
-On the VHDPlus CRUVI module, there are termination resistors shown in the image: <img src="Resistors_on_VHDPlus.jpg" width="300"> <br />
+On the VHDPlus CRUVI module, there are termination resistors shown in the image: <img src="Resistors_on_VHDPlus.jpg" width="300"> <br /> 
 
 Termination resistors circled in the image pose a major problem to the signal integration. This is because termination resistors are supposed to be as close to the end of the line as possible, but in our case, there are two connections between termination resistors and IO pins of FPGA (the first one is the connection between VHDPlus CRUVI Module and CRUVI connector on the carrier board, and again between CRVU connection with carrier board and FPGA SOM.). That is why we desoldered termination resistors on the VHDPlus CRUVI Module and instead used internal termination resistors in the FPGA. More about this in the issue **write issue about this**
 
