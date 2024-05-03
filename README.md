@@ -42,7 +42,7 @@ Test pattern image 720p@60Hz:
 
 **Camera Configuration**
 There are plenty of configurabile registers on the IMX219 camera sensor. On the issue **add issue** you can see what registers we configured in order to make whole system works as expected. Camera is configured to output 720p@60Hz, but in order to configure registers of the camera sensor, I2C comunication protcol was written and the nex image shows some data beenig written on the camera sensor.
-[I2C](I2C_sim.png)
+![I2C](I2C_sim.png)
 
 **Image acquisition**
 Sony [IMX219](0.doc/Sensor.2-lane.RPi2.1/IMX219PQ.Datasheet.pdf) camera sensor is used for Image acquisition. Camera sensor is connected with FPGA with a flex cable through [VHDPlus](https://vhdplus.com/docs/components/camera/) CRUVI module. 
