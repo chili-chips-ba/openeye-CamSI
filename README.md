@@ -22,36 +22,36 @@ It is important to emphasize that, in its current state, our tool is still rathe
 We therefore have Phase2 and, as needed, Phase3 in the plans, looking to be the first to try this new timing prowess in open-source tools for Xilinx FPGAs, using it to squeeze most Fmax from our target device and camera chips. We may at that time introduce some image processing, such as video compression, to allow passing higher-rez content through the same old 1Gbps Ethernet link. 
 
 To create the starter design for our target boards will also require a fair amount of work. The boards we've selected for the project are hardly used in the open-source community, and don't come with support collateral that developers are accustomed to. Still, since they are an EU product, this extra effort is for a good cause, to increase their visibility and introduce them to the open makers.
-      ![our-board](https://github.com/chili-chips-ba/openeye/assets/67533663/12fe4ac5-299f-4040-aa67-dc022124908a)
 
-**First work package**
+## *First work package*
 In this first work package, we are using the system shown in the image:
 
-![test slika](Images/system_no_background.png)
+![system_no_background](system_no_background.png)
 
 In the image, there is a Trenz carrier board, a Trenz 4x5 SoM with Artix-7 FPGA and WHDPlus HDMI + CSI Camera adapter, and lastly, there is a Raspberry Pi camera V2 module.
 
 The main goal is to acquire an image/video from the camera sensor on the Raspberry Pi camera (Sony IMX219) and display the captured image through HDMI output on the monitor.
 
-**HDMI output**
-HDMI source code located in the **location of the source code** supports:
+### *HDMI output*
+HDMI source code located in the [folder](1.hw/ip.hdmi) supports:
 - 720p@60Hz
 - 1080p@30Hz
-More about HDMI options and limitations in the issue (**add issue regarding this**), but main liminig factor of HDMI output is bandwidth of the FPGA (1080p@60Hz not possible)
+More about HDMI options and limitations in the issue (**add issue regarding this**), but main liminig factor of HDMI output is speed of the FPGA (1080p@60Hz not possible)
 Test pattern image 720p@60Hz:
-**add image of test test patern (captured adequatly)**
+**add image of test test patern**
 
 **Camera Configuration**
-**Add imgae of I2C working**
+There are plenty of configurabile registers on the IMX219 camera sensor. On the issue **add issue** you can see what registers we configured in order to make whole system works as expected. Camera is configured to output 720p@60Hz, but in order to configure registers of the camera sensor, I2C comunication protcol was written and the nex image shows some data beenig written on the camera sensor.
+[I2C](I2C_sim.png)
 
 **Image acquisition**
-Sony IMX219 sensor is used for Image acquisition with the documentation located in the **location of the documentation of the sensor**. Sony sensor with FPGA with a flex cable through [VHDPlus](https://vhdplus.com/docs/components/camera/) CRUVI module. 
+Sony [IMX219](0.doc/Sensor.2-lane.RPi2.1/IMX219PQ.Datasheet.pdf) camera sensor is used for Image acquisition. Camera sensor is connected with FPGA with a flex cable through [VHDPlus](https://vhdplus.com/docs/components/camera/) CRUVI module. 
 
 On the VHDPlus CRUVI module, there are termination resistors shown in the image:
-**add image**
+![system_no_background](Resistors_on_VHDPlus.jpg | width=100)
 Termination resistors circled in the image pose a major problem to the signal integration. This is because termination resistors are supposed to be as close to the end of the line as possible, but in our case, there are two connections between termination resistors and IO pins of FPGA (the first one is the connection between VHDPlus CRUVI Module and CRUVI connector on the carrier board, and again between CRVU connection with carrier board and FPGA SOM.). That is why we desoldered termination resistors on the VHDPlus CRUVI Module and instead used internal termination resistors in the FPGA. More about this in the issue **write issue about this**
 
-When using an FPGA internal termination resistor on LVDS_25 IOSTANDART, it is important to set the voltage of the VCCIO bank to 2.5V to ensure that the resistance of termination resistors is 100 Ohm. We do that by switching DIP 2 to ON state to set IOV = 2.5V and using Jumpers J14, J16, and J17 to connect VCCIO to IOV. More on this on the issue **create issue**
+When using an FPGA internal termination resistor on LVDS_25 IOSTANDARD, it is important to set the voltage of the VCCIO bank to 2.5V to ensure that the resistance of termination resistors is 100 Ohm. We do that by switching DIP 2 to ON state to set IOV = 2.5V and using Jumpers J14, J16, and J17 to connect VCCIO to IOV. More on this on the issue **create issue**
  
 After all, hardware-related problems are solved, RTL design is followed. For that, there is a block diagram of the MIPI CSI2 protocol implemented in this work:
 **add block diagram**
