@@ -53,9 +53,9 @@ After all, hardware-related problems are solved, RTL design is followed. For tha
 
 There are a few difficulties/twists in the RTL design process because the VHDPlus CRUVI module has only differential input pins, not a single LP input pin. This means that the detection of blanking parts between frames has to be done by checking whether the clock signal from the camera is active and stable. More about this issue on **add issue**
 
-Before displaying an image on the monitor/display, it has to go through a debayer block to display colors as they are. See more in the **debayer issue**
+Before displaying an image on the monitor/display, it has to go through a debayer block to display colors as they are. See more in the [debayer issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/4)
 
-To see the image on the monitor, everything previously mentioned has to work together perfectly. On top of that processed data from the FPGA has to be in the the sync with HDMI module written in the beginning. For that, we use line buffering instead of frame buffering. This posed some difficulties, which you can read more about in the issue **add issue**. Nevertheless, after everything is polished up the final result is visible in the video:
+To see the image on the monitor, everything previously mentioned has to work together perfectly. On top of that processed data from the FPGA has to be in the the sync with HDMI module written in the beginning. For that, we use line buffering instead of frame buffering. This posed some difficulties, which you can read more about in the [Line buffering issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/2). Nevertheless, after everything is polished up the final result is visible in the video:
 
 
 **<h3> Acknowledgements </h3>**
