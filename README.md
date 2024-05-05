@@ -21,7 +21,7 @@ To create the starter design for our target boards will also require a fair amou
 ## *First work package*
 In this first work package, we are using the system shown in the image:
 
-![system_no_background](system_no_background.png)
+![system_no_background](https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/105a7569-75c5-4f2c-8f15-a408bb72cdc6)
 
 In the image, there is a Trenz carrier board, a Trenz 4x5 SoM with Artix-7 FPGA and WHDPlus HDMI + CSI Camera adapter, and lastly, there is a Raspberry Pi camera V2 module.
 
@@ -37,12 +37,12 @@ HDMI source code located in the [folder](1.hw/ip.hdmi) supports:
 
 ### *Camera Configuration*
 There are plenty of configurabile registers on the IMX219 camera sensor. On the issue **add issue** you can see what registers we configured in order to make whole system works as expected. Camera is configured to output 720p@60Hz, but in order to configure registers of the camera sensor, I2C comunication protcol was written. More about this on [I2C issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/3). Next image shows some data beenig written on the camera sensor.
-<img src="I2C_sim.png" width="700"><br />
+<img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/2b54bf12-1366-4819-8080-df7d5cf8fa20" width="700"><br />
 ### *Image acquisition*
 Sony [IMX219](0.doc/Sensor.2-lane.RPi2.1/IMX219PQ.Datasheet.pdf) camera sensor is used for Image acquisition. Camera sensor is connected with FPGA with a flex cable through [VHDPlus](https://vhdplus.com/docs/components/camera/) CRUVI module. 
 
 On the VHDPlus CRUVI module, there are termination resistors shown in the image: 
-<br /><img src="Resistors_on_VHDPlus.jpg" width="300"> <br /> 
+<br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/31957cba-ea2c-4b42-942e-e01f8f4e62a8" width="300"> <br /> 
 
 Termination resistors circled in the image pose a major problem to the signal integration. This is because termination resistors are supposed to be as close to the end of the line as possible, but in our case, there are two connections between termination resistors and IO pins of FPGA (the first one is the connection between VHDPlus CRUVI Module and CRUVI connector on the carrier board, and again between CRVU connection with carrier board and FPGA SOM.). That is why we desoldered termination resistors on the VHDPlus CRUVI Module and instead used internal termination resistors in the FPGA. More about this in the issue **write issue about this**
 
