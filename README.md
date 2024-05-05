@@ -57,7 +57,8 @@ Before displaying an image on the monitor/display, it has to go through a debaye
 
 To see the image on the monitor, everything previously mentioned has to work together perfectly. On top of that processed data from the FPGA has to be in the the sync with HDMI module written in the beginning. For that, we use line buffering instead of frame buffering. This posed some difficulties, which you can read more about in the [Line buffering issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/2). Nevertheless, after everything is polished up the final result is visible in the video:
 
-[![Video](https://img.youtube.com/vi/BGku8TeV_AA/0.jpg)](https://www.youtube.com/watch?v=BGku8TeV_AA)
+[![image (1)](https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/e333f585-1f67-4c4a-9ce0-ecf5bda4edde)](https://www.youtube.com/watch?v=BGku8TeV_AA)
+
 
 **<h3> Acknowledgements </h3>**
 We are grateful to:
