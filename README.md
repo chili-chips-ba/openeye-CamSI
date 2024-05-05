@@ -33,7 +33,7 @@ HDMI source code located in the [folder](1.hw/ip.hdmi) supports:
 - 1080p@30Hz
 <br /> More about HDMI options and limitations in the [HDMI issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/1#issue-2278453405).
 <br /> Test pattern image 720p@60Hz:
-**add image of test test patern**
+<br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/c405a0d6-2086-452a-aa2a-435240055c48" width="500"><br />
 
 ### *Camera Configuration*
 There are plenty of configurabile registers on the IMX219 camera sensor. On the issue **add issue** you can see what registers we configured in order to make whole system works as expected. Camera is configured to output 720p@60Hz, but in order to configure registers of the camera sensor, I2C comunication protcol was written. More about this on [I2C issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/3). Next image shows some data beenig written on the camera sensor.
