@@ -32,7 +32,8 @@ HDMI source code located in the [folder](1.hw/ip.hdmi) supports:
 - 720p@60Hz
 - 1080p@30Hz
 <br /> More about HDMI options and limitations in the [HDMI issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/1#issue-2278453405).
-<br /> Test pattern image 720p@60Hz:
+
+Test pattern image 720p@60Hz:
 <br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/c405a0d6-2086-452a-aa2a-435240055c48" width="500"><br />
 
 ### *Camera Configuration*
