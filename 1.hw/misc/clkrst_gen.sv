@@ -49,7 +49,7 @@ module clkrst_gen
    output logic  clk_100,
    output logic  clk_200,
    output logic  clk_1hz,
-   output logic  strobe_400kHz, // 400kHz strobe synchrnous to 'clk'
+   output logic  strobe_400kHz, // 400kHz strobe synchronous to 'clk'
 
    output logic  reset,
    output logic  cam_en,

@@ -74,7 +74,7 @@ module i2c_top (
     logic        i2c_sda_di;
     logic        i2c_sda_oe;   
    
-    i2c_master u_i2c (
+    i2c_ctrl u_ctrl (
        .clk              (clk),            //i 
        .strobe_400kHz    (strobe_400kHz),  //i 
        .reset            (reset),          //i 

@@ -36,4 +36,14 @@ endmodule: IOBUF
 
 
 //--------------------------
+// dummy shell
+module IDELAYCTRL (
+  output RDY,
+  input  REFCLK,
+  input  RST
+);
+endmodule: IDELAYCTRL
+
+
+//--------------------------
 // verilator lint_on WIDTH

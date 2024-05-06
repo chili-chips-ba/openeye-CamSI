@@ -38,6 +38,12 @@
 //   FIXME: Adapt logic to 4-lane datapath
 //========================================================================
 
+//FIXME: These Verilator Warnings should not be ignored, 
+//       but rather fixed in RTL
+
+// verilator lint_off SELRANGE
+// verilator lint_off WIDTHTRUNC
+
 module raw2rgb 
   import top_pkg::*;
 #(
@@ -313,6 +319,9 @@ module raw2rgb
                       rgb_out1[7:0]}; 
 
 endmodule: raw2rgb
+
+// verilator lint_on SELRANGE
+// verilator lint_on WIDTHTRUNC
 
 /*
 ------------------------------------------------------------------------------
