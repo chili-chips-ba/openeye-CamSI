@@ -32,180 +32,214 @@
 //
 //              https://opensource.org/license/bsd-3-clause
 //------------------------------------------------------------------------
-// Designers  : Armin Zunic, Isam Vrce
-// Description: <brief explanation of what this module does, with links
-//               to other projects that were used for reference>
+// Description: This is the Chip top-level file. It includes:
+//   - Main PLL with top-level clock and reset generation
+//   - Xilinx-specific IDELAY controller
+//   - I2C Master for loading configuration into camera
+//   - CSI_RX camera front-end
+//   - ISP blocks:
+//        - raw2rgb
+//   - Asynchronous FIFO
+//   - HDMI monitor back-end
+//   - Misc and Debug utilities
 //========================================================================
 
 module top 
-   import soc_pkg::*;
+   import top_pkg::*;
+   import hdmi_pkg::*;
 (
-   input  logic        clk_27,    // 27MHz clock oscillator on TangNano20K
-                        
- //input  logic [2:0]  clk_fpll,  // clock from onboard FractionalPLL (5351)
-                        
-   input  logic [2:1]  key,       // active-HI, S1:UserFunction S2:Reset
-   output logic [5:0]  led_n,     // active-LO onboard LEDs
-                        
-   input  logic        uart_rx,   // -\ UART towards BL616
-   output logic        uart_tx,   // -/ 
+   input logic   areset,   // external active-1 asynchronous reset
+   input logic   clk_ext,  // external 100MHz clock source
 
- //Embedded SDRAM
-   output logic        O_sdram_clk,
-   output logic        O_sdram_cke,
-   output logic        O_sdram_cs_n,
-                                 
-   output logic        O_sdram_ras_n,
-   output logic        O_sdram_cas_n,
-   output logic        O_sdram_wen_n,
-                                
-   output logic [1:0]  O_sdram_ba,  
-   output logic [10:0] O_sdram_addr,
-   output logic [3:0]  O_sdram_dqm,
+  //I2C_Master to Camera
+   inout  wire   i2c_sda,
+   inout  wire   i2c_scl,
+   
+  //MIPI DPHY from/to Camera
+   input  diff_t cam_dphy_clk,
+   input  diff_t cam_dphy_dat [NUM_LANE],
 
-   inout  wire  [31:0] IO_sdram_dq
-
- //ADC
+   output logic  cam_en,
+      
+  //HDMI output, goes directly to connector
+   output logic  hdmi_clk_p,
+   output logic  hdmi_clk_n,
+   output bus3_t hdmi_dat_p,
+   output bus3_t hdmi_dat_n,
+   
+  //Misc/Debug
+   output bus3_t led,
+   output bus8_t debug_pins
 );
 
-//=================================
-// Clock and reset generation
-//=================================
-   logic       arst_n;
-   logic       clk_54;
-                
-   logic       tick_1us;
-   logic       tick_cca15us;
-   logic [2:1] key_clean;
-   
-   fpga_pll u_pll (
-      .clk_27    (clk_27),       //i
-      .force_rst (key_clean[2]), //i            
+//--------------------------------
+// Clock and reset gen
+//--------------------------------
+   logic reset, i2c_reset;
+   logic clk_100, clk_200, clk_1hz, strobe_400kHz;
 
-      .srst_n    (arst_n),       //o
-      .clk_54    (clk_54),       //o
-      .clk_108   ()              //o
+   clkrst_gen u_clkrst_gen (
+      .reset_ext     (areset),        //i
+      .clk_ext       (clk_ext),       //i
+                                       
+      .clk_100       (clk_100),       //o: 100MHz 
+      .clk_200       (clk_200),       //o: 200MHz 
+      .clk_1hz       (clk_1hz),       //o: 1Hz
+      .strobe_400kHz (strobe_400kHz), //o: pulse1 at 400kHz
+
+      .reset         (reset),         //o
+      .cam_en        (cam_en),        //o
+      .i2c_reset     (i2c_reset)      //o
    );
 
-   debounce u_debounce[2:1] (
-      .clk       (clk_54),       //i
-      .tick_15us (tick_cca15us), //i
-      .inp       (key),          //i
-      .out       (key_clean)     //o
+//--------------------------------
+// I2C Master
+//--------------------------------
+   i2c_top u_i2c  (
+     //clocks and resets
+      .clk           (clk_100),       //i
+      .strobe_400kHz (strobe_400kHz), //i
+      .reset         (i2c_reset),     //i
+
+     //I2C_Master to Camera
+      .i2c_scl       (i2c_scl),       //io 
+      .i2c_sda       (i2c_sda)        //io 
    );
 
-   assign led_n[5:1] =  5'b10101;
-   assign led_n[0]   = ~key_clean[1];
+//--------------------------------
+// CSI_RX
+//--------------------------------
+   logic       csi_byte_clk;
+   lane_data_t csi_word_data;
+   logic       csi_word_valid;
+   logic       csi_in_line, csi_in_frame;   
+
+   bus8_t      debug_csi;
+    
+   csi_rx_top u_csi_rx_top (
+      .ref_clock          (clk_200),        //i 
+      .reset              (reset),          //i 
+                          
+     //MIPI DPHY from/to Camera
+      .cam_dphy_clk       (cam_dphy_clk),   //i'diff_t
+      .cam_dphy_dat       (cam_dphy_dat),   //i'diff_t[NUM_LANE]
+      .cam_en             (cam_en),         //o 
+
+     //CSI to internal video pipeline     
+      .csi_byte_clk       (csi_byte_clk),   //o
+      .csi_unpack_dat     (csi_word_data),  //o'lane_data_t
+      .csi_unpack_dat_vld (csi_word_valid), //o
+
+      .csi_in_line        (csi_in_line),    //o    
+      .csi_in_frame       (csi_in_frame),   //o
+
+     //Misc/Debug
+      .debug_pins         (debug_csi)       //o[7:0]
+   );
+      
+//--------------------------------
+// ISP: Raw2RGB
+//--------------------------------
+   logic  rgb_valid;
+   pix_t  rgb_pix;
+   logic  rgb_reading;
+
+   raw2rgb #(
+      .LINE_LENGTH (640),           // number of data entries per line
+      .RGB_WIDTH   ($bits(pix_t))   // width of RGB data (24-bit)
+   )
+   u_raw2rgb (
+      .clk        (csi_byte_clk),   //i           
+      .rst        (reset),          //i
+
+      .data_in    (csi_word_data),  //i'lane_data_t
+      .data_valid (csi_in_line),    //i  
+      .rgb_valid  (rgb_valid),      //i
+
+      .reading    (rgb_reading),    //o
+      .rgb_out    (rgb_pix)         //o[RGB_WIDTH-1:0]
+   );
+      
+//--------------------------------
+// AsyncFIFO with Synchronization
+//--------------------------------
+   logic clk_pix;
+   logic hdmi_frame;
+   logic hdmi_blank;
+   logic hdmi_reset_n;
+   pix_t hdmi_pix;
+
+   rgb2hdmi u_rgb2hdmi (
+     //from/to CSI and RGB block
+      .clk          (csi_byte_clk),   //i           
+      .reset        (reset),          //i
+
+      .csi_in_line  (csi_in_line),    //i  
+      .csi_in_frame (csi_in_frame),   //i  
+
+      .rgb_pix      (rgb_pix),        //i'pix_t
+      .rgb_reading  (rgb_reading),    //i 
+      .rgb_valid    (rgb_valid),      //o
+
+     //from/to HDMI block
+      .clk_pix      (clk_pix),        //i
+
+      .hdmi_frame   (hdmi_frame),     //i
+      .hdmi_blank   (hdmi_blank),     //i
+      .hdmi_reset_n (hdmi_reset_n),   //o
+      .hdmi_pix     (hdmi_pix)        //o'pix_t 
+   );
+
+//--------------------------------
+// HDMI backend
+//--------------------------------
+   logic hdmi_hsync, hdmi_vsync;
+
+   hdmi_top u_hdmi_top(
+      .clk_ext      (clk_100),      //i 
+      .clk_pix      (clk_pix),      //o
+                     
+      .pix          (hdmi_pix),     //i'pix_t  
+     
+     //synchronization
+      .hdmi_reset_n (hdmi_reset_n), //i
+
+      .hdmi_frame   (hdmi_frame),   //o
+
+      .blank        (hdmi_blank),   //o
+      .vsync        (hdmi_vsync),   //o 
+      .hsync        (hdmi_hsync),   //o 
+                     
+     //HDMI output, goes directly to connector
+      .hdmi_clk_p   (hdmi_clk_p),   //o
+      .hdmi_clk_n   (hdmi_clk_n),   //o
+      .hdmi_dat_p   (hdmi_dat_p),   //o'bus3_t
+      .hdmi_dat_n   (hdmi_dat_n)    //o'bus3_t
+   );
    
 
-//=================================
-// CPU Subsystem
-//=================================
-   soc_if bus_cpu   (.arst_n(arst_n), .clk(clk_54));
-   soc_if bus_dmem  (.arst_n(arst_n), .clk(clk_54));
-   soc_if bus_csr   (.arst_n(arst_n), .clk(clk_54));
-   soc_if bus_sdram (.arst_n(arst_n), .clk(clk_54));
+//--------------------------------
+// Misc and Debug
+//--------------------------------
+    assign led[0] = cam_en;
+    assign led[1] = 1'b0;
+    assign led[2] = clk_1hz; 
 
-   csr_if csr ();
-
-   logic        imem_we;
-   logic [31:2] imem_waddr;
-   logic [31:0] imem_wdat;
-
-//---------------------------------
-   soc_cpu #(
-     .ADDR_RESET (32'h 0000_0000),
-     .ADDR_STACK (32'h 2000_0000)
-   ) 
-   u_cpu (
-     .bus        (bus_cpu),    //MST
-
-     .imem_we    (imem_we),    //-\ access point for 
-     .imem_waddr (imem_waddr), // | reloading CPU 
-     .imem_wdat  (imem_wdat)   //-/ program memory 
-   ); 
-
-//---------------------------------
-  soc_fabric u_fabric (
-     .cpu   (bus_cpu),  //SLV
-
-     .dmem  (bus_dmem), //MST
-     .csr   (bus_csr),  //MST
-     .sdram (bus_sdram) //MST
-  );
-
-//---------------------------------
-  soc_ram #(
-     .NUM_WORDS(1024) // 4KByte CPU DataRAM
-  )
-  u_dmem (
-     .bus (bus_dmem) //SLV
-  );
-
-//---------------------------------
-  soc_csr u_csr (
-     .bus (bus_csr), //SLV
-     .csr (csr)      //MST
-  );
-                   
-//---------------------------------
-  sdram_if pad();
+   assign debug_pins = {
+      ~hdmi_hsync, 
+      ~hdmi_vsync, 
+       hdmi_blank, 
+       rgb_reading, 
+       hdmi_reset_n, 
+       debug_csi[2:0]
+   };
    
-  soc_sdram u_sdram (
-     .pad          (pad),         //MST
-     .IO_sdram_dq  (IO_sdram_dq),
-
-     .bus          (bus_sdram),   //SLV
-
-     .tick_1us     (tick_1us),    //o
-     .tick_cca15us (tick_cca15us) //o
-  );
-
-   assign O_sdram_clk   = pad.O_sdram_clk;
-   assign O_sdram_cke   = pad.O_sdram_cke; 
-   assign O_sdram_cs_n  = pad.O_sdram_cs_n;
-                             
-   assign O_sdram_ras_n = pad.O_sdram_ras_n;
-   assign O_sdram_cas_n = pad.O_sdram_cas_n;
-   assign O_sdram_wen_n = pad.O_sdram_wen_n;
-                             
-   assign O_sdram_ba    = pad.O_sdram_ba;
-   assign O_sdram_addr  = pad.O_sdram_addr;
-   assign O_sdram_dqm   = pad.O_sdram_dqm;
-
-//---------------------------------
-  uart #(
-    .DATA_BITS  (8), // Number of DATA bits, can be 7/8
-    .PARITY_BIT (2), // PARITY disabled is by default
-    .STOP_BITS  (1)  // Using only 1 STOP bit
-  )
-  u_uart (
-    .arst_n   (arst_n),   //i 
-    .clk      (clk_54),   //i 
-    .tick_1us (tick_1us), //i 
-
-    .uart_rx  (uart_rx),  //i 
-    .uart_tx  (uart_tx),  //o
-
-    .csr      (csr)       //SLV 
-  );
-
-//---------------------------------
-// TODO: Code for loading IMEM via UART
-   assign imem_we    = '0;
-   assign imem_waddr = '0;
-   assign imem_wdat  = '0;
-
-//=================================
-// Misc
-//=================================
-
 endmodule: top
 
 /*
------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 Version History:
------------------------------------------------------------------------------
- 2024/01/15 AZ: initial creation    
-
+------------------------------------------------------------------------------
+ 2024/2/30 AnelH: Initial creation
+ 2024/3/14 Armin Zunic: updated based on sim results
 */
