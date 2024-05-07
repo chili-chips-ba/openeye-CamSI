@@ -96,11 +96,30 @@ module fpga_pll_top (
    ) 
    uMMCME2_BASE (
       .CLKOUT0  (uclk_out0),     //o: CLKOUT0
+      .CLKOUT0B  (),             //o
+
+      .CLKOUT1   (),             //o
+      .CLKOUT1B  (),             //o
+
       .CLKOUT2  (uclk_out1),     //o: CLKOUT2
+      .CLKOUT2B  (),             //o
+
+      .CLKOUT3   (),             //o 
+      .CLKOUT3B  (),             //o 
+
+      .CLKOUT4   (),             //o                
+      .CLKOUT5   (),             //o 
+      .CLKOUT6   (),             //o 
+
       .CLKFBOUT (clkfb),         //o: Feedback clock
       .LOCKED   (pll_lock),      //o: LOCK
+
       .CLKIN1   (clk_in),        //i: Clock
-      .CLKFBIN  (clkfb)          //i: Feedback clock
+      .CLKFBIN  (clkfb),         //i: Feedback clock
+      .CLKFBOUTB(),              //o
+
+      .PWRDWN    (1'b0),         //i
+      .RST       (1'b0)          //i
    );
 
 //----------------------------------------------

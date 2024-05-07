@@ -72,15 +72,17 @@ module i2c_ctrl (
    state_t state;
    state_t post_state;
    
-   logic [1:0] process_counter;
+   logic [1:0] process_cnt;
    logic [7:0] slave_address_plus_rw;
-   logic [3:0] bit_counter;
+   logic [3:0] bit_cnt, bit_cnt_dec;
    logic       post_serial_data;
    logic       acknowledge_bit;
    
+   assign bit_cnt_dec = 4'(bit_cnt - 4'd1);
+   
    assign scl_oe = (state == IDLE)
-                 | (process_counter == 2'd1)
-                 | (process_counter == 2'd2);
+                 | (process_cnt == 2'd1)
+                 | (process_cnt == 2'd2);
 
    assign sda_oe = (state == IDLE)
                  | (state == CHECK_ACK);
@@ -91,9 +93,9 @@ module i2c_ctrl (
          register_done         <= 1'b0;
          state                 <= IDLE;
          post_state            <= IDLE;
-         process_counter       <= '0;
+         process_cnt           <= '0;
          slave_address_plus_rw <= '0;
-         bit_counter           <= '0;
+         bit_cnt               <= '0;
          post_serial_data      <= 1'b0;
          acknowledge_bit       <= 1'b0;
       end 
@@ -102,8 +104,8 @@ module i2c_ctrl (
 
          //----------------------
             IDLE: begin
-               process_counter       <= '0;
-               bit_counter           <= '0;
+               process_cnt           <= '0;
+               bit_cnt               <= '0;
                acknowledge_bit       <= 1'b0;
                slave_address_plus_rw <= {slave_address, read_write};
                scl_di                <= 1'b1;
@@ -118,72 +120,73 @@ module i2c_ctrl (
 
          //----------------------
             START: if (strobe_400kHz == 1'b1) begin
-               unique case (process_counter)
+               unique case (process_cnt)
                   2'd0: begin
-                     process_counter <= 2'd1;
+                     process_cnt <= 2'd1;
                   end
                   2'd1: begin
-                     sda_di          <= 1'b0;
-                     process_counter <= 2'd2;
+                     sda_di      <= 1'b0;
+                     process_cnt <= 2'd2;
                   end
                   2'd2: begin
-                     bit_counter     <= 4'd8;
-                     process_counter <= 2'd3;
+                     bit_cnt     <= 4'd8;
+                     process_cnt <= 2'd3;
                   end
                   2'd3: begin
-                     scl_di          <= 1'b0;
-                     process_counter <= 2'd0;
-                     state           <= post_state;
-                     sda_di          <= slave_address_plus_rw[3'd7];
+                     scl_di      <= 1'b0;
+                     process_cnt <= 2'd0;
+                     state       <= post_state;
+                     sda_di      <= slave_address_plus_rw[3'd7];
                   end
                endcase
             end
 
          //----------------------
             WRITE_SLAVE_ADDR: if (strobe_400kHz == 1'b1) begin
-               unique case (process_counter)
+               unique case (process_cnt)
                   2'd0: begin
-                     scl_di          <= 1'b1;
-                     process_counter <= 2'd1;
+                     scl_di      <= 1'b1;
+                     process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
                      if (scl_do == 1'b1) begin
-                        process_counter <= 2'd2;
+                        process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     scl_di          <= 1'b0;
-                     bit_counter     <= bit_counter - 4'd1;
-                     process_counter <= 2'd3;
+                     scl_di      <= 1'b0;
+                     bit_cnt     <= bit_cnt_dec;
+                     process_cnt <= 2'd3;
                   end
                   2'd3: begin
-                     if (bit_counter == 4'd0) begin
+                     process_cnt <= 2'd0;
+  
+                     if (bit_cnt == 4'd0) begin
                         post_serial_data <= register_address[4'd15];
                                                 
-                        state        <= CHECK_ACK;
-                        post_state   <= WRITE_REG_ADDR_MSB;
-                        bit_counter  <= 4'd8;
+                        state      <= CHECK_ACK;
+                        post_state <= WRITE_REG_ADDR_MSB;
+                        bit_cnt    <= 4'd8;
                      end
                      else begin
-                        sda_di <= slave_address_plus_rw[bit_counter - 4'd1];
+                        sda_di   <= slave_address_plus_rw[bit_cnt_dec[2:0]];
                      end
-                     process_counter <= 2'd0;
                   end
                endcase
             end
 
          //----------------------
             CHECK_ACK: if (strobe_400kHz == 1'b1) begin
-               unique case (process_counter)
+               unique case (process_cnt)
                   2'd0: begin
-                     scl_di          <= 1'b1;
-                     process_counter <= 2'd1;
+                     scl_di      <= 1'b1;
+                     process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
                      if (scl_do == 1'b1) begin
-                        process_counter <= 2'd2;
+                        process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
@@ -192,7 +195,7 @@ module i2c_ctrl (
                      if (sda_do == 1'b0) begin
                         acknowledge_bit <= 1'b1;
                      end
-                     process_counter <= 2'd3;
+                     process_cnt <= 2'd3;
                   end
                   2'd3: begin
                      if (acknowledge_bit == 1'b1) begin
@@ -201,69 +204,69 @@ module i2c_ctrl (
                         state           <= post_state;
                      end
                      else begin
-                        state <= RESTART;
+                        state    <= RESTART;
                      end
-                     process_counter <= 2'd0;
+                     process_cnt <= 2'd0;
                   end
                endcase
             end
 
          //----------------------
             WRITE_REG_ADDR_MSB: if (strobe_400kHz == 1'b1) begin
-               unique case (process_counter)
+               unique case (process_cnt)
                   2'd0: begin
-                     scl_di          <= 1'b1;
-                     process_counter <= 2'd1;
+                     scl_di      <= 1'b1;
+                     process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
                      if (scl_do == 1'b1) begin
-                        process_counter <= 2'd2;
+                        process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     scl_di          <= 1'b0;
-                     bit_counter     <= bit_counter - 4'd1;
-                     process_counter <= 2'd3;
+                     scl_di      <= 1'b0;
+                     bit_cnt     <= bit_cnt_dec;
+                     process_cnt <= 2'd3;
                   end
                   2'd3: begin
-                     if (bit_counter == 4'd0) begin
+                     if (bit_cnt == 4'd0) begin
                         post_serial_data <= register_address[4'd7];
-                        //sda_di           <= 1'b0; //redundant, not needed
-                        state            <= CHECK_ACK;
-                        post_state       <= WRITE_REG_ADDR;
-                        bit_counter      <= 4'd8;
+                        //sda_di       <= 1'b0; //redundant, not needed
+                        state        <= CHECK_ACK;
+                        post_state   <= WRITE_REG_ADDR;
+                        bit_cnt      <= 4'd8;
                      end
                      else begin
-                        sda_di <= register_address[bit_counter + 4'd7];
+                        sda_di <= register_address[bit_cnt + 4'd7];
                      end
-                     process_counter <= 2'd0;
+                     process_cnt <= 2'd0;
                   end
                endcase
             end
 
          //----------------------
             WRITE_REG_ADDR: if (strobe_400kHz == 1'b1) begin
-               unique case (process_counter)
+               unique case (process_cnt)
                   2'd0: begin
-                     scl_di          <= 1'b1;
-                     process_counter <= 2'd1;
+                     scl_di      <= 1'b1;
+                     process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
                      if (scl_do == 1'b1) begin
-                        process_counter <= 2'd2;
+                        process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     scl_di          <= 1'b0;
-                     bit_counter     <= bit_counter - 4'd1;
-                     process_counter <= 2'd3;
+                     scl_di      <= 1'b0;
+                     bit_cnt     <= bit_cnt_dec;
+                     process_cnt <= 2'd3;
                   end
                   2'd3: begin
-                     if (bit_counter == 4'd0) begin
+                     if (bit_cnt == 4'd0) begin
                         if (read_write == 1'b0) begin
-                           post_serial_data <= data_in[4'd7];
+                           post_serial_data <= data_in[3'd7];
                            post_state       <= WRITE_REG_DATA;
                         end
                         else begin
@@ -271,68 +274,68 @@ module i2c_ctrl (
                            post_serial_data <= 1'b1;
                         end
 
-                        state       <= CHECK_ACK;
-                        bit_counter <= 4'd8;
+                        state   <= CHECK_ACK;
+                        bit_cnt <= 4'd8;
                      end
                      else begin
-                        sda_di <= register_address[bit_counter - 4'd1];
+                        sda_di <= register_address[bit_cnt_dec];
                      end
-                     process_counter <= 2'd0;
+                     process_cnt <= 2'd0;
                   end
                endcase
             end
 
          //----------------------
             WRITE_REG_DATA: if (strobe_400kHz == 1'b1) begin
-               unique case (process_counter)
+               unique case (process_cnt)
                   2'd0: begin
-                     scl_di          <= 1'b1;
-                     process_counter <= 2'd1;
+                     scl_di      <= 1'b1;
+                     process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
                      if (scl_do == 1'b1) begin
-                        process_counter <= 2'd2;
+                        process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     scl_di          <= 1'b0;
-                     bit_counter     <= bit_counter - 4'd1;
-                     process_counter <= 2'd3;
+                     scl_di      <= 1'b0;
+                     bit_cnt     <= bit_cnt_dec;
+                     process_cnt <= 2'd3;
                   end
                   2'd3: begin
-                     if (bit_counter == 4'd0) begin
+                     if (bit_cnt == 4'd0) begin
                         post_serial_data <= 1'b0;
                         state            <= CHECK_ACK;
                         post_state       <= STOP;
-                        bit_counter      <= 4'd8;
+                        bit_cnt          <= 4'd8;
                         //register_done    <= 1'b1;
                      end
                      else begin
-                        sda_di <= data_in[bit_counter - 4'd1];
+                        sda_di <= data_in[bit_cnt_dec[2:0]];
                      end
-                     process_counter <= 2'd0;
+                     process_cnt <= 2'd0;
                   end
                endcase
             end
  
          //----------------------
             STOP: if (strobe_400kHz == 1'b1) begin
-               unique case (process_counter)
+               unique case (process_cnt)
                   2'd0: begin
-                     scl_di          <= 1'b1;
-                     process_counter <= 2'd1;
+                     scl_di      <= 1'b1;
+                     process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
                      if (scl_do == 1'b1) begin
-                        process_counter <= 2'd2;
+                        process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     sda_di          <= 1'b1;
-                     process_counter <= 2'd3;
-                     register_done   <= 1'b1;
+                     sda_di        <= 1'b1;
+                     process_cnt   <= 2'd3;
+                     register_done <= 1'b1;
                   end
                   2'd3: begin
                      state <= IDLE;
@@ -342,20 +345,20 @@ module i2c_ctrl (
 
          //----------------------
             RESTART: if (strobe_400kHz == 1'b1) begin
-               unique case (process_counter)
+               unique case (process_cnt)
                   2'd0: begin
-                     scl_di          <= 1'b1;
-                     process_counter <= 2'd1;
+                     scl_di      <= 1'b1;
+                     process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
                      if (scl_do == 1'b1) begin
-                        process_counter <= 2'd2;
+                        process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     sda_di          <= 1'b1;
-                     process_counter <= 2'd3;
+                     sda_di      <= 1'b1;
+                     process_cnt <= 2'd3;
                   end
                   2'd3: begin
                      state <= IDLE;

@@ -61,6 +61,7 @@
 `define AXIS_INFRASTRUCTURE_V1_0_MUX_ENC_V
 `timescale 1ps/1ps
 
+// verilator lint_off WIDTHTRUNC
 
 (* DowngradeIPIdentifiedWarnings="yes" *)
 module axis_infrastructure_v1_1_0_mux_enc #
@@ -1318,6 +1319,8 @@ inst_xpm_cdc_handshake (
 );
 
 endmodule // axis_infrastructure_v1_1_0_cdc_handshake
+
+// verilator lint_on WIDTHTRUNC
 
 `default_nettype wire
 

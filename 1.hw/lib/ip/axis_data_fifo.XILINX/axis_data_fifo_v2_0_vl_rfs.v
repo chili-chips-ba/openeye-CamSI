@@ -51,6 +51,9 @@
 `timescale 1ps/1ps
 `default_nettype none
 
+// verilator lint_off WIDTHTRUNC
+// verilator lint_off WIDTHEXPAND
+
 module axis_data_fifo_v2_0_3_top #
 (
 ///////////////////////////////////////////////////////////////////////////////
@@ -662,6 +665,7 @@ endgenerate
 
 endmodule // axis_data_fifo
 
+// verilator lint_on WIDTHTRUNC
+// verilator lint_on WIDTHEXPAND
+
 `default_nettype wire
-
-

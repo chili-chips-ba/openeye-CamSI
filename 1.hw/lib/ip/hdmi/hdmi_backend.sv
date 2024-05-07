@@ -102,23 +102,25 @@ module hdmi_backend
        end
        else begin
           // Count lines and rows      
-          if (hcount == HFRAME-1) begin
+          if (hcount == 11'(HFRAME-1)) begin
              hcount    <= '0;
 
-             if (vcount == VFRAME-1) begin
+             if (vcount == 11'(VFRAME-1)) begin
                 vcount <= '0;
              end
              else begin
-                vcount <= 11'(vcount + 12'(1)); 
+                vcount <= 11'(vcount + 11'(1)); 
              end
           end
           else begin
-             hcount    <= 11'(hcount + 12'(1)); 
+             hcount    <= 11'(hcount + 11'(1)); 
           end
 
           // Horizontal Sync
           //if (hcount == 11'd0) begin 
-          if ((hcount >= HSYNC_START) && (hcount < HSYNC_END)) begin
+          if (   (hcount >= 11'(HSYNC_START)) 
+              && (hcount <  11'(HSYNC_END))
+          ) begin
              hsync <=  HSYNC_POLARITY;
           end
           else begin
@@ -126,7 +128,7 @@ module hdmi_backend
           end 
           
           // Vertical Sync
-          //if ((vcount >= VSYNC_START) && (vcount < VSYNC_END)) begin
+          //if ((vcount >= 11'(VSYNC_START)) && (vcount < 11'(VSYNC_END))) begin
           if (vcount < 11'd3) begin
              vsync <=  VSYNC_POLARITY;
           end
@@ -138,12 +140,12 @@ module hdmi_backend
           // Blank when outside the visible screen
           //blank <= (hcount >= HSCREEN) | (vcount >= VSCREEN);
           blank      <= (hcount == 11'd0)
-                      | (hcount >= (HSCREEN+1))
-                      | (vcount < 11'd3)
-                      | (vcount >= (VSCREEN+3));
+                      | (hcount >= 11'(HSCREEN+1))
+                      | (vcount <  11'd3)
+                      | (vcount >= 11'(VSCREEN+3));
 
-          hdmi_frame <= (vcount < 11'd3)
-                      | (vcount >= (VSCREEN+3));
+          hdmi_frame <= (vcount <  11'd3)
+                      | (vcount >= 11'(VSCREEN+3));
        end
 
     end: _tbase_gen

@@ -44,10 +44,11 @@ module fpga_olvds (
    OBUFDS #(
       .IOSTANDARD("TMDS_33"),
       .SLEW("FAST")
-   ) u_OBUFDS (
-      .O(o),
-      .OB(ob),
-      .I(i)
+   ) 
+   u_OBUFDS (
+      .O  (o),
+      .OB (ob),
+      .I  (i)
    );
 
 endmodule: fpga_olvds

@@ -18,9 +18,14 @@ clean:
 	rm -rf output
 
 #-------------------------------------------------------------
-#___Global macro___
+#___Global macros___
 #   +define+SIM_ONLY \    to speed-up things for sim
 #   +define+MIPI_4_LANE \
+#
+#___Xilinx macros___
+#   +define+XIL_TIMING \
+#   +define+HACKED_UNISIM \
+#
 #-------------------------------------------------------------
 compile: 
 	verilator \
@@ -33,10 +38,11 @@ compile:
 		--Mdir ./output \
 		\
 		+define+SIM_ONLY \
+		+define+HACKED_UNISIM \
 		\
 		-f ${HW_SRC}/top.filelist \
 		\
-		models/xilinx.prim_sim.CHILI.v \
+		models/xilinx.unisim.CHILI.v \
 		${TB_NAME}.sv \
 		--top-module ${TB_NAME}
 
@@ -94,7 +100,11 @@ xml2stems:
 		--timescale 1ps/1ps \
 		-f ${HW_SRC}/top.filelist \
 		${TB_NAME}.sv \
-		models/xilinx.prim_sim.CHILI.v \
+                \
+		+define+SIM_ONLY \
+		+define+HACKED_UNISIM \
+                \
+		models/xilinx.unisim.CHILI.v \
 		--top-module ${TB_NAME}
 	xml2stems tb.xml tb.stems
 

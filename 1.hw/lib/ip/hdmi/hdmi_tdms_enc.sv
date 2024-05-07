@@ -72,10 +72,12 @@ module hdmi_tdms_enc
        xored[0] = raw.d[0];
        xnord[0] = raw.d[0];
 
+       // verilator lint_off ALWCOMBORDER
        for (int i=1; i<8; i++) begin
            xored[i] =   raw.d[i] ^ xored[i-1];
            xnord[i] = ~(raw.d[i] ^ xnord[i-1]);
        end
+       // verilator lint_on ALWCOMBORDER
 
        xored[8] = HI;
        xnord[8] = LO;

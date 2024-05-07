@@ -162,12 +162,31 @@ module fpga_pll_hdmi (
        .STARTUP_WAIT("FALSE")     // Delays DONE until MMCM is locked (FALSE, TRUE)
     ) 
     u_MMCME2_BASE (
-       .CLKOUT0(uclk_pix5),       // 1-bit output: CLKOUT0
-       .CLKOUT2(uclk_pix),        // 1-bit output: CLKOUT2
-       .CLKFBOUT(clkfb),          // 1-bit output: Feedback clock
-       .LOCKED(pll_lock),         // 1-bit output: LOCK
-       .CLKIN1(clk_ext),          // 1-bit input: Clock
-       .CLKFBIN(clkfb)            // 1-bit input: Feedback clock
+       .CLKOUT0   (uclk_pix5),    //o: CLKOUT0
+       .CLKOUT0B  (),             //o
+
+       .CLKOUT1   (),             //o
+       .CLKOUT1B  (),             //o
+
+       .CLKOUT2   (uclk_pix),     //o: CLKOUT2
+       .CLKOUT2B  (),             //o
+
+       .CLKOUT3   (),             //o 
+       .CLKOUT3B  (),             //o 
+
+       .CLKOUT4   (),             //o                
+       .CLKOUT5   (),             //o 
+       .CLKOUT6   (),             //o 
+
+       .CLKFBOUT  (clkfb),        //o: Feedback clock
+       .LOCKED    (pll_lock),     //o: LOCK
+
+       .CLKIN1    (clk_ext),      //i: Clock
+       .CLKFBIN   (clkfb),        //i: Feedback clock
+       .CLKFBOUTB (),             //o
+
+       .PWRDWN    (1'b0),         //i
+       .RST       (1'b0)          //i
     );
 
 `endif

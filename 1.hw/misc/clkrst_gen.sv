@@ -60,7 +60,7 @@ module clkrst_gen
 //--------------------------------
 // Clock and reset gen
 //--------------------------------
-   IBUFG u_ibufg (.I(clk_ext), .O(clk_100));
+   BUFG u_ibufio (.I(clk_ext), .O(clk_100));
    
    fpga_pll_top u_pll_top (
       .areset   (reset_ext), //i
@@ -118,7 +118,7 @@ module clkrst_gen
             clk_1hz <= ~clk_1hz;
           
             if (rst_delay_cnt < 4'd8) begin
-                rst_delay_cnt = 4'(rst_delay_cnt + 4'(1));
+                rst_delay_cnt <= 4'(rst_delay_cnt + 4'(1));
           
                 // Enable CMOS power after 2 secs to give supply
                 // time to stabilize. In reality, while only a few

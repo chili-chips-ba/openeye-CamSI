@@ -63,9 +63,16 @@ module fpga_oser10 (
       .TBYTE_SRC("FALSE"),    // Tristate byte source (FALSE, TRUE)
       .TRISTATE_WIDTH(1)      // 3-state converter width (1,4)
    ) master_oserdese (
-      .OQ(q),                 // 1-bit output: Data path output
-      .CLK(clk_ser),          // 1-bit input: High speed clock
-      .CLKDIV(clk_par),       // 1-bit input: Divided clock
+      .OFB      (),           //o:
+      .SHIFTOUT1(),           //o:
+      .SHIFTOUT2(),           //o:
+      .TBYTEOUT (),           //o:
+      .TFB      (),           //o:
+      .TQ       (),           //o:
+
+      .OQ     (q),            //o: Data path output
+      .CLK    (clk_ser),      //i: High speed clock
+      .CLKDIV (clk_par),      //i: Divided clock
 
      //D1 - D8: 1-bit (each) input: Parallel data inputs (1-bit each)
       .D1(d[0]),
@@ -105,10 +112,16 @@ module fpga_oser10 (
       .TBYTE_SRC("FALSE"),    // Tristate byte source (FALSE, TRUE)
       .TRISTATE_WIDTH(1)      // 3-state converter width (1,4)
    ) slave_oserdese (
-     //SHIFTOUT1 / SHIFTOUT2: 1-bit (each) output: Data output expansion (1-bit each)
-      .SHIFTOUT1(shift1),
-      .SHIFTOUT2(shift2),
+      .OFB    (),             //o:
+      .OQ     (),             //o:
 
+     //SHIFTOUT1 / SHIFTOUT2: 1-bit (each) output: Data output expansion (1-bit each)
+      .SHIFTOUT1(shift1),     //o:
+      .SHIFTOUT2(shift2),     //o:
+      .TBYTEOUT (),           //o:
+      .TFB      (),           //o:
+      .TQ       (),           //o:
+                     
       .CLK(clk_ser),          // 1-bit input: High speed clock
       .CLKDIV(clk_par),       // 1-bit input: Divided clock
 

@@ -38,8 +38,8 @@
 //========================================================================
 
 module csi_rx_phy_dat #(
-   parameter     INVERT  = 1'b0,  // invert or not (if pairs are swapped on board)
-   parameter int DELAY   = 3      // IDELAY delay value for skew compensation
+   parameter          INVERT = 1'b0,// 1 to invert (if pairs are swapped on board)
+   parameter bit[4:0] DELAY  = 5'd3 // IDELAY delay value for skew compensation
 )(
    input  logic       bit_clock,  // DDR bit clocks, buffered from D-PHY clock
    input  logic       byte_clock, // byte clock = input clock /4
@@ -75,7 +75,7 @@ module csi_rx_phy_dat #(
       .DELAY_SRC             ("IDATAIN"),  // Delay input (IDATAIN, DATAIN)
       .HIGH_PERFORMANCE_MODE ("TRUE"),     // Reduced jitter:TRUE; Reduced power:FALSE
       .IDELAY_TYPE           ("VAR_LOAD"), // FIXED, VARIABLE, VAR_LOAD, VAR_LOAD_PIPE
-      .IDELAY_VALUE          (DELAY),      // Input delay tap setting (0-31)
+      .IDELAY_VALUE          ({27'd0,DELAY}), // Input delay tap setting (0-31)
       .PIPE_SEL              ("FALSE"),    // Select pipelined mode: FALSE/TRUE
       .REFCLK_FREQUENCY      (199.5),      // IDELAYCTRL clock input frequency in MHz:
                                            //  190.0-210.0 or 290.0-310.0

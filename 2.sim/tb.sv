@@ -45,7 +45,7 @@ module tb #(
    end
 
 //--------------------------------------------------------------
-   diff_t cam_dphy_dat [NUM_LANE];
+   lane_diff_t cam_dphy_dat;
 
    top dut (
       .areset        (reset),        //i     
@@ -57,7 +57,7 @@ module tb #(
    
      //MIPI DPHY from/to Camera
       .cam_dphy_clk  (),             //i'diff_t 
-      .cam_dphy_dat  (cam_dphy_dat), //i'diff_t[NUM_LANE]
+      .cam_dphy_dat  (cam_dphy_dat), //i'lane_diff_t
 
       .cam_en        (),             //o
       

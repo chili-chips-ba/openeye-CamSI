@@ -56,10 +56,10 @@ module top
    inout  wire   i2c_scl,
    
   //MIPI DPHY from/to Camera
-   input  diff_t cam_dphy_clk,
-   input  diff_t cam_dphy_dat [NUM_LANE],
+   input  diff_t      cam_dphy_clk,
+   input  lane_diff_t cam_dphy_dat,
 
-   output logic  cam_en,
+   output logic       cam_en,
       
   //HDMI output, goes directly to connector
    output logic  hdmi_clk_p,
@@ -122,7 +122,7 @@ module top
                           
      //MIPI DPHY from/to Camera
       .cam_dphy_clk       (cam_dphy_clk),   //i'diff_t
-      .cam_dphy_dat       (cam_dphy_dat),   //i'diff_t[NUM_LANE]
+      .cam_dphy_dat       (cam_dphy_dat),   //i'lane_diff_t
       .cam_en             (cam_en),         //o 
 
      //CSI to internal video pipeline     
