@@ -1,0 +1,58 @@
+#==========================================================================
+# List of file to make 'top.sv' design module
+#==========================================================================
+
+${HW_SRC}/top_pkg.sv
+
+#---Library of target-specific components
+${HW_SRC}/lib/fpgatech/XILINX/fpga_olvds.sv
+${HW_SRC}/lib/fpgatech/XILINX/fpga_oser10.sv
+${HW_SRC}/lib/fpgatech/XILINX/fpga_pll_hdmi.sv
+${HW_SRC}/lib/fpgatech/XILINX/fpga_pll_top.sv
+
+#---Library of IP components
+#XILINX--|  +incdir+${HW_SRC}/lib/ip/axis_data_fifo.XILINX
+#XILINX--|  ${HW_SRC}/lib/ip/axis_data_fifo.XILINX/axis_infrastructure_v1_1_vl_rfs.v
+#XILINX--|  ${HW_SRC}/lib/ip/axis_data_fifo.XILINX/axis_data_fifo_v2_0_vl_rfs.v
+#XILINX--|  ${HW_SRC}/lib/ip/axis_data_fifo.XILINX/axis_data_fifo.v
+
+${HW_SRC}/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv
+${HW_SRC}/lib/ip/axis_data_fifo.OPENSRC/afifo.sv
+${HW_SRC}/lib/ip/axis_data_fifo.OPENSRC/axis_data_fifo.sv
+
+${HW_SRC}/lib/ip/hdmi/hdmi_pkg.sv
+${HW_SRC}/lib/ip/hdmi/hdmi_tdms_enc.sv
+${HW_SRC}/lib/ip/hdmi/hdmi_backend.sv
+${HW_SRC}/lib/ip/hdmi/hdmi_top.sv
+
+#${HW_SRC}/lib/ip/i2c_master/i2c_init.mem
+${HW_SRC}/lib/ip/i2c_master/i2c_ctrl.sv
+${HW_SRC}/lib/ip/i2c_master/i2c_top.sv
+
+#---CSI-Rx
+${HW_SRC}/csi_rx/csi_rx_phy_clk.sv
+${HW_SRC}/csi_rx/csi_rx_phy_dat.sv
+${HW_SRC}/csi_rx/csi_rx_clk_det.sv
+${HW_SRC}/csi_rx/csi_rx_align_byte.sv
+${HW_SRC}/csi_rx/csi_rx_align_word.sv
+${HW_SRC}/csi_rx/csi_rx_packer_handler.sv
+${HW_SRC}/csi_rx/csi_rx_hdr_ecc.sv
+${HW_SRC}/csi_rx/csi_rx.sv
+${HW_SRC}/csi_rx/csi_rx_top.sv
+
+#---ISP
+${HW_SRC}/isp/raw2rgb.sv
+
+#---Misc
+${HW_SRC}/misc/rgb2hdmi.sv
+${HW_SRC}/misc/clkrst_gen.sv
+
+#---TOP
+${HW_SRC}/top.sv
+
+#---Constraints
+#${HW_SRC}/top.xdc
+
+#==========================================================================
+# End-of-File
+#==========================================================================
