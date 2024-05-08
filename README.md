@@ -49,8 +49,9 @@ Termination resistors circled in the image pose a major problem to the signal in
 
 When using an FPGA internal termination resistor on LVDS_25 IOSTANDARD, it is important to set the voltage of the VCCIO bank to 2.5V to ensure that the resistance of termination resistors is 100 Ohm. We do that by switching DIP 2 to ON state to set IOV = 2.5V and using Jumpers J14, J16, and J17 to connect VCCIO to IOV.
  
-After all, hardware-related problems are solved, RTL design is followed. For that, there is a block diagram of the MIPI CSI2 protocol implemented in this work:
-**add block diagram**
+<br /> After all, hardware-related problems are solved, RTL design is followed. For that, there is a block diagram of the MIPI CSI2 protocol implemented in this work:
+
+<br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/FPGA-Block-Diagram.png""><br />
 
 There are a few difficulties/twists in the RTL design process because the VHDPlus CRUVI module has only differential input pins, not a single LP input pin. This means that the detection of blanking parts between frames has to be done by checking whether the clock signal from the camera is active and stable. More about this issue on **add issue**
 
