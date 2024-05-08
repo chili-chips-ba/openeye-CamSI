@@ -51,7 +51,7 @@ When using an FPGA internal termination resistor on LVDS_25 IOSTANDARD, it is im
  
 <br /> After all, hardware-related problems are solved, RTL design is followed. For that, there is a block diagram of the MIPI CSI2 protocol implemented in this work:
 
-<br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/FPGA-Block-Diagram.png""><br />
+<br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/FPGA-Block-Diagram.png"><br />
 
 There are a few difficulties/twists in the RTL design process because the VHDPlus CRUVI module has only differential input pins, not a single LP input pin. This means that the detection of blanking parts between frames has to be done by checking whether the clock signal from the camera is active and stable. More about this issue on **add issue**
 
