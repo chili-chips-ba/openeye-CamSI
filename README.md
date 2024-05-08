@@ -28,7 +28,7 @@ In the image, there is a Trenz carrier board, a Trenz 4x5 SoM with Artix-7 FPGA 
 The main goal is to acquire an image/video from the camera sensor on the Raspberry Pi camera (Sony IMX219) and display the captured image through HDMI output on the monitor.
 
 ### *HDMI output*
-HDMI source code located in the [folder](1.hw/ip.hdmi) supports:
+HDMI [source code](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/1.hw/lib/ip/hdmi) supports:
 - 720p@60Hz
 - 1080p@30Hz
 <br /> More about HDMI options and limitations in the [HDMI issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/1#issue-2278453405).
@@ -37,7 +37,7 @@ Test pattern image 720p@60Hz:
 <br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/c405a0d6-2086-452a-aa2a-435240055c48" width="500"><br />
 
 ### *Camera Configuration*
-There are plenty of configurabile registers on the IMX219 camera sensor. On the issue **add issue** you can see what registers we configured in order to make whole system works as expected. Camera is configured to output 720p@60Hz, but in order to configure registers of the camera sensor, I2C comunication protcol was written. More about this on [I2C issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/3). Next image shows some data beenig written on the camera sensor.
+There are plenty of configurabile registers on the IMX219 camera sensor. Camera is configured to output 720p@60Hz. In order to configure registers of the camera sensor, I2C comunication protcol was written. Xou can reed more about I2C protocol on [I2C issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/3). Next image shows some data beenig written on the camera sensor.
 <img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/2b54bf12-1366-4819-8080-df7d5cf8fa20" width="700"><br />
 ### *Image acquisition*
 Sony [IMX219](0.doc/Sensor.2-lane.RPi2.1/IMX219PQ.Datasheet.pdf) camera sensor is used for Image acquisition. Camera sensor is connected with FPGA with a flex cable through [VHDPlus](https://vhdplus.com/docs/components/camera/) CRUVI module. 
