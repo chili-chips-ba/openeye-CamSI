@@ -1,0 +1,257 @@
+++ module tb file tb.sv lines 19 - 19
+++ begin clock_gen file tb.sv line 36
+++ comp clock_gen:G0 type clock_gen:G0 parent tb
+++ module clock_gen:G0 file tb.sv lines 36 - 36
+++ begin run_sim file tb.sv line 40
+++ comp run_sim:G1 type run_sim:G1 parent clock_gen:G0
+++ module run_sim:G1 file tb.sv lines 40 - 40
+++ endbegin clock_gen
+++ endbegin run_sim
+++ comp dut type top parent tb
+++ module top file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/top.sv lines 47 - 47
+++ comp u_clkrst_gen type clkrst_gen parent top
+++ comp u_i2c type i2c_top parent top
+++ comp u_csi_rx_top type csi_rx_top parent top
+++ comp u_raw2rgb type raw2rgb parent top
+++ comp u_rgb2hdmi type rgb2hdmi parent top
+++ comp u_hdmi_top type hdmi_top parent top
+++ module hdmi_top file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_top.sv lines 52 - 52
+++ comp u_hdmi_backend type hdmi_backend parent hdmi_top
+++ module i2c_top file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/i2c_master/i2c_top.sv lines 41 - 41
+++ comp u_ctrl type i2c_ctrl parent i2c_top
+++ comp u_i2c_iobuf type IOBUF parent i2c_top
+++ module csi_rx_top file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_top.sv lines 39 - 39
+++ comp u_csi_rx type csi_rx parent csi_rx_top
+++ comp u_depacket type csi_rx_packet_handler parent csi_rx_top
+++ module raw2rgb file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/isp/raw2rgb.sv lines 47 - 47
+++ module rgb2hdmi file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/misc/rgb2hdmi.sv lines 40 - 40
+++ comp u_afifo type axis_data_fifo parent rgb2hdmi
+++ module clkrst_gen file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/misc/clkrst_gen.sv lines 41 - 41
+++ comp u_ibufio type BUFG parent clkrst_gen
+++ comp u_pll_top type fpga_pll_top parent clkrst_gen
+++ comp u_idelayctrl type IDELAYCTRL parent clkrst_gen
+++ module fpga_pll_top file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/fpgatech/XILINX/fpga_pll_top.sv lines 39 - 39
+++ comp uMMCME2_BASE type MMCME2_BASE__pi1 parent fpga_pll_top
+++ comp u_BUFG_clk_out0 type BUFG parent fpga_pll_top
+++ comp u_BUFG_clk_out2 type BUFG parent fpga_pll_top
+++ module axis_data_fifo file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/axis_data_fifo.sv lines 1 - 1
+++ comp afifo type afifo__D18_Ad parent axis_data_fifo
+++ comp ram type DP_BRAM__D2000_W18 parent axis_data_fifo
+++ module hdmi_backend file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv lines 43 - 43
+++ comp u_fpga_pll_hdmi type fpga_pll_hdmi parent hdmi_backend
+++ begin _tbase_gen file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv line 94
+++ comp _tbase_gen:G2 type _tbase_gen:G2 parent hdmi_backend
+++ module _tbase_gen:G2 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv lines 94 - 94
+++ endbegin _tbase_gen
+++ begin _comb file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv line 166
+++ comp _comb:G3 type _comb:G3 parent hdmi_backend
+++ module _comb:G3 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv lines 166 - 166
+++ endbegin _comb
+++ begin _tdms_sdat file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv line 178
+++ comp _tdms_sdat:G4 type _tdms_sdat:G4 parent hdmi_backend
+++ module _tdms_sdat:G4 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv lines 178 - 178
+++ endbegin _tdms_sdat
+++ begin _tdms_sdat[0] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv line 179
+++ comp _tdms_sdat[0]:G5 type _tdms_sdat[0]:G5 parent hdmi_backend
+++ module _tdms_sdat[0]:G5 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv lines 179 - 179
+++ comp u_tmds type hdmi_tdms_enc parent _tdms_sdat[0]:G5
+++ comp u_oser_dat type fpga_oser10 parent _tdms_sdat[0]:G5
+++ comp u_obuf_dat type fpga_olvds parent _tdms_sdat[0]:G5
+++ endbegin _tdms_sdat[0]
+++ begin _tdms_sdat[1] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv line 179
+++ comp _tdms_sdat[1]:G6 type _tdms_sdat[1]:G6 parent hdmi_backend
+++ module _tdms_sdat[1]:G6 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv lines 179 - 179
+++ comp u_tmds type hdmi_tdms_enc parent _tdms_sdat[1]:G6
+++ comp u_oser_dat type fpga_oser10 parent _tdms_sdat[1]:G6
+++ comp u_obuf_dat type fpga_olvds parent _tdms_sdat[1]:G6
+++ endbegin _tdms_sdat[1]
+++ begin _tdms_sdat[2] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv line 179
+++ comp _tdms_sdat[2]:G7 type _tdms_sdat[2]:G7 parent hdmi_backend
+++ module _tdms_sdat[2]:G7 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_backend.sv lines 179 - 179
+++ comp u_tmds type hdmi_tdms_enc parent _tdms_sdat[2]:G7
+++ comp u_oser_dat type fpga_oser10 parent _tdms_sdat[2]:G7
+++ comp u_obuf_dat type fpga_olvds parent _tdms_sdat[2]:G7
+++ endbegin _tdms_sdat[2]
+++ comp u_oser_clk type fpga_oser10 parent hdmi_backend
+++ comp u_obuf_clk type fpga_olvds parent hdmi_backend
+++ module i2c_ctrl file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/i2c_master/i2c_ctrl.sv lines 39 - 39
+++ module csi_rx_packet_handler file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_packer_handler.sv lines 42 - 42
+++ comp u_ecc type csi_rx_hdr_ecc parent csi_rx_packet_handler
+++ module csi_rx file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx.sv lines 44 - 44
+++ comp u_phy_clk type csi_rx_phy_clk parent csi_rx
+++ comp u_clk_det type csi_rx_clk_det parent csi_rx
+++ begin _lane file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx.sv line 96
+++ comp _lane:G8 type _lane:G8 parent csi_rx
+++ module _lane:G8 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx.sv lines 96 - 96
+++ endbegin _lane
+++ begin _lane[0] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx.sv line 101
+++ comp _lane[0]:G9 type _lane[0]:G9 parent csi_rx
+++ module _lane[0]:G9 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx.sv lines 101 - 101
+++ comp u_phy_dat type csi_rx_phy_dat parent _lane[0]:G9
+++ endbegin _lane[0]
+++ begin _lane[1] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx.sv line 101
+++ comp _lane[1]:G10 type _lane[1]:G10 parent csi_rx
+++ module _lane[1]:G10 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx.sv lines 101 - 101
+++ comp u_phy_dat type csi_rx_phy_dat__Iz5 parent _lane[1]:G10
+++ endbegin _lane[1]
+++ comp u_align_byte type csi_rx_align_byte parent csi_rx
+++ comp u_align_word type csi_rx_align_word parent csi_rx
+++ module IOBUF file models/xilinx.unisim.CHILI.v lines 113 - 113
+++ module IDELAYCTRL file models/xilinx.unisim.CHILI.v lines 977 - 977
+++ module fpga_olvds file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/fpgatech/XILINX/fpga_olvds.sv lines 38 - 38
+++ comp u_OBUFDS type OBUFDS__Iz14_S46415354 parent fpga_olvds
+++ module fpga_oser10 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/fpgatech/XILINX/fpga_oser10.sv lines 42 - 42
+++ comp master_oserdese type OSERDESE2__DCa_Iz5_IBz5_TC1 parent fpga_oser10
+++ comp slave_oserdese type OSERDESE2__pi4 parent fpga_oser10
+++ module fpga_pll_hdmi file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/fpgatech/XILINX/fpga_pll_hdmi.sv lines 54 - 54
+++ comp u_MMCME2_BASE type MMCME2_BASE__pi3 parent fpga_pll_hdmi
+++ comp u_BUFG_clk_pix type BUFG parent fpga_pll_hdmi
+++ comp u_BUFG_clk_pix5 type BUFG parent fpga_pll_hdmi
+++ module hdmi_tdms_enc file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv lines 43 - 43
+++ begin _comb file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv line 69
+++ comp _comb:G11 type _comb:G11 parent hdmi_tdms_enc
+++ module _comb:G11 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv lines 69 - 69
+++ begin unnamedblk1 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv line 76
+++ comp unnamedblk1:G12 type unnamedblk1:G12 parent _comb:G11
+++ module unnamedblk1:G12 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv lines 76 - 76
+++ endbegin _comb
+++ endbegin unnamedblk1
+++ begin unnamedblk2 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv line 88
+++ comp unnamedblk2:G13 type unnamedblk2:G13 parent hdmi_tdms_enc
+++ module unnamedblk2:G13 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv lines 88 - 88
+++ endbegin unnamedblk2
+++ begin unnamedblk3 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv line 107
+++ comp unnamedblk3:G14 type unnamedblk3:G14 parent hdmi_tdms_enc
+++ module unnamedblk3:G14 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv lines 107 - 107
+++ endbegin unnamedblk3
+++ begin _flop file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv line 121
+++ comp _flop:G15 type _flop:G15 parent hdmi_tdms_enc
+++ module _flop:G15 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/hdmi/hdmi_tdms_enc.sv lines 121 - 121
+++ endbegin _flop
+++ module csi_rx_phy_clk file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_phy_clk.sv lines 42 - 42
+++ comp u_bufds_clk type IBUFDS__D54525545_IDz6 parent csi_rx_phy_clk
+++ comp u_bufmr type BUFMR parent csi_rx_phy_clk
+++ comp u_bufr type BUFR parent csi_rx_phy_clk
+++ comp u_clkdiv type BUFR__B4 parent csi_rx_phy_clk
+++ module csi_rx_phy_dat file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_phy_dat.sv lines 40 - 40
+++ comp u_ibuf type IBUFDS__D54525545_IDz6 parent csi_rx_phy_dat
+++ comp u_indelay type IDELAYE2__pi2 parent csi_rx_phy_dat
+++ comp ideser type ISERDESE2__DB8_IEz9_IFz10_N1 parent csi_rx_phy_dat
+++ module csi_rx_clk_det file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_clk_det.sv lines 43 - 43
+++ module csi_rx_align_byte file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_byte.sv lines 51 - 51
+++ begin _ff file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_byte.sv line 73
+++ comp _ff:G16 type _ff:G16 parent csi_rx_align_byte
+++ module _ff:G16 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_byte.sv lines 73 - 73
+++ endbegin _ff
+++ begin _comb file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_byte.sv line 115
+++ comp _comb:G17 type _comb:G17 parent csi_rx_align_byte
+++ module _comb:G17 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_byte.sv lines 115 - 115
+++ endbegin _comb
+++ module csi_rx_align_word file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_word.sv lines 66 - 66
+++ begin unnamedblk1 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_word.sv line 103
+++ comp unnamedblk1:G18 type unnamedblk1:G18 parent csi_rx_align_word
+++ module unnamedblk1:G18 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_word.sv lines 103 - 103
+++ endbegin unnamedblk1
+++ begin unnamedblk2 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_word.sv line 121
+++ comp unnamedblk2:G19 type unnamedblk2:G19 parent csi_rx_align_word
+++ module unnamedblk2:G19 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_word.sv lines 121 - 121
+++ endbegin unnamedblk2
+++ begin unnamedblk3 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_word.sv line 143
+++ comp unnamedblk3:G20 type unnamedblk3:G20 parent csi_rx_align_word
+++ module unnamedblk3:G20 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_align_word.sv lines 143 - 143
+++ endbegin unnamedblk3
+++ module csi_rx_hdr_ecc file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_hdr_ecc.sv lines 38 - 38
+++ module csi_rx_phy_dat__Iz5 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/csi_rx/csi_rx_phy_dat.sv lines 40 - 40
+++ comp u_ibuf type IBUFDS__D54525545_IDz6 parent csi_rx_phy_dat__Iz5
+++ comp u_indelay type IDELAYE2__pi2 parent csi_rx_phy_dat__Iz5
+++ comp ideser type ISERDESE2__DB8_IEz9_IFz10_N1 parent csi_rx_phy_dat__Iz5
+++ module afifo__D18_Ad file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/afifo.sv lines 68 - 68
+++ module DP_BRAM__D2000_W18 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 1 - 1
+++ begin unnamedblk1 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 27
+++ comp unnamedblk1:G21 type unnamedblk1:G21 parent DP_BRAM__D2000_W18
+++ module unnamedblk1:G21 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 27 - 27
+++ endbegin unnamedblk1
+++ begin _i file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 30
+++ comp _i:G22 type _i:G22 parent DP_BRAM__D2000_W18
+++ module _i:G22 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 30 - 30
+++ endbegin _i
+++ begin _i[0] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 31
+++ comp _i[0]:G23 type _i[0]:G23 parent DP_BRAM__D2000_W18
+++ module _i[0]:G23 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 31 - 31
+++ begin Ma file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 32
+++ comp Ma:G24 type Ma:G24 parent _i[0]:G23
+++ module Ma:G24 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 32 - 32
+++ endbegin _i[0]
+++ endbegin Ma
+++ begin _i[1] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 31
+++ comp _i[1]:G25 type _i[1]:G25 parent DP_BRAM__D2000_W18
+++ module _i[1]:G25 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 31 - 31
+++ begin Ma file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 32
+++ comp Ma:G26 type Ma:G26 parent _i[1]:G25
+++ module Ma:G26 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 32 - 32
+++ endbegin _i[1]
+++ endbegin Ma
+++ begin _i[2] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 31
+++ comp _i[2]:G27 type _i[2]:G27 parent DP_BRAM__D2000_W18
+++ module _i[2]:G27 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 31 - 31
+++ begin Ma file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 32
+++ comp Ma:G28 type Ma:G28 parent _i[2]:G27
+++ module Ma:G28 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 32 - 32
+++ endbegin _i[2]
+++ endbegin Ma
+++ begin _j file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 43
+++ comp _j:G29 type _j:G29 parent DP_BRAM__D2000_W18
+++ module _j:G29 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 43 - 43
+++ endbegin _j
+++ begin _j[0] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 44
+++ comp _j[0]:G30 type _j[0]:G30 parent DP_BRAM__D2000_W18
+++ module _j[0]:G30 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 44 - 44
+++ begin Mb file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 45
+++ comp Mb:G31 type Mb:G31 parent _j[0]:G30
+++ module Mb:G31 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 45 - 45
+++ endbegin _j[0]
+++ endbegin Mb
+++ begin _j[1] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 44
+++ comp _j[1]:G32 type _j[1]:G32 parent DP_BRAM__D2000_W18
+++ module _j[1]:G32 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 44 - 44
+++ begin Mb file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 45
+++ comp Mb:G33 type Mb:G33 parent _j[1]:G32
+++ module Mb:G33 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 45 - 45
+++ endbegin _j[1]
+++ endbegin Mb
+++ begin _j[2] file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 44
+++ comp _j[2]:G34 type _j[2]:G34 parent DP_BRAM__D2000_W18
+++ module _j[2]:G34 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 44 - 44
+++ begin Mb file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv line 45
+++ comp Mb:G35 type Mb:G35 parent _j[2]:G34
+++ module Mb:G35 file /mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/../1.hw/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv lines 45 - 45
+++ endbegin _j[2]
+++ endbegin Mb
+++ module BUFG file models/xilinx.unisim.CHILI.v lines 160 - 160
+++ module BUFMR file models/xilinx.unisim.CHILI.v lines 169 - 169
+++ module BUFR file models/xilinx.unisim.CHILI.v lines 177 - 177
+++ begin genblk1 file models/xilinx.unisim.CHILI.v line 358
+++ comp genblk1:G36 type genblk1:G36 parent BUFR
+++ module genblk1:G36 file models/xilinx.unisim.CHILI.v lines 358 - 358
+++ endbegin genblk1
+++ module MMCME2_BASE__pi1 file models/xilinx.unisim.CHILI.v lines 988 - 988
+++ module IBUFDS__D54525545_IDz6 file models/xilinx.unisim.CHILI.v lines 129 - 129
+++ module BUFR__B4 file models/xilinx.unisim.CHILI.v lines 177 - 177
+++ begin genblk1 file models/xilinx.unisim.CHILI.v line 358
+++ comp genblk1:G37 type genblk1:G37 parent BUFR__B4
+++ module genblk1:G37 file models/xilinx.unisim.CHILI.v lines 358 - 358
+++ endbegin genblk1
+++ module IDELAYE2__pi2 file models/xilinx.unisim.CHILI.v lines 412 - 412
+++ begin genblk1 file models/xilinx.unisim.CHILI.v line 704
+++ comp genblk1:G38 type genblk1:G38 parent IDELAYE2__pi2
+++ module genblk1:G38 file models/xilinx.unisim.CHILI.v lines 704 - 704
+++ endbegin genblk1
+++ begin genblk2 file models/xilinx.unisim.CHILI.v line 733
+++ comp genblk2:G39 type genblk2:G39 parent IDELAYE2__pi2
+++ module genblk2:G39 file models/xilinx.unisim.CHILI.v lines 733 - 733
+++ endbegin genblk2
+++ module ISERDESE2__DB8_IEz9_IFz10_N1 file models/xilinx.unisim.CHILI.v lines 1101 - 1101
+++ module MMCME2_BASE__pi3 file models/xilinx.unisim.CHILI.v lines 988 - 988
+++ module OSERDESE2__DCa_Iz5_IBz5_TC1 file models/xilinx.unisim.CHILI.v lines 1042 - 1042
+++ module OSERDESE2__pi4 file models/xilinx.unisim.CHILI.v lines 1042 - 1042
+++ module OBUFDS__Iz14_S46415354 file models/xilinx.unisim.CHILI.v lines 146 - 146

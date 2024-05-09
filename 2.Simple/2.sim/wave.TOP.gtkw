@@ -1,0 +1,40 @@
+[*]
+[*] GTKWave Analyzer v3.3.118 (w)1999-2023 BSI
+[*] Tue May  7 07:55:24 2024
+[*]
+[dumpfile] "/mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/output/wave.fst"
+[dumpfile_mtime] "Tue May  7 07:52:37 2024"
+[dumpfile_size] 7247
+[savefile] "/mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/wave.TOP.gtkw"
+[timestart] 0
+[size] 1380 793
+[pos] -136 29
+*0.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[treeopen] TOP.tb.
+[treeopen] TOP.tb.dut.
+[sst_width] 409
+[signals_width] 319
+[sst_expanded] 1
+[sst_vpaned_height] 220
+@28
+TOP.tb.dut.areset
+TOP.tb.dut.cam_dphy_clk[1:0]
+TOP.tb.dut.cam_dphy_dat[0][1:0]
+TOP.tb.dut.cam_dphy_dat[1][1:0]
+TOP.tb.dut.cam_en
+TOP.tb.dut.clk_1hz
+TOP.tb.dut.clk_100
+TOP.tb.dut.clk_200
+TOP.tb.dut.clk_ext
+TOP.tb.dut.clk_pix
+TOP.tb.dut.csi_byte_clk
+TOP.tb.dut.csi_in_frame
+TOP.tb.dut.csi_in_line
+@22
+TOP.tb.dut.csi_word_data[0][7:0]
+TOP.tb.dut.csi_word_data[1][7:0]
+@28
+TOP.tb.dut.csi_word_valid
+[pattern_trace] 1
+[pattern_trace] 0

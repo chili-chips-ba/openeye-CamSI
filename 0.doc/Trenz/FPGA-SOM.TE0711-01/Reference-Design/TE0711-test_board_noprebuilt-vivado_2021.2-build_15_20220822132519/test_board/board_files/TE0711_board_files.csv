@@ -1,8 +1,0 @@
-CSV_VERSION=1.4
-#Comment:-do not change matrix position or remove CSV_VERSION:
-ID  , PRODID            ,PARTNAME           ,BOARDNAME                            ,SHORTNAME  ,ZYNQFLASHTYP ,FPGAFLASHTYP                           ,PCB_REV  ,DDR_SIZE ,FLASH_SIZE ,EMMC_SIZE  ,OTHERS ,NOTES  ,DESIGN
-1   , TE0711-01-35-2C   ,xc7a35tcsg324-2    ,trenz.biz:te0711_35_2c:part0:1.0     ,35_2c      ,NA           ,s25fl256sxxxxxx0-spi-x1_x2_x4|SPIx4|32 ,REV01    ,NA       ,32MB       ,NA         ,NA     ,NA     ,TE0711
-2   , TE0711-01-100-2C  ,xc7a100tcsg324-2   ,trenz.biz:te0711_100_2c:part0:1.0    ,100_2c     ,NA           ,s25fl256sxxxxxx0-spi-x1_x2_x4|SPIx4|32 ,REV01    ,NA       ,32MB       ,NA         ,NA     ,NA     ,TE0711
-3   , TE0711-01-35-2I   ,xc7a35tcsg324-2    ,trenz.biz:te0711_35_2i:part0:1.0     ,35_2i      ,NA           ,s25fl256sxxxxxx0-spi-x1_x2_x4|SPIx4|32 ,REV01    ,NA       ,32MB       ,NA         ,NA     ,NA     ,TE0711
-4   , TE0711-01-100-2I  ,xc7a100tcsg324-2   ,trenz.biz:te0711_100_2i:part0:1.0    ,100_2i     ,NA           ,s25fl256sxxxxxx0-spi-x1_x2_x4|SPIx4|32 ,REV01    ,NA       ,32MB       ,NA         ,NA     ,NA     ,TE0711
-4   , TE0711-01-S001    ,xc7a100tcsg324-2   ,trenz.biz:te0711_100_2i:part0:1.0    ,100_2i     ,NA           ,s25fl256sxxxxxx0-spi-x1_x2_x4|SPIx4|32 ,REV01    ,NA       ,32MB       ,NA         ,NA     ,NA     ,TE0711

@@ -1,3 +1,0 @@
-https://www.geeksforgeeks.org/examples-on-udp-header
-https://github.com/alexforencich/verilog-ethernet
-https://github.com/adamchristiansen/fpga-ethernet-udp

@@ -1,7 +1,0 @@
-CSV_VERSION=1.2
-#Comment:-do not change matrix position or remove CSV_VERSION:
-ID  , PRODID            ,PARTNAME           ,BOARDNAME                            ,SHORTNAME    ,ZYNQFLASHTYP ,FPGAFLASHTYP
-1   , te0711-01-35-2c   ,xc7a35tcsg324-2    ,trenz.biz:te0711_35_2c:part0:1.0     ,TE0711_35_2c    ,NA           ,s25fl256sxxxxxx0-spi-x1_x2_x4|SPIx4|32
-2   , te0711-01-100-2c  ,xc7a100tcsg324-2   ,trenz.biz:te0711_100_2c:part0:1.0    ,TE0711_100_2c   ,NA           ,s25fl256sxxxxxx0-spi-x1_x2_x4|SPIx4|32
-3   , te0711-01-35-2i   ,xc7a35tcsg324-2    ,trenz.biz:te0711_35_2i:part0:1.0     ,TE0711_35_2i    ,NA           ,s25fl256sxxxxxx0-spi-x1_x2_x4|SPIx4|32
-4   , te0711-01-100-2i  ,xc7a100tcsg324-2   ,trenz.biz:te0711_100_2i:part0:1.0    ,TE0711_100_2i   ,NA           ,s25fl256sxxxxxx0-spi-x1_x2_x4|SPIx4|32
