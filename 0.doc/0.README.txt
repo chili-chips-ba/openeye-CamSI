@@ -1,22 +1,72 @@
-Our Inspiration:
-   https://github.com/emard/ulx3s-misc/tree/master/examples
-   
----------------------------------------------------------------
-Our Communication:
-   1) Radiona Discord: https://discord.gg/F5UPDFFdsH
-   2) Olimex  Discord: https://discord.gg/yzkfzdN3Up
-   
-   3) goran.mahovlic@gmail.com
-   4) fpga@chili-chips.com
-   
+Our Inspirations:
+   https://github.com/StereoNinja/StereoNinjaFPGA
+   https://github.com/ryuz/jelly/blob/master/projects/zybo_z7/zybo_z7_imx219/README.md   
+
 ---------------------------------------------------------------
 Our Cards:
-   https://www.olimex.com/Products/FPGA/GateMate/GateMateA1-EVB/open-source-hardware
-   https://github.com/OLIMEX/GateMateA1-EVB/tree/main
+  
+  Carrier
+    https://shop.trenz-electronic.de/de/TEB0707-02-Trenz-Electronic-4-x-5-Modul-Carrier-fuer-CRUVI-Erweiterungsboards
+
+  FPGA-SOM
+    https://shop.trenz-electronic.de/de/TE0711-01-35-2C-High-IO-AMD-Artix-7-35T-Module-mit-Speedgrade-2C-und-USB
+
+  CRUVI PSRAM extension board
+    https://shop.trenz-electronic.de/en/CR00045-01-0-CRUVI-AP-Memory-x8/x16-Xccela-PSRAM-Board
+
+  CRUVI breakout for debug
+    https://shop.trenz-electronic.de/en/CR00026-01-A-CRUVI-Signal-breakout-debug-adapter
+
+  CRUVI 1000/100/100 Ethernet PHY
+    https://shop.trenz-electronic.de/en/CR00200-01-CRUVI-HS-Ethernet-PHY-Adapter
+
+  CRUVI Loopback Board
+    https://shop.trenz-electronic.de/en/CR00091-01-CRUVI-Loopback-adapter
+
+  CRUVI CSI Camera (pinout for RPi Camera)
+    https://vhdplus.com/docs/components/overview/#camera-extension
+    https://vhdplus.com/docs/components/camera
+    for questions please use sales@vhdplus.com
+
+  CRUVI IAS Camera (for OnSemi Camera)
+    https://vhdplus.com/docs/components/overview/#ias-camera-extension
+
+
+Trenz support:
+   antti.lukats@trenz-electronic.de
+   support@trenz-electronic.de
 
 ---------------------------------------------------------------
-Our Tools:
-   https://www.colognechip.com/docs/ug1002-toolchain-install-latest.pdf
-   
+Our 2-lane 16MP RPI camera - ArduCam IMX519
+   https://docs.arducam.com/Raspberry-Pi-Camera/Native-camera/16MP-IMX519
+   https://www.raspberrypi.com/documentation/computers/raspberry-pi-5.html#using-non-raspberry-pi-devices
+
+Our 4-lane sensor: IMX283
+   https://www.willwhang.dev/OneInchEye
+   https://x.com/kieranbingham/status/1720936625725677835?s=20
+
+---------------------------------------------------------------
+Migen + Proprietary D-PHY
+   https://antmicro.com/blog/2023/10/fully-open-source-fpga-design-for-sdi-mipi-video-converter
 ---------------------------------------------------------------
 
+Xilinx I/OSERDESE2 examples:
+ 
+1) LiteDRAM: https://github.com/enjoy-digital/litedram/blob/master/litedram/phy/s7ddrphy.py
+
+2) HDMI Core: https://github.com/litex-hub/litevideo/blob/master/litevideo/output/hdmi/s7.py
+
+Hans: Both of those cores have been tested working. I did not do any Fmax tests. Your mileage may vary.
+---------------------------------------------------------------
+
+@Yimin Gu made a CRUVI to Flatflex adapter for the Oneincheye sensor.
+BEWARE: This adapter was never used / tested, and it could be buggy.
+---------------------------------------------------------------
+
+Sonix WebCam chip
+   https://www.sonix.com.tw/article-en-995-7860
+---------------------------------------------------------------
+
+Good ISP Read:
+   https://www.eecs.yorku.ca/~mbrown/ICCV19_Tutorial_MSBrown.pdf
+---------------------------------------------------------------
