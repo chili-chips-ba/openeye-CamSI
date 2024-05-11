@@ -1,67 +1,83 @@
 # openEye-CamSI (Phase1)
-## *Project Objectives - Functional content*
-The goals of this development activity are to deliver a truly open-source, therefore accessible and trustworthy, video pipeline for three popular hi-rez imaging sensors:
+## *Objective 1 - Performance and Functional upgrade*
+The goals of this development activity are to deliver a truly opensource, therefore accessible and trustworthy, video pipeline for three popular hi-rez imaging sensors:
  - `2-lane RPiV2.1`, based on Sony IMX219, in `1280x720P@60Hz` RGB888 mode (aka `HD`)
  - `4-lane OneInchEye`, based on Sony IMX283, in `1920x1080P@30Hz` RGB888 mode (aka `FHD`)
  - `2-lane OV2740`, in a TBD "Webcam" setup for Lukas Henkel's [openLaptop](https://resources.altium.com/p/open-source-laptop-part-one) project
 
-The intent is to do it with mature and affordable <b>Artix7 FPGA</b>, by using its <b>IBUFDS, IDELAY, ISERDES</b> primitives for the camera front-end. These primitives are available in all IOBs, hence ubiquitous and relatively easy to work with, and already supported by open-source PNR tool for Xilinx Series7. This also leaves the path open for future reduction of total solution cost by migrating to [Spartan7](https://www.xilinx.com/video/fpga/spartan-7-technical-overview.html?_ga=2.252819658.271111311.1715447274-1421952438.1715447272), which does not have the GTP transceivers (aka "true SerDes").
+The intent is to do it with mature and affordable <b>Artix7 FPGA</b>, by using its <b>IBUFDS, IDELAY, ISERDES</b> primitives for the camera front-end. These primitives are available in all IOBs, hence ubiquitous and relatively easy to work with, and already supported by opensource PNR tool for Xilinx Series7. This also leaves the path open for future reduction of total solution cost by migrating to [Spartan7](https://www.xilinx.com/video/fpga/spartan-7-technical-overview.html?_ga=2.252819658.271111311.1715447274-1421952438.1715447272), which does not have the GTP transceivers (aka "true SerDes").
 
-To be clear -- We don't plan on using any of the 3rd party D-PHY front-end silicon devices specified in [XAPP894](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Xilinx/MIPI/xapp894-d-phy-solutions.pdf). Moreover, we won't even use the passive signal conditioning networks that Xilinx has recommended. Instead, our objective is to achieve robust Signal Integrity (SI) and smooth video flow for both HD and FHD quality level by pulling in **only on-chip resources**. 
+>To be clear -- We don't plan on using any of the 3rd party D-PHY front-end silicon devices specified in [XAPP894](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Xilinx/MIPI/xapp894-d-phy-solutions.pdf). Moreover, we won't even use the passive signal conditioning networks that Xilinx has recommended. Instead, our objective is to achieve robust Signal Integrity (SI) and smooth video flow for both HD and FHD quality levels by pulling in **only on-chip resources**.
 
-That brings about multiple challenges. Compared to StereoNinja's original work, which was done with LatticeSemi ECP5 FPGA, our target device does not have built-in support for D-PHY receiver (*no wonder why Artix7 costs less*). We are also doing it without expending much storage, all within meager BRAM allocation. In other words, no PSRAM, no SDRAM, no DDR or similar external chips are called to rescue to support our smooth HD/FHD video flow. That's a major upgrade to StereoNinja which  available in this entry-level family.
+That brings about multiple challenges. Compared to StereoNinja's original work, which was done with LatticeSemi ECP5 FPGA, our target device does not have the built-in support for D-PHY receiver *(no wonder why Artix7 costs less* :innocent:*)*.
 
->><b>This makes our solution simpler and more affordable, hence uniquely appealing to the makers <i>"on the budget"</i>!</b>. 
+We are also doing it without expending much storage, staying within meager internal-to-FPGA BRAM budget. In other words, no PSRAM, no SDRAM, no DDR or similar external chips are called to rescue to support our smooth HD/FHD video flow. That's a major upgrade to StereoNinja's design, where end-to-end, Camera-to-Monitor video flow was established only for the 640x480 VGA quality, and only in Grayscale, far below our vibrant RG888 color palette. This goes hand-in-hand with NLnet plan for this project to take StereoNinja's pioneering work to an order of magnitude higher performance and functionality level.
+
+>All this makes our solution simpler and more affordable, hence uniquely appealing to the makers *on the budget*, while also paving the path for openLaptop video subsystem.
+
 <img src="https://github.com/chili-chips-ba/openeye/assets/67533663/07cb0f47-c9c7-483e-a028-0066342f5023" width="250">
 
-Our objectives are to showcase real-time video streaming through FPGA, from Camera to:
- - <b>HDMI monitor</b>
- - <b>VLC, via 1Gbps Ethernet link, using UDP packets</b>
+On the sink side of Camera video feed, we intend to showcase real-time video streaming to:
+ - **HDMI** monitor
+ - **1Gbps Ethernet**, using UDP packets, rendered on a PC with [VLC Player](https://www.videolan.org)
 
-In prep for the follow on "Webcam" project, which will add to this list the <b>UVC</b> (USB2.0 Video Class) destination, we also intend to work out Webcam critical building blocks:
- - <b>Image Signal Processing (ISP)</b>: White Balance, Color Correction, Gamma Correction
- - <b>Video Compression</b>: JPEG. Possibly also H.264. While not needed for the 1Gbps Ethernet, the compression is mandatory for transmitting 1024P@30fps over USB2
+The follow on "Webcam" (aka Phase2) project is to add **UVC** (USB2.0 Video Class) to this list. In prep for this future work, we are to develop the following critical building blocks:
+ - `Image Signal Processing (ISP)` - White Balance, Color Correction, Gamma Correction
+ - `Video Compression` - JPEG. Possibly also H.264 *(not needed for 1Gbps Ethernet. Compression is mandatory for transmitting 1024P@30fps over USB2)*.
 
-## *Project Objectives - Opensource eco-system*
-We intend to tap into <a href="https://github.com/openXC7">openXC7</a> toolkit, including its web-based CI/CD flow. That's both for the security of images taken, and to help openXC7 attain the level of robustness found in the commercial / proprietary CAE tools. In that sense, <i>OpenEye-CamSI</i> is the continuation of our <a href="https://github.com/chili-chips-ba/openXC7-TetriSaraj">TetriSaraj</a>, which was the first openXC7 test case for a design more complex than a mere blinky. 
+Let's note that, while our design is pushing Artix7 to the limit, it is those very silicon limits that don't allow us to use the given imaging sensors to their fullest. Indeed, even StereoNinja's more capable LatticeSemi FPGA cannot generate HDMI at 1920x1080@60Hz. Using Vivado tool chain, we brought this design to the point where the Max Toggle Rate realistically achievable with Artix7 I/O structures and clock distribution network is the only factor preventing us from getting more bits, more resolution, more throughput from it.
 
->>Our goal is to resolve the fundamental challenges of working with IOSERDES and openXC7 at high frequencies. 
+## *Objective 2 - Opensource eco-system*
 
-It is important to emphasize that, in its current state, openXC7 is still rather immature, without even the basic timing awareness, yet alone timing-driven optimizations
->>The as-is openXC7 is simply not adequate for proper timing closure
+We intend to tap into [openXC7](https://github.com/openXC7">openXC7) toolkit, including its web-based CI/CD flow. That's both for the security of images taken, and to help openXC7 attain the level of robustness found in commercial / proprietary CAE tools, Xilinx Vivado in particular. In that sense, OpenEye-CamSI is the continuation of our [TetriSaraj](https://github.com/chili-chips-ba/openXC7-TetriSaraj), which was the first openXC7 test case for a design more complex than a mere blinky. 
 
-While another project is underway, aiming to bridge this major STA gap, it won't be ready in time for our Phase1. 
+>Our goal is to uncover and resolve issues of using openXC7 for IOSERDES at high frequencies and cutting-edge designs. 
 
-We therefore have Phase2 and, as needed, Phase3 in the plans, looking to be the first to try this new timing prowess in open-source PNR tools for Xilinx FPGAs, using it to squeeze most Fmax from our target device and camera chips. 
+It is important to note that, in its current state, openXC7 is rather immature, without even the basic timing awareness, yet alone timing-driven optimizations. It has never been used for designs that push the underlying silicon to the edge. The as-is openXC7 is simply not adequate for proper timing closure.
 
-The choice of our development boards was also made with community and eco-system in mind. While the boards we've selected are based on the opensource <a href="https://github.com/micro-FPGA/CRUVI/blob/master/docs/CRUVI_Specification.pdf">CRUVI</a> connectorization system, they are hardly used in the dev community, and don't come with support collateral we are accustomed to on more popular hardware platform. 
+While another project is underway, aiming to bridge this major STA gap with opensource tools, it won't be ready in time for our Phase1. We therefore plan for Phase2 and Phase3, looking to be the first to try this new timing prowess in the open PNR for Xilinx FPGAs, aiming to stress-test it, congest it, overwhelm it, all for the sake of making it more amenable to squeezing the most possible Fmax and Utilization figures from the silicon at hand. 
 
-Indeed, we have uncovered quite a few board problems and idiosyncrasies, spending a fair amount of time chasing issues that simply should not have been there. Still, since those were both the EU products and open-source, this extra effort was for a good cause. We are sure our feedback and work with help increase their visibility and introduce them to open makers. 
+The choice of our development platform is made with eco-system in mind. The boards we've selected are based on opensource [CRUVI](https://github.com/micro-FPGA/CRUVI/blob/master/docs/CRUVI_Specification.pdf) connectivity system. But, they are hardly used in the dev community, and don't come with support collateral we are accustomed to with more popular hardware platforms. 
 
-## *Objective 1*
-In this first delivery, we are using the system shown in the image:
+Indeed, we have uncovered quite a few board problems and idiosyncrasies, spending a fair amount of time chasing issues that simply should not have been there. Still, since those were both opensource and EU products, this extra effort was for a good cause. We are certain that our feedback and this project with help increase their visibility, boosting their acceptance and rate of use amongst open makers. 
 
-![system_no_background](https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/105a7569-75c5-4f2c-8f15-a408bb72cdc6)
+## *Play 1*
+Done:
+- [x] Familiarize with Trenz hardware platform: Connectivity, Clocking, Power, etc. 
+- [x] Bring up Blinky on Trenz
+- [x] Standalone HDMI Video generation: 1280x720P@60Hz RGB888 (HD)
+- [x] Standalone HDMI Video generation: 1920x1080P@30Hz RGB888 (FHD)
+- [x] Standalone HDMI Video generation: 1920x1080@60Hz RGB888 - **Established that's not physically possible with given silicon**
+- [x] Experiments with IMX219 configuration and resolution options
+- [x] Experiments with Termination Schemes - `How to do better than XAPP894`, sharing insights with Lukas
+- [x] Test opensource 4-lane CRUVI adapter, sharing feedback with Edmund
+- [x] Redesign the 4-lane CRUVI, fixing bugs and expanding functionality, now allowing both 2 and 4-lane
+- [x] Uncover Crosstalk issues in VHDPlus CRUVI adapter, sharing findings with community
+- [x] Uncover Trenz signal inversions and inconsistencies, sharing insights with Antti
+- [x] Acquire HD video from camera sensor and display it via HDMI - Jerky and with Frame Loss
+- [x] Battle issues with opensource asynchronous FIFO, sharing insights with IP owners
+      
+- [x] **`Implement elegant and smooth end-to-end HD video streaming w/o external storage`**
 
-It consists of:
+For this first play, the hardware is used in the following config:
 - Trenz Carrier Card (TEB0707-02)
 - Trenz 4x5 SoM with Artix-7 FPGA (TE0711-01)
 - VHDPlus HDMI + 2-lane CSI Camera adapter
 - Raspberry Pi camera V2.1 module (Sony IMX219)
+<br />![system_no_background](https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/105a7569-75c5-4f2c-8f15-a408bb72cdc6)
 
-The goal is to acquire an video from the camera sensor and display it through HDMI output on the monitor.
 
 ### *HDMI output*
 HDMI [source code](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/1.hw/lib/ip/hdmi) supports:
-- 720p@60Hz
-- 1080p@30Hz
+- 720P@60Hz
+- 1080P@30Hz
 <br /> More about HDMI options and limitations in the [HDMI issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/1#issue-2278453405).
 
-Test pattern image 720p@60Hz:
+Test pattern image 720P@60Hz:
 <br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/c405a0d6-2086-452a-aa2a-435240055c48" width="500"><br />
 
 ### *Camera Configuration*
-There are plenty of configurabile registers on the IMX219 camera sensor. Camera is configured to output 720p@60Hz. In order to configure registers of the camera sensor, I2C comunication protcol was written. Xou can reed more about I2C protocol on [I2C issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/3). Next image shows some data beenig written on the camera sensor.
+There are plenty of configurable registers in the IMX219 imaging sensor. Having fully familiarize with them, both by sniffing RPi I2C transactions and running own experiments, we've settled on 720P@60Hz. In order to load camera registers, I2C comunication protocol was written. More on it in [I2C issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/3). Next image shows some data beenig written on the camera sensor.
 <img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/2b54bf12-1366-4819-8080-df7d5cf8fa20" width="700"><br />
 
 ### *Image acquisition*
@@ -90,8 +106,8 @@ To see the image on the monitor, everything previously mentioned has to work tog
 
 **<h3> Acknowledgements </h3>**
 We are grateful to:
- - NLnet Foundation's sponsorship for giving us an opportunity to work on this novel, video-centric designware
- - [StereoNinja](https://github.com/StereoNinja/StereoNinjaFPGA), whose pioneering work has set the stage for this major performance and functionality expansion
+ - NLnet Foundation's sponsorship for giving us an opportunity to work on this novel, video-centric designware in SystemVerilog RTL
+ - [StereoNinja](https://github.com/StereoNinja/StereoNinjaFPGA), whose project has set the stage for this major performance and functionality expansion
 
    
 > ![logo_nlnet](https://github.com/chili-chips-ba/openeye/assets/67533663/18e7db5c-8c52-406b-a58e-8860caa327c2)
