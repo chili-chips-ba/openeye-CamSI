@@ -1,11 +1,15 @@
-# openEye-CamSI - Phase1
+# openEye-CamSI (Phase1)
 ## *Project Objectives - Functional content*
-This development is about delivering a truly open-source, therefore accessible and trustworthy, image and video pipeline for three representative hi-rez imaging sensors:
- - <b>2-lane RPiV2.1</b>, based on Sony IMX219, in <b>1280x720P@60Hz</b> RGB888 mode
- - <b>4-lane OneInchEye</b>, based on Sony IMX283, in <b>1920x1080P@30Hz</b> RGB888 mode
- - <b>2-lane OV2740</b>, in a TBD "Webcam" setup
+The goals of this development activity are to deliver a truly open-source, therefore accessible and trustworthy, video pipeline for three popular hi-rez imaging sensors:
+ - `2-lane RPiV2.1`, based on Sony IMX219, in `1280x720P@60Hz` RGB888 mode (aka `HD`)
+ - `4-lane OneInchEye`, based on Sony IMX283, in `1920x1080P@30Hz` RGB888 mode (aka `FHD`)
+ - `2-lane OV2740`, in a TBD "Webcam" setup for Lukas Henkel's [openLaptop](https://resources.altium.com/p/open-source-laptop-part-one) project
 
-The goal is to do it with mature and affordable <b>Artix7 FPGAs</b>, using their <b>IBUFDS, IDELAY, ISERDES</b> primitives for the camera front-end. These primitives are available in all IOBs, hence ubiquitous and easy to work with, while at the same time already supported by open-source implementation tools for Xilinx Series7. It is worth stressing here that we don't intend to use any of the 3rd party DPHY front-end silicon devices specified in <a href="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Xilinx/MIPI/xapp894-d-phy-solutions.pdf">XAPP894</a>. Moreover, we shall not use even the passive signal conditioning networks that the XAPP894 is recommending. Instead, our objective is to achieve robust <i>Signal Integrity</i> (SI) and reliable hi-rez camera operation by pulling in only resources available in this entry-level family.
+The intent is to do it with mature and affordable <b>Artix7 FPGA</b>, by using its <b>IBUFDS, IDELAY, ISERDES</b> primitives for the camera front-end. These primitives are available in all IOBs, hence ubiquitous and relatively easy to work with, and already supported by open-source PNR tool for Xilinx Series7. This also leaves the path open for future reduction of total solution cost by migrating to [Spartan7](https://www.xilinx.com/video/fpga/spartan-7-technical-overview.html?_ga=2.252819658.271111311.1715447274-1421952438.1715447272), which does not have the GTP transceivers (aka "true SerDes").
+
+To be clear -- We don't plan on using any of the 3rd party D-PHY front-end silicon devices specified in [XAPP894](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Xilinx/MIPI/xapp894-d-phy-solutions.pdf). Moreover, we won't even use the passive signal conditioning networks that Xilinx has recommended. Instead, our objective is to achieve robust Signal Integrity (SI) and smooth video flow for both HD and FHD quality level by pulling in **only on-chip resources**. 
+
+That brings about multiple challenges. Compared to StereoNinja's original work, which was done with LatticeSemi ECP5 FPGA, our target device does not have built-in support for D-PHY receiver (*no wonder why Artix7 costs less*). We are also doing it without expending much storage, all within meager BRAM allocation. In other words, no PSRAM, no SDRAM, no DDR or similar external chips are called to rescue to support our smooth HD/FHD video flow. That's a major upgrade to StereoNinja which  available in this entry-level family.
 
 >><b>This makes our solution simpler and more affordable, hence uniquely appealing to the makers <i>"on the budget"</i>!</b>. 
 <img src="https://github.com/chili-chips-ba/openeye/assets/67533663/07cb0f47-c9c7-483e-a028-0066342f5023" width="250">
