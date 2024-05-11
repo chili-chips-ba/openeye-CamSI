@@ -120,7 +120,7 @@ Once all hardware and board related problems were solved, we could focus on RTL 
 
 <br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/FPGA-Block-Diagram.png"><br />
 
-Given our goal to minimize overhead and eliminate the need for LP pins (see XAPP894), RTL had to implement LP pins substitude using some algorithmic smarts. It detects the blanking intervals between frames by checking whether the clock signal from the camera is active and stable. More about this issue on **add issue**.
+Given our goal to minimize overhead and eliminate the need for LP pins (see XAPP894), RTL had to provide a clever substitute for the brute-force LP pins. It did it by detecting the blanking intervals between frames and using some FSM smarts to determine whether the clock signal from the camera is active and stable. More about this issue on **add issue**.
 
 For proper color space, before displaying video on monitor/display, the stream must be processed through a *Debayer* function. For more on it see [debayer issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/4)
 
