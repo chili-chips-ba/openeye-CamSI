@@ -43,7 +43,6 @@ Our 2-lane 16MP RPI camera - ArduCam IMX519
 
 Our 4-lane sensor: IMX283
    https://www.willwhang.dev/OneInchEye
-   https://x.com/kieranbingham/status/1720936625725677835?s=20
 
 ---------------------------------------------------------------
 Migen + Proprietary D-PHY
@@ -61,6 +60,11 @@ Hans: Both of those cores have been tested working. I did not do any Fmax tests.
 
 @Yimin Gu made a CRUVI to Flatflex adapter for the Oneincheye sensor.
 BEWARE: This adapter was never used / tested, and it could be buggy.
+        It indeed was, shorting the power!!
+        We had to fully redesign it 
+
+https://www.chili-chips.xyz/blog/untwisting-rpi5-camera-connectivity/
+
 ---------------------------------------------------------------
 
 Sonix WebCam chip
