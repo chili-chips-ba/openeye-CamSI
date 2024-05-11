@@ -102,7 +102,7 @@ Here is an illustration of I2C waveforms and protocol used for sensor Control Pl
 Sony [IMX219](0.doc/Sensor.2-lane.RPi2.1/IMX219PQ.Datasheet.pdf) camera sensor is used for image acquisition. It is connected to FPGA with a 15-pin flex cable, using [VHDPlus](https://vhdplus.com/docs/components/camera) CRUVI module. We strongly recommend checking our [blog](https://www.chili-chips.xyz/blog/untwisting-rpi5-camera-connectivity) on this topic.
 
 The VHDPlus CRUVI carries termination resistors, as shown below: 
-<img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/31957cba-ea2c-4b42-942e-e01f8f4e62a8" width="300"><br />
+<br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/31957cba-ea2c-4b42-942e-e01f8f4e62a8" width="300"><br />
 
 They however create a major SI problem. That's beacuse termination resistors are meant to be as close to the end of the *Transmission Line* (TL) as possible. However, on this Trenz system, we have three connectors in the path from Camera to FPGA pins.
 
