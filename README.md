@@ -60,21 +60,21 @@ Indeed, we have uncovered quite a few board problems and idiosyncrasies, spendin
 >`How to do better than XAPP894`, sharing insights with Lukas
 >>>
 - [x] Test opensource 4-lane CRUVI adapter, sharing feedback with Edmund
-- [x] Fully redesign it, fixing bugs and expanding scope, to now include both 2 and 4-lane
+- [x] Fully redesign, fixing bugs and expanding scope, to now include 2 and 4-lane
 >>>
-- [x] Clock Detection Logic `without using LP I/O`
+- [x] Clock Detection Logic `without LP I/O`
 - [x] Syncbyte Decoding Logic
 - [x] Header Decoding Logic and Stripping
 - [x] Acquire static image from Camera, transfer it to DualPort BRAM, then HDMI
 >>>
-- [x] Uncovering Crosstalk issues in VHDPlus CRUVI adapter, sharing findings with community
+- [x] Uncovering Crosstalk issues in VHDPlus CRUVI adapter, sharing with community
 - [x] Uncovering Trenz signal inversions and inconsistencies, sharing with Antti
 >>>
 - [x] HD video transfer from Camera to HDMI - At first jerky and with Frame Loss
-- [x] Battling issues with opensource Asynchronous FIFO, sharing insights with IP owners
+- [x] Battling issues with opensource Asynchronous FIFO, sharing with IP owners
 >>>
 - [x] Debayering Logic for color space conversion     
-- [x] **Devise elegant synchronization for smooth video streaming `w/o external storage`**
+- [x] Synchronization Logic for smooth video streaming `w/o external storage`
 
 For this first play, the hardware is used in the following config:
 - Trenz Carrier Card (TEB0707-02)
