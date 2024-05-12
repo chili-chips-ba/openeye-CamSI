@@ -1,7 +1,8 @@
 # openEye-CamSI (Phase1)
 <img src="https://github.com/chili-chips-ba/openeye/assets/67533663/07cb0f47-c9c7-483e-a028-0066342f5023" width="250">
 
-## *Objective I - Upgrade Cam Performance and Functionality*
+# Objective I
+## Upgrade Cam Performance and Functionality
 The goals of this development are to deliver complete camera video pipeline for three popular hi-rez imaging sensors:
  - `2-lane RPiV2.1`, based on Sony IMX219, in `1280x720P@60Hz` RGB888 - `HD`
  - `4-lane OneInchEye`, based on Sony IMX283, in `1920x1080P@30Hz` RGB888 - `FHD`
@@ -33,7 +34,8 @@ While our design is pushing Artix7 to its limits, it's these very silicon limits
 
 Using Vivado tool chain, we were able to bring this design to the point where the only remaining factor preventing further resolution increase is the *Max Specified Toggle Rate* for Artix7 I/O structures and clock distribution networks.
 
-## *Objective II - Add to opensource ecosystem 4 Xilinx*
+# Objective II
+## Add to opensource ecosystem 4 Xilinx
 
 We intend to use [openXC7](https://github.com/openXC7) toolkit, including its web-based CI/CD flow. That's both for the security of images taken, and to help openXC7 attain the level of robustness found in commercial / proprietary CAE tools, Xilinx Vivado in particular. In that sense, OpenEye-CamSI is the continuation of our [TetriSaraj](https://github.com/chili-chips-ba/openXC7-TetriSaraj), which was the first openXC7 test case for a design more complex than a mere blinky. 
 
@@ -47,7 +49,7 @@ The choice of our development platform was governed by the benefit for the great
 
 We have indeed come across quite a few board problems and idiosyncrasies, spending a fair amount of time chasing issues that simply should not have been there. Still, since those are both opensource and EU products, this extra effort was for a good cause. We are certain that this project will help increase their visibility, and boost their acceptance rate among open makers. 
 
-## *Execution Play 1 : Foundations*
+# Execution Play 1 : Foundations
 - [x] Familiarize with [Trenz](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/Trenz) hardware platform: Connectivity, clocking, power, etc. 
 - [x] Bring up Blinky on Trenz
 >___
@@ -165,22 +167,22 @@ It is only at the point, when video payload is "unpacked", that we may engage in
 **rgb2hdmi** is the critical design element. It provides the bridge between Camera and HDMI+GE worlds. See [*CDC and Video Synchronization*](https://github.com/chili-chips-ba/openeye-CamSI?tab=readme-ov-file#cdc-and-video-synchronization) section. 
 
 
-## *Execution Play 2 : 4-lane Camera*
+# Execution Play 2 : 4-lane Camera
 - [ ] Repeat the same with the 4-lane IMX283 camera sensor
 - [ ] Step-by-step introduce the following 3 ISP elements:
 > [x] Debayer [ ] Manual Exposure Control [ ] Dead Pixel Management
 - [ ] Implement another (lower) resolution of our choice
 
-## *Execution Play 3 : Ethernet Upload*
+# Execution Play 3 : Ethernet Upload
 - [ ] Add 1GE as second video sink, then move display to remote PC, via UDP VLC
 - [x] Document implementation via block diagram and project repo
 
-## *Execution Play 4 : OpenXC7*
+# Execution Play 4 : OpenXC7
 - [ ] Port final design from Vivado to openXC7
 - [ ] Simulate it with Verilator and cocoTB, in CI/CD system
 - [ ] Document scripts and flows used in this process
 
-## *Execution Play 5 : Webcam*
+# Execution Play 5 : Webcam
 - [ ] Add 3 Webcam ISP functions
 > [ ] White Balance [ ] Color Correction [ ] Gamma Correction
 - [ ] and JPEG video compression
