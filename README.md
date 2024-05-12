@@ -8,7 +8,7 @@ The goals of this development are to deliver complete video pipeline for three p
  - `4-lane OneInchEye`, based on Sony IMX283, in `1920x1080P@30Hz` RGB888 - `FHD`
  - `2-lane OV2740`, in a TBD "Webcam" setup for Lukas Henkel's [openLaptop](https://resources.altium.com/p/open-source-laptop-part-one)
 
-This is for mature, low-cost **Artix7 FPGAs**, by using its **IBUFDS, IDELAY, ISERDES** primitives in the camera front-end. These primitives are available in all IOBs, hence ubiquitous, relatively easy to work with, and already supported by opensource PNR tool for Xilinx Series7. This also allows future reduction of the total solution cost by migrating to [Spartan7](https://www.xilinx.com/video/fpga/spartan-7-technical-overview.html?_ga=2.252819658.271111311.1715447274-1421952438.1715447272), which does not have GTP transceivers (aka "true SerDes").
+This is for mature, low-cost **Artix7 FPGAs**, by using its **IBUFDS, IDELAY, ISERDES** primitives in the camera front-end. These primitives are available in all IOBs, hence ubiquitous, relatively easy to work with, and already supported by opensource PNR for Xilinx Series7. This also allows future reduction of the total solution cost by migrating to [Spartan7](https://www.xilinx.com/video/fpga/spartan-7-technical-overview.html?_ga=2.252819658.271111311.1715447274-1421952438.1715447272), which does not have GTP transceivers (aka "true SerDes").
 
 >To be clear -- We don't plan on using any of the 3rd party D-PHY front-end silicon devices specified in [XAPP894](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Xilinx/MIPI/xapp894-d-phy-solutions.pdf). Moreover, we won't even use the passive signal conditioning networks that Xilinx is recommending. Instead, our objective is to achieve robust *Signal Integrity* (SI) and flawless HD/FHD video flow by pulling-in only on-chip resources.
 
@@ -65,7 +65,7 @@ We have indeed come across quite a few board problems and idiosyncrasies, spendi
 - [x] Experiments with LVDS and termination schemes.
       How to do better than XAPP894, sharing insights with Lukas
 >___
-- [x] Test opensource 4-lane [CRUVI](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/CRUVI-camera-adapter) adapter, sharing feedback with Edmund
+- [x] Test opensource [4-lane adapter](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/CRUVI-camera-adapter), sharing feedback with Edmund
 - [x] Full redesign, fixing [bugs](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/CRUVI-camera-adapter/Technical-Note.TN-mipi.REV1.pdf) and expanding scope, to now include 2 and 4 lanes
 >___
 - [x] Clock Detection logic without standard LP I/O
@@ -135,12 +135,18 @@ Given the goal to minimize overhead and eliminate the need for LP pins (see XAPP
 For proper color rendering on monitor, the video stream must also be processed through a *Debayer* ISP function. More on it in [Debayer issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/4)
 
 ### *CDC and Video Synchronization*
-To have fluid and uneventful video, we need to pass Pixel data with Line and Frame synchronization pulses from Camera to HDMI clock. Aiming for low-cost solution, this *Clock Domain Crossing* (CDC) and *Timebase Handoffs* are accomplished using Line Buffering instead of full Frame Buffering, so saving storage resources. More on this topic in [Line buffering issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/2). 
+To have fluid and seamless video, we need to pass Pixel data with Line and Frame synchronization pulses from Camera to HDMI clock. Aiming for low-cost solution, this *Clock Domain Crossing* (CDC) and *Timebase Handoffs* are accomplished using Line Buffering instead of full Frame Buffering, so saving storage resources. More on this topic in [Line buffering issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/2).
 
-To ensure smooth and seamless video, synchronization signals play a crucial role in our setup. These signals include csi_clock and hdmi_clock, coordinating the flow of data from the camera to the HDMI output. Additionally, signals such as csi_line_in and hdmi_line_in mark the beginning of each new line of incoming camera data and the corresponding line for display on the HDMI output.
-Furthermore, signals like fifo_areset_n manage the resetting of the asynchronous FIFO, facilitating proper data transfer between the camera and HDMI output. Similarly, hdmi_reset_n controls the reset process for the HDMI output, ensuring its stability and correct functionality. These signals and their roles can be observed in the following image: ![wavedrom (13)](https://github.com/chili-chips-ba/openeye-CamSI/assets/70281175/c25774df-cdfd-4cd0-9da2-ecc97919f373)
+In addition to AsyncFIFO for **csi_clock->hdmi_clock** CDC, the signals that play crucial role in the *Timebase Handoffs* process are:
+- csi_line_in
+- hdmi_line_in
+They mark the beginning of each new scan line in incoming video from camera, as well as outgoing line to HDMI.
 
-It took us a bit of trial-and-error to get it right. That was to some extent due to CDC bug we found in the fullness count of AsyncFIFO, the IP block we pulled from one of the opensource libraries. 
+Furthermore, Async FIFO is kept in reset when either camera or HDMI Out-Of-Frame. It is through this **fifo_areset_n** and **hdmi_reset_n** that we are forcing HDMI side to track camera. Timing diagram below contains additional detail.
+
+<img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Timing-Diagram.png">
+
+In all honesty, it took us a bit of trial-and-error to get it right. That was to some extent due to CDC bug we found in the fullness count of AsyncFIFO, which is the IP block we pulled from one of the opensource libraries. 
 
 In the end, when everything was tuned, and AsyncFIFO CDC problem factored out of the solution, the final result came to be as nice and polished as follows:
 
