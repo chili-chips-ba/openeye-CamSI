@@ -49,7 +49,8 @@ The choice of our development platform was governed by the benefit for the great
 
 We have indeed come across quite a few board problems and idiosyncrasies, spending a fair amount of time chasing issues that simply should not have been there. Still, since those are both opensource and EU products, this extra effort was for a good cause. We are certain that this project will help increase their visibility, and boost their acceptance rate among open makers. 
 
-# Execution Play 1 : Foundations
+# Execution Play 1
+## Foundations
 - [x] Familiarize with [Trenz](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/Trenz) hardware platform: Connectivity, clocking, power, etc. 
 - [x] Bring up Blinky on Trenz
 >___
@@ -167,22 +168,26 @@ It is only at the point, when video payload is "unpacked", that we may engage in
 **rgb2hdmi** is the critical design element. It provides the bridge between Camera and HDMI+GE worlds. See [*CDC and Video Synchronization*](https://github.com/chili-chips-ba/openeye-CamSI?tab=readme-ov-file#cdc-and-video-synchronization) section. 
 
 
-# Execution Play 2 : 4-lane Camera
+# Execution Play 2
+## Expand to 4-lane Camera
 - [ ] Repeat the same with the 4-lane IMX283 camera sensor
 - [ ] Step-by-step introduce the following 3 ISP elements:
 > [x] Debayer [ ] Manual Exposure Control [ ] Dead Pixel Management
 - [ ] Implement another (lower) resolution of our choice
 
-# Execution Play 3 : Ethernet Upload
+# Execution Play 3
+## Ethernet Upload
 - [ ] Add 1GE as second video sink, then move display to remote PC, via UDP VLC
 - [x] Document implementation via block diagram and project repo
 
-# Execution Play 4 : OpenXC7
+# Execution Play 4
+## OpenXC7
 - [ ] Port final design from Vivado to openXC7
 - [ ] Simulate it with Verilator and cocoTB, in CI/CD system
 - [ ] Document scripts and flows used in this process
 
-# Execution Play 5 : Webcam
+# Execution Play 5
+## Webcam
 - [ ] Add 3 Webcam ISP functions
 > [ ] White Balance [ ] Color Correction [ ] Gamma Correction
 - [ ] and JPEG video compression
