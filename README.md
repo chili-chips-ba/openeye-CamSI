@@ -163,7 +163,7 @@ The datapath is a linearly-progessing video pipeline with option for width scali
 
 The pipeline starts with circuits for capturing serial *Double Data Rate* (DDR) camera stream, eye-centering it using IDELAY, converting to paralell format using ISERDES, then looking first for the Byte, then Word boundaries, then Packet Header and Payload, extracting video pixels from it.
 
-It is only at the point, when video payload is "unpacked", that we may engage in ISP. The ISP is a set of functions that could be as elaborate as one is willing to invest in them. Here is a [good read on it](https://www.eecs.yorku.ca/~mbrown/ICCV19_Tutorial_MSBrown.pdf). The extent of ISP for this project is clearly defined. The follow on Phase2 and Phase3 can expand on it.
+It is only from this point, where video payload is "unpacked", that we may engage in ISP. The ISP is a set of functions that could be as elaborate as one is willing to invest in them. Here is a [good read on it](https://www.eecs.yorku.ca/~mbrown/ICCV19_Tutorial_MSBrown.pdf). The extent of ISP for this project is clearly defined. The follow on Phase2 and Phase3 can expand on it.
 
 **rgb2hdmi** is the critical design element. It provides the bridge between Camera and HDMI+GE worlds. See [*CDC and Video Synchronization*](https://github.com/chili-chips-ba/openeye-CamSI?tab=readme-ov-file#cdc-and-video-synchronization) section. 
 
