@@ -94,8 +94,6 @@ module csi_rx_packet_handler
    );
       logic result;
 
-      result = 1'b0;
-
 `ifdef ICARUS
       // sorry: "inside" expressions not supported yet.
       case(packet_type)
@@ -112,6 +110,8 @@ module csi_rx_packet_handler
          default: result = 1'b0;
       endcase
 `else
+      result = 1'b0;
+
       if (packet_type inside {
          /*SYNC*/ 
          6'h00, 6'h01, 6'h02, 6'h03,
