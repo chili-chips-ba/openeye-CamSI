@@ -24,8 +24,10 @@ On the video feed sink side, we plan to showcase real-time streaming to:
  - **1Gbps Ethernet**, using UDP packets, rendered on a PC with [VLC Player](https://www.videolan.org)
 
 The follow on "Webcam" project (aka Phase2) is to add **UVC** (USB2.0 Video Class) to this list. In prep for this future work, we plan to develop a number of add-on functions:
- - `Image Signal Processing (ISP) 4 Webcam` - White Balance, Color Correction, Gamma Correction
- - `Video Compression 4 Webcam` - JPEG *(not needed for 1GE. But, compression is a must-have for the 1024P@30Hz over USB2)*
+ - `Image Signal Processing (ISP) 4 Webcam`
+    > White Balance, Color Correction, Gamma Correction
+ - `Video Compression 4 Webcam` - JPEG
+    > Not needed for 1GE. But, compression is a must-have for the 1024P@30Hz over USB2
 
 While our design is pushing Artix7 to its limits, it's these very silicon limits that stand in the way of getting more from the given imaging sensors. Recall that even StereoNinja's generally faster and better LatticeSemi FPGA cannot generate HDMI at 1920x1080@60Hz. 
 
