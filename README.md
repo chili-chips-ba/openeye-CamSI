@@ -154,12 +154,9 @@ The frequency of camera *Bit* and *Byte* clocks is the function of sensor resolu
 
 The frequency of these two clocks is the function of HDMI resolution. We provide Verilog macros in the central *`top_pkg.sv`* for selection of HDMI resolution. 
 
-The datapath is a linearly-progessing video pipeline with option for width scaling via `NUM_LANE` parameter, which is also located in the central *top_pkg.sv*. The pipeline moves from:
-- circuits for capturing serial *Double Data Rate* (DDR) camera stream
-- ... eye-centering it using IDELAY
-- ... and converting to paralell format using ISERDES
-- then looking first for the Byte, then Word boundaries
-- then Packet Header and Payload, extracting video pixels from it
+The datapath is a linearly-progessing video pipeline with option for width scaling via `NUM_LANE` parameter, which is also located in the central *top_pkg.sv*. 
+
+The pipeline starts with circuits for capturing serial *Double Data Rate* (DDR) camera stream, eye-centering it using IDELAY, converting to paralell format using ISERDES, then looking first for the Byte, then Word boundaries, then Packet Header and Payload, extracting video pixels from it.
 
 It is only at the point, when video payload is "unpacked", that we may engage in ISP. The ISP is a set of functions that could be as elaborate as one is willing to invest in them. Here is a [good read on it](https://www.eecs.yorku.ca/~mbrown/ICCV19_Tutorial_MSBrown.pdf). The extent of ISP for this project is clearly defined. The follow on Phase2 and Phase3 can expand on it.
 
