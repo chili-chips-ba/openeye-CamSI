@@ -65,7 +65,14 @@ module fpga_pll_hdmi (
     logic       uclk_pix;
     logic       uclk_pix5;
 
-
+`ifdef COCOTB_SIM
+// PLL outputs driven from cocotb
+initial begin
+    pll_lock = 0;
+    uclk_pix = 'x;
+    uclk_pix5 = 'x;
+end
+`else
 `ifdef HDMI_1080p60
 //-----------------------------
 // 1920x1080Px60Hz CVT-RBv2. BEWARE: Artix-7 cannot go this speed
@@ -190,7 +197,7 @@ module fpga_pll_hdmi (
     );
 
 `endif
-
+`endif //COCOTB_SIM
 
 //----------------------------------------------
 // Clock buffers

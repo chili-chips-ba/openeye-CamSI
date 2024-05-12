@@ -47,7 +47,7 @@ module csi_rx_top
  //MIPI DPHY from/to Camera
    input  diff_t      cam_dphy_clk,
    input  lane_diff_t cam_dphy_dat,
-   output logic       cam_en,
+   input  logic       cam_en,
 
  //CSI to internal video pipeline
    output logic       csi_byte_clk,

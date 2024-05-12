@@ -72,6 +72,9 @@ module top
    output bus8_t debug_pins
 );
 
+`ifdef COCOTB_SIM
+glbl glbl();
+`endif
 //--------------------------------
 // Clock and reset gen
 //--------------------------------
