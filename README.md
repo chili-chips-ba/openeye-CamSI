@@ -137,6 +137,9 @@ For proper color rendering on monitor, the video stream must also be processed t
 ### *CDC and Video Synchronization*
 To have fluid and uneventful video, we need to pass Pixel data with Line and Frame synchronization pulses from Camera to HDMI clock. Aiming for low-cost solution, this *Clock Domain Crossing* (CDC) and *Timebase Handoffs* are accomplished using Line Buffering instead of full Frame Buffering, so saving storage resources. More on this topic in [Line buffering issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/2). 
 
+To ensure smooth and seamless video, synchronization signals play a crucial role in our setup. These signals include csi_clock and hdmi_clock, coordinating the flow of data from the camera to the HDMI output. Additionally, signals such as csi_line_in and hdmi_line_in mark the beginning of each new line of incoming camera data and the corresponding line for display on the HDMI output.
+Furthermore, signals like fifo_areset_n manage the resetting of the asynchronous FIFO, facilitating proper data transfer between the camera and HDMI output. Similarly, hdmi_reset_n controls the reset process for the HDMI output, ensuring its stability and correct functionality. These signals and their roles can be observed in the following image: ![wavedrom (13)](https://github.com/chili-chips-ba/openeye-CamSI/assets/70281175/c25774df-cdfd-4cd0-9da2-ecc97919f373)
+
 It took us a bit of trial-and-error to get it right. That was to some extent due to CDC bug we found in the fullness count of AsyncFIFO, the IP block we pulled from one of the opensource libraries. 
 
 In the end, when everything was tuned, and AsyncFIFO CDC problem factored out of the solution, the final result came to be as nice and polished as follows:
