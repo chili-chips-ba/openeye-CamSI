@@ -83,14 +83,13 @@ VERILOG_SOURCES += \
 VERILOG_SOURCES += \
         ../../models/BUFR.v \
         ../../models/IDELAYE2.v \
-        ../../models/ISERDESE2.v \
-        ../../models/OSERDESE2.v
-
+        ../../models/ISERDESE2.v
 
 VERILOG_INCLUDE_DIRS +=  $(HW_SRC)
 
 COMMON_DEFINES += \
-        HACKED_UNISIM
+        HACKED_UNISIM \
+        OSERDES_SIM_MODEL
 
 ifeq ($(SIM),$(filter $(SIM),verilator VERILATOR))
         EXTRA_ARGS += $(COMMON_DEFINES:%=+define+%)

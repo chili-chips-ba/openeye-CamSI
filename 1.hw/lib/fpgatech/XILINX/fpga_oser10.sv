@@ -47,6 +47,26 @@ module fpga_oser10 (
    output logic       q
 );
 
+`ifdef OSERDES_SIM_MODEL
+
+// Simplified 10:1 SERDES model (functionality verified in Xsim)
+logic [9:0] D, D_CDC, SHIFT;
+logic [4:0] CLK_PAR_CDC;
+
+always @(posedge clk_par) D <= d;
+
+always @(posedge clk_ser) begin
+    CLK_PAR_CDC <= {CLK_PAR_CDC, clk_par};
+    if (CLK_PAR_CDC[3:2]==1)
+        D_CDC <= D;
+    if (CLK_PAR_CDC[4:3]==1)
+        SHIFT <= D_CDC; 
+    else SHIFT <= 
+        SHIFT >> 2;
+end
+assign #(0.1) q = clk_ser ? SHIFT[0] : SHIFT[1];
+
+`else
    logic shift1;
    logic shift2;
 
@@ -149,6 +169,7 @@ module fpga_oser10 (
       .TBYTEIN(1'b0),         // 1-bit input: Byte group tristate
       .TCE(1'b0)              // 1-bit input: 3-state clock enable
    );
+`endif //OSERDES_SIM_MODEL
 
 endmodule: fpga_oser10
 
