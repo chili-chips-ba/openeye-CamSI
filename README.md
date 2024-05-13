@@ -37,7 +37,7 @@ Using Vivado tool chain, we were able to bring this design to the point where th
 # Objective II
 ## Add to opensource ecosystem 4 Xilinx
 
-We intend to use [openXC7](https://github.com/openXC7) toolkit, including its web-based CI/CD flow. That's both for the security of images taken, and to help openXC7 attain the level of robustness found in commercial / proprietary CAE tools, Xilinx Vivado in particular. In that sense, OpenEye-CamSI is the continuation of our [TetriSaraj](https://github.com/chili-chips-ba/openXC7-TetriSaraj), which was the first openXC7 test case for a design more complex than a mere blinky. 
+We are thrilled to use [openXC7](https://github.com/openXC7) toolkit, including its web-based CI/CD flow. That's both for the security of images taken, and to help openXC7 attain the level of robustness found in commercial / proprietary CAE tools, Xilinx Vivado in particular. In that sense, OpenEye-CamSI is the continuation of our [TetriSaraj](https://github.com/chili-chips-ba/openXC7-TetriSaraj), which was the first openXC7 test case for a design more complex than a mere blinky. 
 
 >Our goal is to bring to the light issues that arrive from openXC7's first-ever exposure to demanding, cutting-edge designs like this one. 
 
@@ -132,17 +132,16 @@ Once all these hardware and board problems were put behind, we turned focus back
 
 Given the goal to minimize overhead and eliminate the need for LP pins (see XAPP894), RTL had to provide a clever substitute for our non-existent I/O compared to standard Camera Serial Interface. After some experimentation, we settled on a scheme that detects blanking intervals between frames by using *Clock_Lock_FSM* with thresholds and timeouts. The output of this *Clock_Lock_FSM* is then used as global reset for the camera side of pipeline. That's to say that the video pipeline is out of reset only when camera clock is active and stable.
 
-For proper color rendering on monitor, the video stream must also be processed through a *Debayer* ISP function. More on it in [Debayer issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/4)
-
 ### *CDC and Video Synchronization*
 To have fluid and seamless video, we need to pass Pixel data with Line and Frame synchronization pulses from Camera to HDMI clock. Aiming for low-cost solution, this *Clock Domain Crossing* (CDC) and *Timebase Handoffs* are accomplished using Line Buffering instead of full Frame Buffering, so saving storage resources. More on this topic in [Line buffering issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/2).
 
 In addition to AsyncFIFO for **csi_clock->hdmi_clock** CDC, the signals that play crucial role in the *Timebase Handoffs* process are:
 - csi_line_in
 - hdmi_line_in
-They mark the beginning of each new scan line in incoming video from camera, as well as outgoing line to HDMI.
 
-Furthermore, Async FIFO is kept in reset when either camera or HDMI Out-Of-Frame. It is through this **fifo_areset_n** and **hdmi_reset_n** that we are forcing HDMI side to track camera. Timing diagram below contains additional detail.
+They mark the beginning of each new scan line in incoming video from Camera, as well as outgoing line to HDMI.
+
+Furthermore, Async FIFO is kept in reset when either Camera or HDMI are Out-Of-Frame. It is through this **fifo_areset_n** and **hdmi_reset_n** that we are forcing HDMI to track the Camera. **rgb2hdmi** is the bridge between Camera and HDMI+GE worlds. Timing diagram below contains additional detail.
 
 <img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Timing-Diagram.png">
 
@@ -168,14 +167,13 @@ The frequency of camera *Bit* and *Byte* clocks is the function of sensor resolu
 
 The frequency of these two clocks is the function of HDMI resolution. We provide Verilog macros in the central *`top_pkg.sv`* for selection of HDMI resolution. 
 
-The datapath is a linearly-progessing video pipeline with option for width scaling via `NUM_LANE` parameter, which is also located in the central *top_pkg.sv*. 
+The datapath is a straight video pipeline with option for width scaling via `NUM_LANE` parameter, which is also located in the central *top_pkg.sv*. 
 
-The pipeline starts with circuits for capturing serial *Double Data Rate* (DDR) camera stream, eye-centering it using IDELAY, converting to paralell format using ISERDES, then looking first for the Byte, then Word boundaries, then Packet Header and Payload, extracting video pixels from it.
+The pipeline starts with circuits for capturing serial *Double Data Rate* (DDR) camera stream, eye-centering it using IDELAY, converting it to paralell format with ISERDES, then searching for *Byte boundaries*, followed by *Word alignement*, followed by *Packet Header* parsing and extraction of video *Payload* pixels.
 
-It is only from this point, where video payload is "unpacked", that we may engage in ISP. The ISP is a set of functions that could be as elaborate as one is willing to invest in them. Here is a [good read on it](https://www.eecs.yorku.ca/~mbrown/ICCV19_Tutorial_MSBrown.pdf). The extent of ISP for this project is clearly defined. The follow on Phase2 and Phase3 can expand on it.
+It is only at this point, where video is *unpacked*, that we may engage in ISP. The ISP is a set of functions that could be as elaborate as one is willing to invest in them. Here is a [good read on it](https://www.eecs.yorku.ca/~mbrown/ICCV19_Tutorial_MSBrown.pdf). The extent of ISP for this project is clearly defined. The future Phase2 and Phase3 would add more. 
 
-**rgb2hdmi** is the critical design element. It provides the bridge between Camera and HDMI+GE worlds. See [*CDC and Video Synchronization*](https://github.com/chili-chips-ba/openeye-CamSI?tab=readme-ov-file#cdc-and-video-synchronization) section. 
-
+*Debayer* is the first ISP function we implemented. Without it, the displayed colors would have looked weird. More on it in [Debayer issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/4).
 
 # Execution Play 2
 ## Expand to 4-lane Camera
