@@ -15,10 +15,12 @@ HW_SRC	:= ../../../1.hw
 
 # Design sources
 VERILOG_SOURCES += \
+        $(HW_SRC)/top_pkg.sv \
         tb.sv \
         dumper.sv \
         ${HW_SRC}/lib/fpgatech/XILINX/fpga_pll_hdmi.sv \
-        ${HW_SRC}/lib/fpgatech/XILINX/fpga_pll_top.sv 
+        ${HW_SRC}/lib/fpgatech/XILINX/fpga_pll_top.sv \
+        ${HW_SRC}/csi_rx/csi_rx_phy_dat.sv
 
 # Xilinx primitives
 VERILOG_SOURCES += \
@@ -46,13 +48,8 @@ VERILOG_SOURCES += \
 
 VERILOG_INCLUDE_DIRS += .
 
-ifeq ($(WAVES),1)
-DUMP := ""
-endif
-
-
 all:
-	xvlog --sv $(VERILOG_SOURCES) $(VERILOG_INCLUDE_DIRS:%=--include %)  --define DUMP
+	xvlog --sv $(VERILOG_SOURCES) $(VERILOG_INCLUDE_DIRS:%=--include %)  --define DUMP $(ISERDES_SIM_MODEL:%=--define ISERDES_SIM_MODEL)
 	xelab -s my_snapshot glbl dumper tb --timescale 1ns/1ps
 	xsim my_snapshot --R --xsimdir . --testplusarg "dump"
 

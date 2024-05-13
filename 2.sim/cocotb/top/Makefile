@@ -82,14 +82,14 @@ VERILOG_SOURCES += \
 
 VERILOG_SOURCES += \
         ../../models/BUFR.v \
-        ../../models/IDELAYE2.v \
-        ../../models/ISERDESE2.v
+        ../../models/IDELAYE2.v
 
 VERILOG_INCLUDE_DIRS +=  $(HW_SRC)
 
 COMMON_DEFINES += \
         HACKED_UNISIM \
-        OSERDES_SIM_MODEL
+        OSERDES_SIM_MODEL \
+        ISERDES_SIM_MODEL
 
 PLUSARGS += \
         +i2c_init_mem_file="${HW_SRC}/lib/ip/i2c_master/i2c_init.mem"
