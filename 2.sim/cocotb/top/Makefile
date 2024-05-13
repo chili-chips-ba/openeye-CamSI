@@ -91,6 +91,9 @@ COMMON_DEFINES += \
         HACKED_UNISIM \
         OSERDES_SIM_MODEL
 
+PLUSARGS += \
+        +i2c_init_mem_file="${HW_SRC}/lib/ip/i2c_master/i2c_init.mem"
+
 ifeq ($(SIM),$(filter $(SIM),verilator VERILATOR))
         EXTRA_ARGS += $(COMMON_DEFINES:%=+define+%)
         EXTRA_ARGS += --no-timing
