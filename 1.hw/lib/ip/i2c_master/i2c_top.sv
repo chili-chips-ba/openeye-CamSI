@@ -95,7 +95,12 @@ module i2c_top (
        .sda_oe           (i2c_sda_oe)      //o 
     );
     
-    initial $readmemh("i2c_init.mem", i2c_data_init);
+    string i2c_init_mem_file;
+    initial 
+        if ($value$plusargs("i2c_init_mem_file=%s", i2c_init_mem_file))
+            $readmemh(i2c_init_mem_file, i2c_data_init);
+        else
+            $readmemh("i2c_init.mem", i2c_data_init);
 
     always_ff @(posedge reset or posedge clk) begin
        if (reset == 1'b1) begin
