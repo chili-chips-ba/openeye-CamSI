@@ -97,7 +97,7 @@ module csi_rx_phy_clk
 //---------------------------------------------DIV4
  //BUFR : Regional Clock Buffer
    BUFR #(
-      .BUFR_DIVIDE (4),       // Values: "BYPASS", 1, 2, 3, 4, 5, 6, 7, 8
+      .BUFR_DIVIDE ("4"),       // Values: "BYPASS", 1, 2, 3, 4, 5, 6, 7, 8
       .SIM_DEVICE  (FPGA_DEV) // Must be set to "7SERIES"
    )
    u_clkdiv (
