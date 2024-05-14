@@ -35,6 +35,8 @@
 // Description: Common declarations, applicable across the board
 //========================================================================
 
+`ifndef __TOP_PKG__
+`define __TOP_PKG__
 package top_pkg;
    
 //-----------------------------------------------------------
@@ -99,7 +101,7 @@ package top_pkg;
    typedef bus8_t [NUM_LANE-1:0] lane_data_t;
 
 endpackage: top_pkg
-
+`endif //__TOP_PKG__
 /*
 ------------------------------------------------------------------------------
 Version History:

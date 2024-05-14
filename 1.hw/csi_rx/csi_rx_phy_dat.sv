@@ -104,6 +104,20 @@ module csi_rx_phy_dat #(
       sreset <= reset;
    end
    
+`ifdef ISERDES_SIM_MODEL
+
+// Simplified 8:1 ISERDES model (functionality verified in Xsim)
+logic FF0, FF1;
+logic [7:0] SHIFT0, SHIFT1, SHIFT2, Q;
+always @(posedge bit_clock) FF0 <= in_delayed;
+always @(negedge bit_clock) FF1 <= in_delayed;
+always @(posedge bit_clock) SHIFT0 <= {FF1, FF0, SHIFT0[7:2]};
+always @(posedge bit_clock) SHIFT1 <= SHIFT0;
+always @(posedge bit_clock) SHIFT2 <= SHIFT1;
+always @(posedge byte_clock) Q <= SHIFT2;
+always_comb serdes_out = Q;
+
+`else
    ISERDESE2 #(
       .DATA_RATE         ("DDR"),   // DDR, SDR
       .DATA_WIDTH        (8),       // Parallel data width (2-8,10,14)
@@ -177,6 +191,7 @@ module csi_rx_phy_dat #(
 
       .O()                             //o: Combinatorial output
    );
+`endif //ISERDES_SIM_MODEL
    
 //---------------------------------------------
    assign deser_out = (INVERT == 1'b1) ? ~serdes_out : serdes_out;

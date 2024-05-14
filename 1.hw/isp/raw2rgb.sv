@@ -156,6 +156,9 @@ module raw2rgb
    always_ff @(posedge clk) begin
       if (reading == 1'b1) begin
 
+`ifndef ICARUS
+         // ../../../1.hw/isp/raw2rgb.sv:159: error: Part-select [15:8] exceeds the declared bounds for line0_buffer[].
+         // ../../../1.hw/isp/raw2rgb.sv:160: error: Part-select [7:0] exceeds the declared bounds for line0_buffer[].
          line0_green0 <= line0_buffer[read_count][15:8];
          line0_blue0  <= line0_buffer[read_count][7:0];
          line0_green1 <= line0_buffer[read_count + 10'd1][15:8];
@@ -175,6 +178,27 @@ module raw2rgb
          line3_green0 <= line3_buffer[read_count][7:0];  
          line3_red1   <= line3_buffer[read_count + 10'd1][15:8];
          line3_green1 <= line3_buffer[read_count + 10'd1][7:0];
+`else
+         line0_green0 <= (line0_buffer[read_count] >> 8) & 8'hff;
+         line0_blue0  <= line0_buffer[read_count] & 8'hff;
+         line0_green1 <= (line0_buffer[read_count + 10'd1] >> 8) & 8'hff;
+         line0_blue1  <= line0_buffer[read_count + 10'd1] & 8'hff;
+         
+         line1_red0   <= (line1_buffer[read_count] >> 8) & 8'hff;
+         line1_green0 <= line1_buffer[read_count] & 8'hff;
+         line1_red1   <= (line1_buffer[read_count + 10'd1] >> 8) & 8'hff;
+         line1_green1 <= line1_buffer[read_count + 10'd1] & 8'hff;
+         
+         line2_green0 <= (line2_buffer[read_count] >> 8) & 8'hff;
+         line2_blue0  <= line2_buffer[read_count] & 8'hff;
+         line2_green1 <= (line2_buffer[read_count + 10'd1] >> 8) & 8'hff;
+         line2_blue1  <= line2_buffer[read_count + 10'd1] & 8'hff;
+         
+         line3_red0   <= (line3_buffer[read_count] >> 8) & 8'hff;
+         line3_green0 <= line3_buffer[read_count] & 8'hff;  
+         line3_red1   <= (line3_buffer[read_count + 10'd1] >> 8) & 8'hff;
+         line3_green1 <= line3_buffer[read_count + 10'd1] & 8'hff;
+`endif //ICARUS
 
       end
    end  

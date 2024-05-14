@@ -39,7 +39,8 @@ module axis_data_fifo #(
    logic [AW:0] waddr, raddr;
     
 // verilator lint_off WIDTHEXPAND
-   always_comb axis_rd_data_count = 32'(waddr - raddr);
+   //always_comb axis_rd_data_count = 32'(waddr - raddr);
+   always_comb axis_rd_data_count = 'hx;
 // verilator lint_on WIDTHEXPAND
 
    always_comb wr = s_axis_tvalid & ~full;

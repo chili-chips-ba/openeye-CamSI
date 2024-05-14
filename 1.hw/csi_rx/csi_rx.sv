@@ -93,7 +93,7 @@ module csi_rx
 //--------------------------------
 // DPHY-Data
 //--------------------------------
-   for (genvar i=0; i<NUM_LANE; i++) begin: _lane
+   for (genvar i=0; i<NUM_LANE; i++) begin: lane
       csi_rx_phy_dat #(
          .INVERT     (DINVERT   [i]),
          .DELAY      (DSKEW     [i])
@@ -108,7 +108,7 @@ module csi_rx
          .dphy_hs    (dphy_dat  [i]), //i[1:0]
          .deser_out  (deser_data[i])  //o[7:0]
       );
-   end: _lane
+   end: lane
 
    
 //--------------------------------

@@ -94,6 +94,22 @@ module csi_rx_packet_handler
    );
       logic result;
 
+`ifdef ICARUS
+      // sorry: "inside" expressions not supported yet.
+      case(packet_type)
+         /*SYNC*/ 
+         6'h00, 6'h01, 6'h02, 6'h03,
+
+         /*Non-Image*/ 
+         6'h10, 6'h11, 6'h12,
+
+         /*RAW*/ 
+         6'h28, 6'h29, 6'h2A, 6'h2B, 6'h2C, 6'h2D: 
+            result = 1'b1;
+         
+         default: result = 1'b0;
+      endcase
+`else
       result = 1'b0;
 
       if (packet_type inside {
@@ -106,6 +122,7 @@ module csi_rx_packet_handler
          /*RAW*/ 
          6'h28, 6'h29, 6'h2A, 6'h2B, 6'h2C, 6'h2D
       }) result = 1'b1;
+`endif //ICARUS
 
       return result;
    endfunction: is_allowed_type
@@ -241,7 +258,12 @@ module csi_rx_packet_handler
          if ({is_hdr, valid_packet, packet_type[5:4]} == {2'b11, 2'd2}) begin
             in_line <= 1'b1;
          end
+`ifdef ICARUS 
+         // sorry: "inside" expressions not supported yet.
+         else if ((state==SYNC0 || state==SYNC1 || state==LONG_WAIT || state==LONG_READ) == 1'b0) begin
+`else
          else if ((state inside {SYNC0, SYNC1, LONG_WAIT, LONG_READ}) == 1'b0) begin
+`endif //ICARUS
             in_line <= 1'b0;
          end
       end

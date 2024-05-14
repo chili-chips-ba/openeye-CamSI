@@ -50,6 +50,14 @@ module fpga_pll_top (
    logic uclk_out0;
    logic uclk_out1;
 
+`ifdef COCOTB_SIM
+// PLL outputs driven from cocotb
+initial begin
+    pll_lock = 0;
+    uclk_out0 = 'x;
+    uclk_out1 = 'x;
+end
+`else
    MMCME2_BASE #(
       .BANDWIDTH   ("OPTIMIZED"), // Jitter programming (OPTIMIZED, HIGH, LOW)
       .DIVCLK_DIVIDE   (5),       // Master division value (1-106)
@@ -121,6 +129,7 @@ module fpga_pll_top (
       .PWRDWN    (1'b0),         //i
       .RST       (1'b0)          //i
    );
+`endif //COCOTB_SIM
 
 //----------------------------------------------
 // Clock buffers

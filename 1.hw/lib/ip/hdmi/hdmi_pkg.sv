@@ -40,6 +40,8 @@
 
 ///*Artix-7 cannot go this option*/ `define HDMI_1080p60 
 
+`ifndef __HDMI_PKG__
+`define __HDMI_PKG__
 package hdmi_pkg;
    import top_pkg::*;
 
@@ -111,6 +113,7 @@ package hdmi_pkg;
    typedef tdms_t[2:0] tdms_pix_t;
 
 endpackage: hdmi_pkg
+`endif //__HDMI_PKG__
 
 /*
 ------------------------------------------------------------------------------

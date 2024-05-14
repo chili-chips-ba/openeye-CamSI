@@ -3,7 +3,7 @@
 #=============================================================
 SHELL   := /bin/bash
 
-HW_SRC	:= $(CURDIR)/../1.hw
+HW_SRC	:= $(CURDIR)/../../1.hw
 TB_NAME := tb
 
 export HW_SRC TB_NAME
@@ -42,7 +42,7 @@ compile:
 		\
 		-f ${HW_SRC}/top.filelist \
 		\
-		models/xilinx.unisim.CHILI.v \
+		../models/xilinx.unisim.CHILI.v \
 		${TB_NAME}.sv \
 		--top-module ${TB_NAME}
 
@@ -104,7 +104,7 @@ xml2stems:
 		+define+SIM_ONLY \
 		+define+HACKED_UNISIM \
                 \
-		models/xilinx.unisim.CHILI.v \
+		../models/xilinx.unisim.CHILI.v \
 		--top-module ${TB_NAME}
 	xml2stems tb.xml tb.stems
 

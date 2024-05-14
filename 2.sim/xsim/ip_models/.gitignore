@@ -1,0 +1,7 @@
+*.vcd
+*.wdb
+
+.Xil
+xvlog.*
+xelab.*
+xsim*.*

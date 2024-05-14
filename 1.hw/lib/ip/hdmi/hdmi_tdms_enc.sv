@@ -71,24 +71,49 @@ module hdmi_tdms_enc
    // work out two different encodings for the byte
        xored[0] = raw.d[0];
        xnord[0] = raw.d[0];
-
+`ifdef ICARUS
+            xored[1] =   raw.d[1] ^ xored[0];
+            xnord[1] = ~(raw.d[1] ^ xnord[0]);
+            xored[2] =   raw.d[2] ^ xored[1];
+            xnord[2] = ~(raw.d[2] ^ xnord[1]);
+            xored[3] =   raw.d[3] ^ xored[2];
+            xnord[3] = ~(raw.d[3] ^ xnord[2]);
+            xored[4] =   raw.d[4] ^ xored[3];
+            xnord[4] = ~(raw.d[4] ^ xnord[3]);
+            xored[5] =   raw.d[5] ^ xored[4];
+            xnord[5] = ~(raw.d[5] ^ xnord[4]);
+            xored[6] =   raw.d[6] ^ xored[5];
+            xnord[6] = ~(raw.d[6] ^ xnord[5]);
+            xored[7] =   raw.d[7] ^ xored[6];
+            xnord[7] = ~(raw.d[7] ^ xnord[6]);
+`else
        // verilator lint_off ALWCOMBORDER
        for (int i=1; i<8; i++) begin
            xored[i] =   raw.d[i] ^ xored[i-1];
            xnord[i] = ~(raw.d[i] ^ xnord[i-1]);
        end
        // verilator lint_on ALWCOMBORDER
-
+`endif //ICARUS
        xored[8] = HI;
        xnord[8] = LO;
      
    // count how many ones are set in data
        num_ones = 4'd0;
-
+`ifdef ICARUS
+            num_ones = num_ones + {3'd0, raw.d[0]};
+            num_ones = num_ones + {3'd0, raw.d[1]};
+            num_ones = num_ones + {3'd0, raw.d[2]};
+            num_ones = num_ones + {3'd0, raw.d[3]};
+            num_ones = num_ones + {3'd0, raw.d[4]};
+            num_ones = num_ones + {3'd0, raw.d[5]};
+            num_ones = num_ones + {3'd0, raw.d[6]};
+            num_ones = num_ones + {3'd0, raw.d[7]};
+`else
        for (int i=0; i<8; i++) begin
            num_ones = num_ones + {3'd0, raw.d[i]};
        end     
- 
+`endif //ICARUS
+
    // decide which encoding to use
        if (
             ( num_ones > 4'd4) 
