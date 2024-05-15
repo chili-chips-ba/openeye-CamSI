@@ -20,7 +20,7 @@ XILINX_UNISIMS = $(XILINX)/data/verilog/src/unisims
 HW_SRC	:= $(realpath ../../../1.hw)
 
 # Read verilog sources from 1.hw/top.filelist
-TOP_FILELIST = $(shell perl -ne 's/\$$\{HW_SRC\}\///g ; print unless /\#/' ${HW_SRC}/top.filelist)
+TOP_FILELIST = $(shell perl -ne 's/\$$\{HW_SRC\}\///g ; print unless /^\s*\#/' ${HW_SRC}/top.filelist)
 VERILOG_SOURCES += $(TOP_FILELIST:%=$(HW_SRC)/%)
 
 # Xilinx primitives      
