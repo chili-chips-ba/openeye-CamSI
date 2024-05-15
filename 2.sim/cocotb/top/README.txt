@@ -1,0 +1,4 @@
+- Verilog sources: Makefile reads source file list ${HW_SRC}/top.filelist
+- Testbench (clocks, resets, transactors, BFM, checkers, etc): test_top.py
+- Run simulation with Verilator: make or make SIM=verilator
+- Run simulation with Icarus: make SIM=icarus

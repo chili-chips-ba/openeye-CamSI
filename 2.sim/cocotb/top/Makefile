@@ -20,7 +20,7 @@ XILINX_UNISIMS = $(XILINX)/data/verilog/src/unisims
 HW_SRC	:= $(realpath ../../../1.hw)
 
 # Read verilog sources from 1.hw/top.filelist
-TOP_FILELIST = $(shell perl -ne 's/\$$\{HW_SRC\}\//$$a/g ; print unless /\#/' ${HW_SRC}/top.filelist)
+TOP_FILELIST = $(shell perl -ne 's/\$$\{HW_SRC\}\///g ; print unless /^\s*\#/' ${HW_SRC}/top.filelist)
 VERILOG_SOURCES += $(TOP_FILELIST:%=$(HW_SRC)/%)
 
 # Xilinx primitives      
@@ -76,6 +76,7 @@ MODULE = test_top
 export PYTHONPATH := $(realpath .)
 
 # include cocotb's make rules to take care of the simulator setup
+sim: $(VERILOG_SOURCES)
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
 g gtkwave:
