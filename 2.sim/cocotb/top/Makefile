@@ -17,58 +17,11 @@ TOPLEVEL_LANG ?= verilog
 XILINX = /tools/Xilinx/Vivado/2023.2
 XILINX_UNISIMS = $(XILINX)/data/verilog/src/unisims
 
-HW_SRC	:= ../../../1.hw
+HW_SRC	:= $(realpath ../../../1.hw)
 
-VERILOG_SOURCES += \
-        $(HW_SRC)/top_pkg.sv
-
-#---Library of target-specific components
-VERILOG_SOURCES += \
-        ${HW_SRC}/lib/fpgatech/XILINX/fpga_olvds.sv \
-        ${HW_SRC}/lib/fpgatech/XILINX/fpga_oser10.sv \
-        ${HW_SRC}/lib/fpgatech/XILINX/fpga_pll_hdmi.sv \
-        ${HW_SRC}/lib/fpgatech/XILINX/fpga_pll_top.sv 
-
-#---Library of IP components
-VERILOG_SOURCES += \
-        ${HW_SRC}/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv \
-        ${HW_SRC}/lib/ip/axis_data_fifo.OPENSRC/afifo.sv \
-        ${HW_SRC}/lib/ip/axis_data_fifo.OPENSRC/axis_data_fifo.sv \
-
-VERILOG_SOURCES += \
-        $(HW_SRC)/lib/ip/hdmi/hdmi_pkg.sv \
-        ${HW_SRC}/lib/ip/hdmi/hdmi_tdms_enc.sv \
-        ${HW_SRC}/lib/ip/hdmi/hdmi_backend.sv \
-        ${HW_SRC}/lib/ip/hdmi/hdmi_top.sv
-
-VERILOG_SOURCES += \
-        ${HW_SRC}/lib/ip/i2c_master/i2c_ctrl.sv \
-        ${HW_SRC}/lib/ip/i2c_master/i2c_top.sv
-
-#---CSI-Rx
-VERILOG_SOURCES += \
-        ${HW_SRC}/csi_rx/csi_rx_phy_clk.sv \
-        ${HW_SRC}/csi_rx/csi_rx_phy_dat.sv \
-        ${HW_SRC}/csi_rx/csi_rx_clk_det.sv \
-        ${HW_SRC}/csi_rx/csi_rx_align_byte.sv \
-        ${HW_SRC}/csi_rx/csi_rx_align_word.sv \
-        ${HW_SRC}/csi_rx/csi_rx_packer_handler.sv \
-        ${HW_SRC}/csi_rx/csi_rx_hdr_ecc.sv \
-        ${HW_SRC}/csi_rx/csi_rx.sv \
-        ${HW_SRC}/csi_rx/csi_rx_top.sv
-
-#---ISP
-VERILOG_SOURCES += \
-        ${HW_SRC}/isp/raw2rgb.sv
-
-#---Misc
-VERILOG_SOURCES += \
-        ${HW_SRC}/misc/rgb2hdmi.sv \
-        ${HW_SRC}/misc/clkrst_gen.sv
-
-#---TOP
-VERILOG_SOURCES += \
-        $(HW_SRC)/top.sv 
+# Read verilog sources from 1.hw/top.filelist
+TOP_FILELIST = $(shell perl -ne 's/\$$\{HW_SRC\}\//$$a/g ; print unless /\#/' ${HW_SRC}/top.filelist)
+VERILOG_SOURCES += $(TOP_FILELIST:%=$(HW_SRC)/%)
 
 # Xilinx primitives      
 VERILOG_SOURCES += \
@@ -84,7 +37,7 @@ VERILOG_SOURCES += \
         ../../models/BUFR.v \
         ../../models/IDELAYE2.v
 
-VERILOG_INCLUDE_DIRS +=  $(HW_SRC)
+VERILOG_INCLUDE_DIRS += 
 
 COMMON_DEFINES += \
         HACKED_UNISIM \
