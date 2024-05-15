@@ -28,11 +28,11 @@ set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS25} [get_ports i2c_scl]
 set_property -dict {PACKAGE_PIN F15 IOSTANDARD LVDS_25}  [get_ports cam_dphy_clk[1]]
 set_property -dict {PACKAGE_PIN F16 IOSTANDARD LVDS_25}  [get_ports cam_dphy_clk[0]]
                                                           
-set_property -dict {PACKAGE_PIN C16 IOSTANDARD LVDS_25}  [get_ports cam_dphy_d[0][1]}]
-set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVDS_25}  [get_ports cam_dphy_d[0][0]}]
+set_property -dict {PACKAGE_PIN C16 IOSTANDARD LVDS_25}  [get_ports cam_dphy_dat[0][1]]
+set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVDS_25}  [get_ports cam_dphy_dat[0][0]]
                                                           
-set_property -dict {PACKAGE_PIN E17 IOSTANDARD LVDS_25}  [get_ports cam_dphy_d[1][1]]
-set_property -dict {PACKAGE_PIN D17 IOSTANDARD LVDS_25}  [get_ports cam_dphy_d[1][0]]
+set_property -dict {PACKAGE_PIN E17 IOSTANDARD LVDS_25}  [get_ports cam_dphy_dat[1][1]]
+set_property -dict {PACKAGE_PIN D17 IOSTANDARD LVDS_25}  [get_ports cam_dphy_dat[1][0]]
 
 #-------------------------------------------------------------------------
 # HDMI
