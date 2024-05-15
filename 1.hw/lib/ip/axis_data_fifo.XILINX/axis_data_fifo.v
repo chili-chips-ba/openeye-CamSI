@@ -65,8 +65,7 @@ module axis_data_fifo (
   m_axis_aclk,
   m_axis_tvalid,
   m_axis_tready,
-  m_axis_tdata,
-  axis_rd_data_count
+  m_axis_tdata
 );
 
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME S_RSTIF, POLARITY ACTIVE_LOW, INSERT_VIP 0" *)
@@ -92,7 +91,6 @@ input wire m_axis_tready;
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME M_AXIS, TDATA_NUM_BYTES 3, TDEST_WIDTH 0, TID_WIDTH 0, TUSER_WIDTH 0, HAS_TREADY 1, HAS_TSTRB 0, HAS_TKEEP 0, HAS_TLAST 0, FREQ_HZ 100000000, PHASE 0.000, LAYERED_METADATA undef, INSERT_VIP 0" *)
 (* X_INTERFACE_INFO = "xilinx.com:interface:axis:1.0 M_AXIS TDATA" *)
 output wire [23 : 0] m_axis_tdata;
-output wire [31 : 0] axis_rd_data_count;
 
   axis_data_fifo_v2_0_3_top #(
     .C_FAMILY("artix7"),
@@ -136,7 +134,7 @@ output wire [31 : 0] axis_rd_data_count;
     .m_axis_tdest(),
     .m_axis_tuser(),
     .axis_wr_data_count(),
-    .axis_rd_data_count(axis_rd_data_count),
+    .axis_rd_data_count(),
     .almost_empty(),
     .prog_empty(),
     .almost_full(),

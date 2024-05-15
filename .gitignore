@@ -13,5 +13,11 @@
 *temp*
 *.gprj.user
 
+*vivado.cache*
+*vivado.hw*
+*vivado.ip_user_files*
+*vivado.runs*
+*vivado.sim*
+
 *\#*\#
 *\#*

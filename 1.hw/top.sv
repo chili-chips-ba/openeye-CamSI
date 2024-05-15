@@ -141,17 +141,17 @@ glbl glbl();
    );
       
 //--------------------------------
-// ISP: Raw2RGB
+// ISP Functions
 //--------------------------------
    logic  rgb_valid;
    pix_t  rgb_pix;
    logic  rgb_reading;
 
-   raw2rgb #(
+   isp_top #(
       .LINE_LENGTH (640),           // number of data entries per line
       .RGB_WIDTH   ($bits(pix_t))   // width of RGB data (24-bit)
    )
-   u_raw2rgb (
+   u_isp (
       .clk        (csi_byte_clk),   //i           
       .rst        (reset),          //i
 
@@ -166,7 +166,7 @@ glbl glbl();
 //--------------------------------
 // AsyncFIFO with Synchronization
 //--------------------------------
-   logic clk_pix;
+   logic hdmi_clk;
    logic hdmi_frame;
    logic hdmi_blank;
    logic hdmi_reset_n;
@@ -174,7 +174,7 @@ glbl glbl();
 
    rgb2hdmi u_rgb2hdmi (
      //from/to CSI and RGB block
-      .clk          (csi_byte_clk),   //i           
+      .csi_clk      (csi_byte_clk),   //i           
       .reset        (reset),          //i
 
       .csi_in_line  (csi_in_line),    //i  
@@ -185,7 +185,7 @@ glbl glbl();
       .rgb_valid    (rgb_valid),      //o
 
      //from/to HDMI block
-      .clk_pix      (clk_pix),        //i
+      .hdmi_clk     (hdmi_clk),       //i
 
       .hdmi_frame   (hdmi_frame),     //i
       .hdmi_blank   (hdmi_blank),     //i
@@ -200,7 +200,7 @@ glbl glbl();
 
    hdmi_top u_hdmi_top(
       .clk_ext      (clk_100),      //i 
-      .clk_pix      (clk_pix),      //o
+      .clk_pix      (hdmi_clk),     //o
                      
       .pix          (hdmi_pix),     //i'pix_t  
      

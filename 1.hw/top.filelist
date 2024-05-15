@@ -17,7 +17,7 @@ ${HW_SRC}/lib/fpgatech/XILINX/fpga_pll_top.sv
 #XILINX--|  ${HW_SRC}/lib/ip/axis_data_fifo.XILINX/axis_data_fifo.v
 
 ${HW_SRC}/lib/ip/axis_data_fifo.OPENSRC/DP_BRAM.sv
-${HW_SRC}/lib/ip/axis_data_fifo.OPENSRC/afifo.sv
+${HW_SRC}/lib/ip/axis_data_fifo.OPENSRC/afifo_ctrl.sv
 ${HW_SRC}/lib/ip/axis_data_fifo.OPENSRC/axis_data_fifo.sv
 
 ${HW_SRC}/lib/ip/hdmi/hdmi_pkg.sv
@@ -37,11 +37,12 @@ ${HW_SRC}/csi_rx/csi_rx_align_byte.sv
 ${HW_SRC}/csi_rx/csi_rx_align_word.sv
 ${HW_SRC}/csi_rx/csi_rx_packer_handler.sv
 ${HW_SRC}/csi_rx/csi_rx_hdr_ecc.sv
-${HW_SRC}/csi_rx/csi_rx.sv
 ${HW_SRC}/csi_rx/csi_rx_top.sv
 
 #---ISP
 ${HW_SRC}/isp/raw2rgb.sv
+${HW_SRC}/isp/isp_top.sv
+
 
 #---Misc
 ${HW_SRC}/misc/rgb2hdmi.sv
@@ -49,9 +50,6 @@ ${HW_SRC}/misc/clkrst_gen.sv
 
 #---TOP
 ${HW_SRC}/top.sv
-
-#---Constraints
-#${HW_SRC}/top.xdc
 
 #==========================================================================
 # End-of-File

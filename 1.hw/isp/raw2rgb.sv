@@ -38,12 +38,6 @@
 //   FIXME: Adapt logic to 4-lane datapath
 //========================================================================
 
-//FIXME: These Verilator Warnings should not be ignored, 
-//       but rather fixed in RTL
-
-// verilator lint_off SELRANGE
-// verilator lint_off WIDTHTRUNC
-
 module raw2rgb 
   import top_pkg::*;
 #(
@@ -117,6 +111,9 @@ module raw2rgb
 // Read side
 //---------------------------------------------
    cnt_t       read_count; // count up to LINE_LENGTH-1
+   cnt_t       read_count_nxt;
+   assign      read_count_nxt = cnt_t'(read_count + cnt_t'(1));
+     
    logic       odd_pixel, line_end;
    logic [1:0] line_not_read;
 
@@ -141,7 +138,7 @@ module raw2rgb
          end 
          else begin
             if (odd_pixel == 1'b1) begin
-               read_count <= cnt_t'(read_count + cnt_t'(1));
+               read_count <= read_count_nxt;
             end
             odd_pixel     <= ~odd_pixel;
          end
@@ -156,49 +153,25 @@ module raw2rgb
    always_ff @(posedge clk) begin
       if (reading == 1'b1) begin
 
-`ifndef ICARUS
-         // ../../../1.hw/isp/raw2rgb.sv:159: error: Part-select [15:8] exceeds the declared bounds for line0_buffer[].
-         // ../../../1.hw/isp/raw2rgb.sv:160: error: Part-select [7:0] exceeds the declared bounds for line0_buffer[].
-         line0_green0 <= line0_buffer[read_count][15:8];
-         line0_blue0  <= line0_buffer[read_count][7:0];
-         line0_green1 <= line0_buffer[read_count + 10'd1][15:8];
-         line0_blue1  <= line0_buffer[read_count + 10'd1][7:0];
+         line0_green0 <= line0_buffer[read_count]    [1];
+         line0_blue0  <= line0_buffer[read_count]    [0];
+         line0_green1 <= line0_buffer[read_count_nxt][1];
+         line0_blue1  <= line0_buffer[read_count_nxt][0];
          
-         line1_red0   <= line1_buffer[read_count][15:8];
-         line1_green0 <= line1_buffer[read_count][7:0];
-         line1_red1   <= line1_buffer[read_count + 10'd1][15:8];
-         line1_green1 <= line1_buffer[read_count + 10'd1][7:0];
+         line1_red0   <= line1_buffer[read_count]    [1];
+         line1_green0 <= line1_buffer[read_count]    [0];
+         line1_red1   <= line1_buffer[read_count_nxt][1];
+         line1_green1 <= line1_buffer[read_count_nxt][0];
          
-         line2_green0 <= line2_buffer[read_count][15:8];
-         line2_blue0  <= line2_buffer[read_count][7:0];
-         line2_green1 <= line2_buffer[read_count + 10'd1][15:8];
-         line2_blue1  <= line2_buffer[read_count + 10'd1][7:0];
+         line2_green0 <= line2_buffer[read_count]    [1];
+         line2_blue0  <= line2_buffer[read_count]    [0];
+         line2_green1 <= line2_buffer[read_count_nxt][1];
+         line2_blue1  <= line2_buffer[read_count_nxt][0];
          
-         line3_red0   <= line3_buffer[read_count][15:8];
-         line3_green0 <= line3_buffer[read_count][7:0];  
-         line3_red1   <= line3_buffer[read_count + 10'd1][15:8];
-         line3_green1 <= line3_buffer[read_count + 10'd1][7:0];
-`else
-         line0_green0 <= (line0_buffer[read_count] >> 8) & 8'hff;
-         line0_blue0  <= line0_buffer[read_count] & 8'hff;
-         line0_green1 <= (line0_buffer[read_count + 10'd1] >> 8) & 8'hff;
-         line0_blue1  <= line0_buffer[read_count + 10'd1] & 8'hff;
-         
-         line1_red0   <= (line1_buffer[read_count] >> 8) & 8'hff;
-         line1_green0 <= line1_buffer[read_count] & 8'hff;
-         line1_red1   <= (line1_buffer[read_count + 10'd1] >> 8) & 8'hff;
-         line1_green1 <= line1_buffer[read_count + 10'd1] & 8'hff;
-         
-         line2_green0 <= (line2_buffer[read_count] >> 8) & 8'hff;
-         line2_blue0  <= line2_buffer[read_count] & 8'hff;
-         line2_green1 <= (line2_buffer[read_count + 10'd1] >> 8) & 8'hff;
-         line2_blue1  <= line2_buffer[read_count + 10'd1] & 8'hff;
-         
-         line3_red0   <= (line3_buffer[read_count] >> 8) & 8'hff;
-         line3_green0 <= line3_buffer[read_count] & 8'hff;  
-         line3_red1   <= (line3_buffer[read_count + 10'd1] >> 8) & 8'hff;
-         line3_green1 <= line3_buffer[read_count + 10'd1] & 8'hff;
-`endif //ICARUS
+         line3_red0   <= line3_buffer[read_count]    [1];
+         line3_green0 <= line3_buffer[read_count]    [0];  
+         line3_red1   <= line3_buffer[read_count_nxt][1];
+         line3_green1 <= line3_buffer[read_count_nxt][0];
 
       end
    end  
@@ -343,9 +316,6 @@ module raw2rgb
                       rgb_out1[7:0]}; 
 
 endmodule: raw2rgb
-
-// verilator lint_on SELRANGE
-// verilator lint_on WIDTHTRUNC
 
 /*
 ------------------------------------------------------------------------------

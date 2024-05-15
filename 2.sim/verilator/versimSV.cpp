@@ -25,11 +25,17 @@ double sc_time_stamp() { return 0; }
 int main(int argc, char** argv, char**) {
    // Setup context, defaults, and parse command line
    Verilated::debug(0);
+   //Verilated::commandArgs(argc, argv);
+
    const std::unique_ptr<VerilatedContext> contextp{new VerilatedContext};
+
+   //{VerilatedContext*} -> commandArgs(argc, argv);
+
    contextp->traceEverOn(true);
    contextp->commandArgs(argc, argv);
    VerilatedFstC *m_trace = new VerilatedFstC;
-   
+
+
    // Construct the Verilated model, from Vtop.h generated from Verilating
    const std::unique_ptr<Vtb> topp{new Vtb{contextp.get()}};
 
