@@ -8,7 +8,7 @@ import fpga_pll
 
 @cocotb.test()
 async def test_0(dut):
-    # initializer PLL
+    # initialize PLL
     pllt = fpga_pll.fpga_pll(dut, 'top')
     pllh = fpga_pll.fpga_pll(dut, 'hdmi')
 
