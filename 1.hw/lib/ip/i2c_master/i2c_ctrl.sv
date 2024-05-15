@@ -100,8 +100,11 @@ module i2c_ctrl (
          acknowledge_bit       <= 1'b0;
       end 
       else begin
+`ifndef ICARUS
          unique case (state)
-
+`else
+         case (state)
+`endif
          //----------------------
             IDLE: begin
                process_cnt           <= '0;
