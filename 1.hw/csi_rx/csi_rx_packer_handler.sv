@@ -77,6 +77,8 @@ module csi_rx_packet_handler
       LONG_WAIT = 3'd7
    } state_t;
 
+   state_t state;
+
    logic        is_hdr;
 
    logic [31:0] packet_data;
@@ -159,8 +161,6 @@ module csi_rx_packet_handler
 //----------------------
 // Main FSM
 //----------------------
-   state_t state;
-
    always_ff @(posedge clock or posedge reset) begin
       if (reset == 1'b1) begin
          state        <= INIT;
