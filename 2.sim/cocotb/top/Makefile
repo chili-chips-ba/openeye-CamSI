@@ -76,6 +76,7 @@ MODULE = test_top
 export PYTHONPATH := $(realpath .)
 
 # include cocotb's make rules to take care of the simulator setup
+sim: $(VERILOG_SOURCES)
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
 g gtkwave:
