@@ -37,6 +37,12 @@
 
 `ifndef __TOP_PKG__
 `define __TOP_PKG__
+
+`define HDMI_720p60
+//`define HDMI_1080p30
+//`define HDMI_1080p60 /*Artix-7 cannot go this option*/ 
+
+
 package top_pkg;
    
 //-----------------------------------------------------------

@@ -77,6 +77,8 @@ module csi_rx_packet_handler
       LONG_WAIT = 3'd7
    } state_t;
 
+   state_t state;
+
    logic        is_hdr;
 
    logic [31:0] packet_data;
@@ -130,15 +132,12 @@ module csi_rx_packet_handler
    
 /*
 RM/Yimin:
-../../../1.hw/csi_rx/csi_rx_packer_handler.sv:132: error: Unable to bind wire/reg/memory `state' in `top.u_csi_rx_top.u_depacket'
-../../../1.hw/csi_rx/csi_rx_packer_handler.sv:162:      : A symbol with that name was declared here. Check for declaration after use.
 ../../../1.hw/csi_rx/csi_rx_packer_handler.sv:138: error: Unable to bind wire/reg/memory `expected_ecc' in `top.u_csi_rx_top.u_depacket'
 ../../../1.hw/csi_rx/csi_rx_packer_handler.sv:151:      : A symbol with that name was declared here. Check for declaration after use.
 ../../../1.hw/csi_rx/csi_rx_packer_handler.sv:142: error: Unable to bind wire/reg/memory `expected_ecc' in `top.u_csi_rx_top.u_depacket'
 ../../../1.hw/csi_rx/csi_rx_packer_handler.sv:151:      : A symbol with that name was declared here. Check for declaration after use.
 */
    logic [7:0]  expected_ecc;
-   state_t state;
 
    always_comb begin
       is_hdr         = ({data_valid, state} == {1'b1, SYNC1});
@@ -160,7 +159,6 @@ RM/Yimin:
 //----------------------
 // ECC Calculation
 //----------------------
-//   logic [7:0]  expected_ecc;
    
    csi_rx_hdr_ecc u_ecc (
       .data (packet_for_ecc), //i[23:0]
@@ -171,7 +169,6 @@ RM/Yimin:
 //----------------------
 // Main FSM
 //----------------------
-//   state_t state;
 
    always_ff @(posedge clock or posedge reset) begin
       if (reset == 1'b1) begin

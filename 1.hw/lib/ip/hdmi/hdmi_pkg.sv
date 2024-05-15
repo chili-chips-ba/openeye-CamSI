@@ -35,11 +35,6 @@
 // Description: Common HDMI-related declarations
 //========================================================================
 
-`define HDMI_720p60
-//`define HDMI_1080p30
-
-///*Artix-7 cannot go this option*/ `define HDMI_1080p60 
-
 `ifndef __HDMI_PKG__
 `define __HDMI_PKG__
 package hdmi_pkg;

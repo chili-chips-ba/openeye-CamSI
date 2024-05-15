@@ -1,57 +1,62 @@
 # openEye-CamSI (Phase1)
 <img src="https://github.com/chili-chips-ba/openeye/assets/67533663/07cb0f47-c9c7-483e-a028-0066342f5023" width="250">
 
-## *Objective I - Upgrade Cam Performance and Functionality*
-The goals of this development are to deliver complete camera video pipeline for three popular hi-rez imaging sensors:
+# Objective I
+## Upgrade openCam Performance and Functionality
+The goals of this development are to deliver complete video pipeline for three popular hi-rez imaging/camera sensors:
  - `2-lane RPiV2.1`, based on Sony IMX219, in `1280x720P@60Hz` RGB888 - `HD`
  - `4-lane OneInchEye`, based on Sony IMX283, in `1920x1080P@30Hz` RGB888 - `FHD`
- - `2-lane OV2740`, in a TBD "Webcam" setup for Lukas Henkel's [openLaptop](https://resources.altium.com/p/open-source-laptop-part-one) project
+ - `2-lane OV2740`, in a TBD "Webcam" setup for Lukas Henkel's [openLaptop](https://resources.altium.com/p/open-source-laptop-part-one)
 
-The intent is to do it in mature and affordable <b>Artix7 FPGA</b>, by using its <b>IBUFDS, IDELAY, ISERDES</b> primitives for the camera front-end. These primitives are available in all IOBs, hence ubiquitous, relatively easy to work with, and already supported by opensource PNR tool for Xilinx Series7. This also allows future reduction of the total solution cost by migrating to [Spartan7](https://www.xilinx.com/video/fpga/spartan-7-technical-overview.html?_ga=2.252819658.271111311.1715447274-1421952438.1715447272), which does not have GTP transceivers (aka "true SerDes").
+This is for mature, low-cost **Artix7 FPGAs**, by using its **IBUFDS, IDELAY, ISERDES** primitives in the camera front-end. These primitives are available in all IOBs, hence ubiquitous, relatively easy to work with, and already supported by opensource PNR for Xilinx Series7. This also allows future reduction of the total solution cost by migrating to [Spartan7](https://www.xilinx.com/video/fpga/spartan-7-technical-overview.html?_ga=2.252819658.271111311.1715447274-1421952438.1715447272), which does not have GTP transceivers (aka "true SerDes").
 
->To be clear -- We don't plan on using any of the 3rd party D-PHY front-end silicon devices specified in [XAPP894](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Xilinx/MIPI/xapp894-d-phy-solutions.pdf). Moreover, we don't even use the passive signal conditioning networks that Xilinx is recommending. Instead, our objective is to achieve robust *Signal Integrity* (SI) and flawless HD/FHD video flow by pulling-in only on-chip resources.
+>To be clear -- We don't plan on using any of the 3rd party D-PHY front-end silicon devices specified in [XAPP894](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Xilinx/MIPI/xapp894-d-phy-solutions.pdf). Moreover, we won't even use the passive signal conditioning networks that Xilinx is recommending. Instead, our objective is to achieve robust *Signal Integrity* (SI) and flawless HD/FHD video flow by pulling-in only on-chip resources.
 
 This brings about multiple challenges. Compared to [StereoNinja's](https://github.com/StereoNinja/StereoNinjaFPGA) original work, which was for LatticeSemi ECP5 FPGA, our target device does not come with D-PHY receiver circuit *(no wonder why Artix7 costs less* :innocent:*)*.
 
-On top of it, we are doing it on meager internal-to-FPGA BRAM budget, without expending much storage. In other words, PSRAM, SDRAM, DDR or similar external chips are NOT called to rescue. That's a major upgrade to StereoNinja's design, who realized end-to-end, camera-to-monitor streaming only for the 640x480 VGA, and only in Grayscale, far below our vibrant RG888 color palette of HD and FHD quality. 
+On top of it, we are doing it on meager internal-to-FPGA BRAM budget, without expending much storage. In other words, PSRAM, SDRAM, DDR or similar external chips are NOT called to rescue. That's a major upgrade to StereoNinja's design, who realized end-to-end, camera-to-monitor streaming for only 640x480 VGA, and only in Grayscale, far below our vibrant RG888 color palette and HD/FHD quality. 
 
 >This design is simpler and more affordable, hence uniquely appealing to the makers. It also paves a path to a cost-efficient openLaptop camera subsystem.
 
-It is indeed NLnet's objective for this project to bring StereoNinja's pioneering work to an order of magnitude higher performance and functionality level.
+It is indeed the NLnet's objective for this project to bring StereoNinja's pioneering work to an order of magnitude higher performance and functionality level.
 
 On the video feed sink side, we plan to showcase real-time streaming to:
  - **HDMI** monitor
  - **1Gbps Ethernet**, using UDP packets, rendered on a PC with [VLC Player](https://www.videolan.org)
 
-The follow on "Webcam" project (aka Phase2) is to add **UVC** (USB2.0 Video Class) to this list. In prep for this future work, we plan to develop these add-on functions:
- - `Image Signal Processing (ISP) 4 Webcam` - White Balance, Color Correction, Gamma Correction
- - `Video Compression 4 Webcam` - JPEG *(not needed for 1GE. But, compression is a must-have for the 1024P@30Hz over USB2)*
+The follow on "Webcam" project (aka Phase2) is to add **UVC** (USB2.0 Video Class) to this list. In prep for this future work, we plan to develop a number of add-on functions:
+ - `Image Signal Processing (ISP) 4 Webcam`
+    > White Balance, Color Correction, Gamma Correction
+ - `Video Compression 4 Webcam` - JPEG
+    > Not needed for 1GE. But, compression is a must-have for the 1024P@30Hz over USB2
 
 While our design is pushing Artix7 to its limits, it's these very silicon limits that stand in the way of getting more from the given imaging sensors. Recall that even StereoNinja's generally faster and better LatticeSemi FPGA cannot generate HDMI at 1920x1080@60Hz. 
 
-Using Vivado tool chain, we were able to bring this design to the point where the only factor preventing further resolution increase became the *Max Specified Toggle Rate* that's realistically possible with Artix7 I/O structures and clock distribution networks.
+Using Vivado tool chain, we were able to bring this design to the point where the only remaining factor preventing further resolution increase is the *Max Specified Toggle Rate* for Artix7 I/O structures and clock distribution networks.
 
-## *Objective II - Improve opensource eco-system 4 Xilinx*
+# Objective II
+## Add to opensource ecosystem 4 Xilinx
 
-We intend to put to use [openXC7](https://github.com/openXC7) toolkit, including its web-based CI/CD flow. That's both for the security of images taken, and to help openXC7 attain the level of robustness found in commercial / proprietary CAE tools, Xilinx Vivado in particular. In that sense, OpenEye-CamSI is the continuation of our [TetriSaraj](https://github.com/chili-chips-ba/openXC7-TetriSaraj), which was the first openXC7 test case for a design more complex than a mere blinky. 
+We are thrilled to use [openXC7](https://github.com/openXC7) toolkit, including its web-based CI/CD flow. That's both for the security of images taken, and to help openXC7 attain the level of robustness found in commercial / proprietary CAE tools, Xilinx Vivado in particular. In that sense, OpenEye-CamSI is the continuation of our [TetriSaraj](https://github.com/chili-chips-ba/openXC7-TetriSaraj), which was the first openXC7 test case for a design more complex than a mere blinky. 
 
 >Our goal is to bring to the light issues that arrive from openXC7's first-ever exposure to demanding, cutting-edge designs like this one. 
 
 It is important to note that, in its current state, openXC7 is rather immature, without even the basic timing awareness, yet alone timing-driven optimizations. It has never been used for designs that push the underlying silicon to the max. The as-is openXC7 is simply not adequate for proper timing closure.
 
-While another project is underway and looking to plug this major opensource STA gap, it won't be ready for our Phase1. We're therefore planning Phase2 and Phase3, hoping to try this new timing closure prowess... Stress-testing, congesting, overwhelming it, all for the sake of making it more amenable to higher Utilization and Fmax metrics with silicon at hand. 
+While another project is underway and looking to plug this major opensource STA gap, it won't be ready for our Phase1. We're therefore planning Phase2 and Phase3, hoping to try this new timing closure prowess... Stress-testing, congesting, overwhelming it, all for the sake of making it more amenable to realizing higher Utilization and Fmax metrics with silicon at hand. 
 
-The choice of our development platform was governed by the benefit for the greater ecosystem. The boards were selected for their opensource [CRUVI](https://github.com/micro-FPGA/CRUVI/blob/master/docs/CRUVI_Specification.pdf) connectivity spec. Yes, they are hardly used and don't come with support collateral found on the more popular hardware platforms. That's exactly why we opted for them!
+The choice of our development platform was governed by the benefit for the greater community. The boards were selected for their opensource [CRUVI](https://github.com/micro-FPGA/CRUVI/blob/master/docs/CRUVI_Specification.pdf) connectivity spec. Yes, they are hardly used and don't come with support collateral found on the more popular hardware platforms. That's exactly why we opted for them!
 
-We have indeed come across quite a few board problems and idiosyncrasies, spending a fair amount of time chasing issues that simply should not have been there. Still, since those are both opensource and EU products, this extra effort was for a good cause. We are certain that this project will help increase their visibility and boost their acceptance rate among open makers. 
+We have indeed come across quite a few board problems and idiosyncrasies, spending a fair amount of time chasing issues that simply should not have been there. Still, since those are both opensource and EU products, this extra effort was for a good cause. We are certain that this project will help increase their visibility, and boost their acceptance rate among open makers. 
 
-## *Play1 : Groundwork*
+# Execution Play 1
+## Laying a foundation
 - [x] Familiarize with [Trenz](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/Trenz) hardware platform: Connectivity, clocking, power, etc. 
 - [x] Bring up Blinky on Trenz
 >___
 - [x] Standalone HDMI image generation: 1280x720P@60Hz  RGB888 (HD)
 - [x] Standalone HDMI image generation: 1920x1080P@30Hz RGB888 (FHD@30Hz)
-- [x] Standalone HDMI image generation: 1920x1080P@60Hz RGB888 (FHD@60Hz). Established that FHD@60Hz is not physically possible with given silicon
+- [x] Standalone HDMI image generation: 1920x1080P@60Hz RGB888 (FHD@60Hz). Established that FHD@60Hz is physically impossible with given silicon
 >___
 - [x] Experiments with IMX219 configuration and resolution options
 - [x] Sniff Raspberry Pie interactions with Camera
@@ -60,7 +65,7 @@ We have indeed come across quite a few board problems and idiosyncrasies, spendi
 - [x] Experiments with LVDS and termination schemes.
       How to do better than XAPP894, sharing insights with Lukas
 >___
-- [x] Test opensource 4-lane [CRUVI](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/CRUVI-camera-adapter) adapter, sharing feedback with Edmund
+- [x] Test opensource [4-lane adapter](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/CRUVI-camera-adapter), sharing feedback with Edmund
 - [x] Full redesign, fixing [bugs](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/CRUVI-camera-adapter/Technical-Note.TN-mipi.REV1.pdf) and expanding scope, to now include 2 and 4 lanes
 >___
 - [x] Clock Detection logic without standard LP I/O
@@ -87,12 +92,11 @@ For this first play, the hardware was used in the following config:
 ![system_no_background](https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/105a7569-75c5-4f2c-8f15-a408bb72cdc6)
 
 ### *Standalone HDMI image generation*
-HDMI [source code](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/1.hw/lib/ip/hdmi) for Artix7 can achieve:
+Our HDMI [image generator](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/1.hw/lib/ip/hdmi) is limited by the toggle rate that's realistically possible with Artix7 clock and I/O primitives. The max we can get from it is:
 - 720P@60Hz
 - 1080P@30Hz
-<br /> More about this and silicon limitations in [HDMI issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/1#issue-2278453405).
-
-Here is the test image that our HDMI RTL outputs on its own, w/o camera connected to it:
+  
+More about this and silicon limitations in [HDMI issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/1#issue-2278453405). Here is the test image that our HDMI RTL outputs on its own, w/o camera connected to it:
 <br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/c405a0d6-2086-452a-aa2a-435240055c48" width="500"><br />
 
 ### *I2C for Camera Configuration*
@@ -104,64 +108,96 @@ Here is an illustration of I2C waveforms, i.e. our Control Plane protocol.
 ### *Camera Connection*
 Sony [IMX219](0.doc/Sensor.2-lane.RPi2.1/IMX219PQ.Datasheet.pdf) camera sensor is used for image acquisition. It is connected to FPGA with a 15-pin flex cable (FFC), using [VHDPlus](https://vhdplus.com/docs/components/camera) CRUVI module. We recommend checking our [blog](https://www.chili-chips.xyz/blog/untwisting-rpi5-camera-connectivity) for additional detail on this topic.
 
-It turned out that the 4-lane CRUVI connector had a serious design flaw, essentially shorting system power. Having located its root cause, we had to fully redesign it. We have also ran into Trenz I2C wiring and supply complications related to onboard CPLD.
+It turned out that the 4-lane CRUVI connector had a serious design flaw, essentially shorting system power. Having identified its root cause, we had to fully redesign it. We have also run into Trenz I2C wiring and supply complications related to onboard CPLD. Luckily, we managed to find a way around it without having to open the CPLD and change its internals.
 
 ### *High-speed Signaling and Signal Integrity*
 The VHDPlus CRUVI carries three 100 Ohm termination resistors, one for clock, plus two for data, as shown below: 
 <br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/31957cba-ea2c-4b42-942e-e01f8f4e62a8" width="300"><br />
 
-The location of these resistors close to data source is a major SI problem. Termination must be placed at the end of *Transmission Line* (TL). Yet, on this Trenz system, the termination is not only misplaced, but there are also three connectors in the path of high speed signals:
-- Camera to CRUVI -> `Location of the stock termination`
+Location of these resistors close to data source is a major SI problem. Termination must be placed at the end of *Transmission Line* (TL), next to sink. Yet, on this system, the termination is not only misplaced, but there are also three connectors in the path of high speed signals:
+- Camera to CRUVI -> `that's where the stock termination is placed`
 - CRUVI to Carrier Card
 - Carrier to FPGA SOM Card.
 
-Consequently, we had to remove them and implement terminaton using internal-to-FPGA resistors.
+Consequently, we had to remove the stock termination and replace it with internal-to-FPGA resistors, so essentially relocating it to the very end of TL.
 
-When FPGA internal termination is used with LVDS_25 IOSTANDARD, it is important to set the correspoding bank's VCCIO to 2.5V. Only then will their differential resistance be 100 Ohms. 
+When Artix7 internal termination is used in connecton to LVDS_25 IOSTANDARD, it is important to set the correspoding bank's VCCIO to 2.5V. Only then will their differential resistance be 100 Ohms. 
 
 That's on Trenz hardware done in the following way:
 - switch DIP 2 to ON state, to set the IOV to 2.5V
 - use Jumpers J14, J16, and J17 to connect VCCIO to IOV.
  
 ### *Detection of Camera Clock Activity Intervals*
-Once all these hardware and board problems were put behind, we turned focus back to RTL. 
+Once all these hardware and board problems were put behind, we turned focus back to RTL design. 
 
-Given our goal to minimize overhead and eliminate the need for LP pins (see XAPP894), RTL had to provide a clever substitute for the non-existent I/O compared to standard Camera Serial Interface. After some experimentation, we settled on a scheme that was detecting blanking intervals between frames, and used Lock_FSM with timeouts to determine whether camera clock signal was active and stable.
-
-For proper color rendering, the stream must also be processed through a *Debayer* ISP function. For more on it see [Debayer issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/4)
+Given the goal to minimize overhead and eliminate the need for LP pins (see XAPP894), RTL had to provide a clever substitute for our non-existent I/O compared to standard Camera Serial Interface. After some experimentation, we settled on a scheme that detects blanking intervals between frames by using *Clock_Lock_FSM* with thresholds and timeouts. The output of this *Clock_Lock_FSM* is then used as global reset for the camera side of pipeline. That's to say that the video pipeline is out of reset only when camera clock is active and stable.
 
 ### *CDC and Video Synchronization*
-For the fluid and uneventful video, we need to pass Pixel data with Line and Frame synchronization pulses from Camera to HDMI clock. To save on cost and storage resources, this *Clock Domain Crossing* (CDC) and *Timebase Handoffs* are accomplished using Line Buffering instead of full Frame Buffering. More on this topic in [Line buffering issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/2). 
+To have fluid and seamless video, we need to pass Pixel data with Line and Frame synchronization pulses from Camera to HDMI clock. Aiming for low-cost solution, this *Clock Domain Crossing* (CDC) and *Timebase Handoffs* are accomplished using Line Buffering instead of full Frame Buffering, so saving storage resources. More on this topic in [Line buffering issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/2).
 
-It took us a bit of trial-and-error to get it right. That was to some extent due to CDC bug we found in the fullness count of AsyncFIFO, which was pulled from one of the opensource libraries. 
+In addition to AsyncFIFO for **csi_clock->hdmi_clock** CDC, the signals that play crucial role in the *Timebase Handoffs* process are:
+- csi_line_in
+- hdmi_line_in
+
+They mark the beginning of each new scan line in incoming video from Camera, as well as outgoing line to HDMI.
+
+Furthermore, Async FIFO is kept in reset when either Camera or HDMI are Out-Of-Frame. It is through this **fifo_areset_n** and **hdmi_reset_n** that we are forcing HDMI to track the Camera. **rgb2hdmi** is the bridge between Camera and HDMI+GE worlds. Timing diagram below contains additional detail.
+
+<img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Timing-Diagram.png">
+
+In all honesty, it took us a bit of trial-and-error to get it right. That was to some extent due to CDC bug we found in the fullness count of AsyncFIFO, which is the IP block we pulled from one of the opensource libraries. 
 
 In the end, when everything was tuned, and AsyncFIFO CDC problem factored out of the solution, the final result came to be as nice and polished as follows:
 
 [![image (1)](https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/e333f585-1f67-4c4a-9ce0-ecf5bda4edde)](https://www.youtube.com/watch?v=BGku8TeV_AA)
 
-### *Block and Clock Diagram*
+### *Clock and Block Diagram*
 
-The following diagram illustrates design block structure and clocking scheme:
+The following diagram illustrates design clocking scheme and block structure:
 
 <br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/FPGA-Block-Diagram.png"><br />
 
-## *Play2 : 4-lane Camera*
-- [ ] Repeat the same with the 4-lane IMX283 camera sensor
+Design operates off of a single **external 100MHz** clock, from which we generate **200MHz refclk** for IDELAY and detection of camera activity. The camera clock comes in two forms:
+- **CSI Bit** clock, for sampling and capturing incoming DDR data
+- **CSI Byte** clock (= Bit clock / 4) for the rest of CSI video pipeline
+
+The frequency of camera *Bit* and *Byte* clocks is the function of sensor resolution. A PLL on HDMI side generates two specific clocks from the common 100MHz input:
+- **Parallel**, for RGB888 HDMI data
+- **Serial**, (x5) for OSERDES and transmission of multiplexed video to monitor
+
+The frequency of these two clocks is the function of HDMI resolution. We provide Verilog macros in the central *`top_pkg.sv`* for selection of HDMI resolution. 
+
+The datapath is a straight video pipeline with option for width scaling via `NUM_LANE` parameter, which is also located in the central *top_pkg.sv*. 
+
+The pipeline starts with circuits for capturing serial *Double Data Rate* (DDR) camera stream, eye-centering it using IDELAY, converting it to paralell format with ISERDES, then searching for *Byte boundaries*, followed by *Word alignement*, followed by *Packet Header* parsing and extraction of video *Payload* pixels.
+
+It is only at this point, where video is *unpacked*, that we may engage in ISP. The ISP is a set of functions that could be as elaborate as one is willing to invest in them. Here is a [good read on it](https://www.eecs.yorku.ca/~mbrown/ICCV19_Tutorial_MSBrown.pdf). The extent of ISP for this project is clearly defined. The future Phase2 and Phase3 would add more. 
+
+*Debayer* is the first ISP function we implemented. Without it, the displayed colors would have looked weird. More on it in [Debayer issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/4).
+
+# Execution Play 2
+## Widening up the pathway
+- [ ] Repeat the same for the 4-lane IMX283 camera sensor
 - [ ] Step-by-step introduce the following 3 ISP elements:
 > [x] Debayer [ ] Manual Exposure Control [ ] Dead Pixel Management
 - [ ] Implement another (lower) resolution of our choice
 
-## *Play3 : Ethernet Upload*
+# Execution Play 3
+## Ethernet streaming
 - [ ] Add 1GE as second video sink, then move display to remote PC, via UDP VLC
 - [x] Document implementation via block diagram and project repo
 
-## *Play4 : OpenXC7*
+# Execution Play 4
+## Porting to openXC7
 - [ ] Port final design from Vivado to openXC7
 - [ ] Simulate it with Verilator and cocoTB, in CI/CD system
 - [ ] Document scripts and flows used in this process
 
-## *Play5 : Webcam*
-- [ ] Add 3 Webcam ISP functions and JPEG video compression
+# Execution Play 5
+## Prepping for Webcam
+- [ ] Add 3 new ISP functions
+> [ ] White Balance [ ] Color Correction [ ] Gamma Correction
+- [ ] and JPEG video compression
       
 ## *Acknowledgements*
 We are grateful to:

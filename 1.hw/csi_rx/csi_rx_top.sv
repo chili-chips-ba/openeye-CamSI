@@ -32,8 +32,13 @@
 //
 //              https://opensource.org/license/bsd-3-clause
 //------------------------------------------------------------------------
-// Description: This is the CSI_RX top-level file. It includes:
-//   - CSI_RX camera front-end
+// Description: This is the CSI_RX top-level file. It includes camera 
+// front-end logic:
+//   - Clock and Data PHYs
+//   - Clock Detector
+//   - Byte Aligners 
+//   - Word Aligner 
+//   - Depacketizer
 //========================================================================
 
 module csi_rx_top 
@@ -62,59 +67,118 @@ module csi_rx_top
 );
    
 //--------------------------------
-// CSI_Rx
+// DPHY-Clock with clock detector
 //--------------------------------
-   logic       csi_link_reset_out;
-   logic       csi_wait_for_sync;
-   logic       csi_packet_done;
-   lane_data_t csi_word_data;
-   logic       csi_word_valid;
-   logic       csi_sync_seq;
-
-   lane_vld_t  debug_out;
-   bus2_t      debug_pkgout;
-
-   csi_rx u_csi_rx (
-      .ref_clock      (ref_clock),          //i 
-      .dphy_clk       (cam_dphy_clk),       //i'diff_t 
-      .dphy_dat       (cam_dphy_dat),       //i'lane_diff_t 
-
-      .reset          (reset),              //i
-      .enable         (cam_en),             //i
-      .wait_for_sync  (csi_wait_for_sync),  //i
-      .packet_done    (csi_packet_done),    //i
-
-      .reset_out      (csi_link_reset_out), //o
-      .byte_clock     (csi_byte_clk),       //o
-      .word_valid     (csi_word_valid),     //o
-      .word_data      (csi_word_data),      //o'lane_data_t
-
-      .debug_out      (debug_out)           //o'lane_vld_t
-   );  
+   logic bit_clock;
+   logic csi_reset;
    
+   csi_rx_phy_clk u_phy_clk (   
+      .dphy_clk   (cam_dphy_clk),   //i[1:0]
+      .reset      (reset),          //i
+                                 
+      .bit_clock  (bit_clock),      //o buffered dphy clock
+      .byte_clock (csi_byte_clk)    //o buferred dphy clock / 4
+   );
+
+   csi_rx_clk_det u_clk_det (
+      .ref_clock  (ref_clock),      //i 
+      .byte_clock (csi_byte_clk),   //i 
+
+      .reset_in   (reset),          //i   
+      .enable     (cam_en),         //i 
+
+      .reset_out  (csi_reset)       //o
+   );
 
 //--------------------------------
-// CSI Packet Handler
+// DPHY-Data
 //--------------------------------
+   lane_data_t deser_data;
+   
+   for (genvar i=0; i<NUM_LANE; i++) begin: lane
+      csi_rx_phy_dat #(
+         .INVERT     (DINVERT   [i]),
+         .DELAY      (DSKEW     [i])
+      ) 
+      u_phy_dat (      
+         .bit_clock  (bit_clock),       //i
+         .byte_clock (csi_byte_clk),    //i     
+
+         .reset      (csi_reset),       //i
+         .enable     (cam_en),          //i
+       
+         .dphy_hs    (cam_dphy_dat[i]), //i[1:0]
+         .deser_out  (deser_data  [i])  //o[7:0]
+      );
+   end: lane
+
+   
+//--------------------------------
+// Byte and Word Aligners
+//--------------------------------
+   logic        wait_for_sync;
+   logic        byte_packet_done;
+   logic        packet_done;
+
+   lane_data_t  byte_align_data;
+   lane_vld_t   byte_valid;
+
+   lane_data_t  word_data;
+   logic        word_valid;
+   
+   
+   csi_rx_align_byte u_align_byte [NUM_LANE-1:0] (
+      .clock           (csi_byte_clk),     //i
+      .reset           (csi_reset),        //i
+                                            
+      .enable          (cam_en),           //i
+      .deser_in        (deser_data),       //i[7:0]
+      .wait_for_sync   (wait_for_sync),    //i
+      .packet_done     (byte_packet_done), //i
+                                            
+      .data_out        (byte_align_data),  //o[7:0]
+      .data_vld        (byte_valid)        //o
+   );
+
+//--------------------------------
+   csi_rx_align_word u_align_word (
+      .byte_clock      (csi_byte_clk),     //i
+      .reset           (csi_reset),        //i
+
+      .enable          (cam_en),           //i
+      .packet_done     (packet_done),      //i
+      .wait_for_sync   (wait_for_sync),    //i
+      .word_in         (byte_align_data),  //i'lane_data_t
+      .valid_in        (byte_valid),       //i'lane_vld_t
+
+      .packet_done_out (byte_packet_done), //o
+      .word_out        (word_data),        //o'lane_data_t
+      .valid_out       (word_valid)        //o
+   );
+
+//--------------------------------
+   logic   csi_sync_seq;
+   bus2_t  debug_pkt;
+
    csi_rx_packet_handler u_depacket (
-      .clock          (csi_byte_clk),       //i 
-      .reset          (csi_link_reset_out), //i 
-      .enable         (cam_en),             //i 
-
-      .data           (csi_word_data),      //i'lane_data_t
-      .data_valid     (csi_word_valid),     //i
-
-      .sync_wait      (csi_wait_for_sync),  //o
-      .packet_done    (csi_packet_done),    //o 
-      .payload_out    (csi_unpack_dat),     //o'lane_data_t
-      .payload_valid  (csi_unpack_dat_vld), //o
-
-      .sync_seq       (csi_sync_seq),       //o
-      .in_frame       (csi_in_frame),       //o
-      .in_line        (csi_in_line),        //o
-
-      .ecc_out        (),                   //o
-      .debug_out      (debug_pkgout)        //o[1:0]
+      .clock           (csi_byte_clk),       //i 
+      .reset           (csi_reset),          //i 
+      .enable          (cam_en),             //i 
+                        
+      .data            (word_data),          //i'lane_data_t
+      .data_valid      (word_valid),         //i
+                        
+      .sync_wait       (wait_for_sync),      //o
+      .packet_done     (packet_done),        //o 
+      .payload_out     (csi_unpack_dat),     //o'lane_data_t
+      .payload_valid   (csi_unpack_dat_vld), //o
+                        
+      .sync_seq        (csi_sync_seq),       //o
+      .in_frame        (csi_in_frame),       //o
+      .in_line         (csi_in_line),        //o
+                        
+      .ecc_out         (),                   //o
+      .debug_out       (debug_pkt)           //o[1:0]
    );
 
 
@@ -152,8 +216,8 @@ module csi_rx_top
        .probe2  (csi_in_line),
        .probe3  (sof_extended),
        .probe4  (csi_sync_seq),
-       .probe5  (debug_out[0]),
-       .probe6  (debug_out[1]),        
+       .probe5  (byte_valid[0]),
+       .probe6  (byte_valid[1]),        
        .probe7  (csi_word_data)       
    );   
 
@@ -173,8 +237,8 @@ module csi_rx_top
  */   
     
     assign debug_pins = {
-       debug_pkgout, 
-       debug_out[1:0], 
+       debug_pkt, 
+       byte_valid[1:0], 
        csi_sync_seq, 
        1'b0, 
        csi_in_line, 

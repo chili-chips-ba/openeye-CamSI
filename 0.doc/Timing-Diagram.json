@@ -1,0 +1,31 @@
+{signal: [
+  {                                 node: 'a..b' },
+  {name: 'csi_clock - 114MHz', wave: 'p....|...|...|', node: 'c', period: 3},
+  {},
+  {                                 node:'d...e', phase:-2.4},
+  {name: 'hdmi_clock - 86MHz',       wave: 'p..|..|..|', node:'f', phase:-2.5,  period: 4},
+  {},
+  {name: 'csi_line_in', wave:  '0..1....................0........1.......', node: '...g....................h........k'},
+  {},
+  {name: 'hdmi_line_in', wave:  '0......1.......................0...1......', node: '.......i.......................j', phase: 0.5},
+  {},
+  {name: 'fifo_areset_n', wave: '0..1.....................................', node: '...l.....................................m'},
+  {},
+  {name: 'hdmi_reset_n', wave: '0................................1.......', node: '.n.......................................o'}
+  
+], config: { hscale: 1, skin:'default' },
+  
+  edge: [
+    'a<->b 8.77ns', 
+    'd<->e 11.61ns',
+    'c~>f Clocks from the camera and from the FPGA are not synchronized',
+    'g<->h Writing pixels to the FIFO with each csi_byte clock',
+    'h<->k Blanking csi part between the lines',
+    'h~>j HDMI reads for a longer period of time due to a slower clock',
+    'i<->j Reading pixels from the FIFO with each pix clock',
+    'g~>i Reading starts only when there are some pixels in the FIFO',
+    'l<->m csi_in_frame || hdmi_in_frame',
+    'n<->o Keep HDMI in reset between start of CMOS frame and rising edge on second CMOS line',
+    'b|->g',
+    'e|->i'
+  ],}

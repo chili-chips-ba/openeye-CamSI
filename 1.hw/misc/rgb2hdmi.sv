@@ -42,7 +42,7 @@ module rgb2hdmi
    import hdmi_pkg::*;
 (
  //from/to CSI and RGB block
-   input  logic clk,
+   input  logic csi_clk,
    input  logic reset, // active-1 synchronous reset
 
    input  logic csi_in_line,
@@ -53,7 +53,7 @@ module rgb2hdmi
    output logic rgb_valid,
 
  //from/to HDMI block
-   input  logic clk_pix,
+   input  logic hdmi_clk,
 
    input  logic hdmi_frame,
    input  logic hdmi_blank,
@@ -67,7 +67,7 @@ module rgb2hdmi
    logic   csi_in_line_dly;   
    bus11_t csi_line_count;
    
-   always_ff @(posedge clk) begin 
+   always_ff @(posedge csi_clk) begin 
       if (reset == 1'b1) begin         
          csi_in_line_dly <= 1'b0;
          csi_line_count  <= '0;
@@ -96,7 +96,7 @@ module rgb2hdmi
             end
          end 
       end // else: !if(reset == 1'b1)
-   end // always_ff @ (posedge clk)
+   end // always_ff @ (posedge csi_clk)
    
 
 //--------------------------------
@@ -106,18 +106,16 @@ module rgb2hdmi
       .s_axis_aresetn (csi_in_frame | hdmi_frame), //i
 
      //FIFO Write side: Camera 
-      .s_axis_aclk    (clk),         //i
+      .s_axis_aclk    (csi_clk),     //i
       .s_axis_tvalid  (rgb_reading), //i
       .s_axis_tready  (),            //o
       .s_axis_tdata   (rgb_pix),     //i[23:0] 
 
      //FIFO Read side: HDMI 
-      .m_axis_aclk    (clk_pix),     //i
+      .m_axis_aclk    (hdmi_clk),    //i
       .m_axis_tvalid  (),            //o
       .m_axis_tready  (~hdmi_blank), //i
-      .m_axis_tdata   ( hdmi_pix),   //o[23:0]
-
-      .axis_rd_data_count()          //o[31:0]
+      .m_axis_tdata   ( hdmi_pix)    //o[23:0]
    );
 
 endmodule: rgb2hdmi

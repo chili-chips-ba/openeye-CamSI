@@ -20,8 +20,6 @@ module tb_axis_data_fifo;
     wire m_axis_tvalid;
     wire [DATA_WIDTH-1:0] m_axis_tdata;
     
-    logic [13:0] axis_rd_data_count;
-
     // Instantiate the module
     axis_data_fifo dut (
         .s_axis_aresetn(s_axis_aresetn),
@@ -32,8 +30,7 @@ module tb_axis_data_fifo;
         .m_axis_aclk(m_axis_aclk),
         .m_axis_tvalid(m_axis_tvalid),
         .m_axis_tready(m_axis_tready),
-        .m_axis_tdata(m_axis_tdata),
-        .axis_rd_data_count(axis_rd_data_count)
+        .m_axis_tdata(m_axis_tdata)
     );
 
     // Clock generation for s_axis_aclk
