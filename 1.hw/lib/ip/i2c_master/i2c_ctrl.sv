@@ -50,11 +50,9 @@ module i2c_ctrl (
         
    input  logic        scl_do,
    output logic        scl_di,
-   output logic        scl_oe,
 
    input  logic        sda_do,
    output logic        sda_di,
-   output logic        sda_oe
 );
 
    typedef enum logic [3:0] {
@@ -80,12 +78,6 @@ module i2c_ctrl (
    
    assign bit_cnt_dec = 4'(bit_cnt - 4'd1);
    
-   assign scl_oe = (state == IDLE)
-                 | (process_cnt == 2'd1)
-                 | (process_cnt == 2'd2);
-
-   assign sda_oe = (state == IDLE)
-                 | (state == CHECK_ACK);
 
    
    always_ff @(posedge reset or posedge clk) begin
@@ -98,6 +90,8 @@ module i2c_ctrl (
          bit_cnt               <= '0;
          post_serial_data      <= 1'b0;
          acknowledge_bit       <= 1'b0;
+         scl_di                <= 1'b1;
+         sda_di                <= 1'b1;
       end 
       else begin
 `ifndef ICARUS
