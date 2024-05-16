@@ -52,9 +52,14 @@ module top
    input logic   clk_ext,  // external 100MHz clock source
 
   //I2C_Master to Camera
+`ifdef COCOTB_SIM
+   inout  tri1   i2c_sda,
+   inout  tri1   i2c_scl,
+`else
    inout  wire   i2c_sda,
    inout  wire   i2c_scl,
-   
+`endif //COCOTB_SIM
+
   //MIPI DPHY from/to Camera
    input  diff_t      cam_dphy_clk,
    input  lane_diff_t cam_dphy_dat,
