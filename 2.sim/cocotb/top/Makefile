@@ -93,5 +93,5 @@ endif
 
 clean::
 	rm -rf __pycache__ results.xml
-	rm -rf dump.vcd dump.vcd.fst dump.vcd.fst.hier 
+	rm -rf dump.vcd dump.vcd.fst dump.vcd.fst.hier dump.fst.hier
 	rm -rf transcript modelsim.ini vsim.wlf vsim_stacktrace.vstf vish_stacktrace.vstf
