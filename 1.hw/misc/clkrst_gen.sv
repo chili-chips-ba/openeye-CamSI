@@ -100,6 +100,8 @@ module clkrst_gen
 //--------------------------------
    cnt_1hz_t    cnt_1hz;
    logic [3:0]  rst_delay_cnt;
+   logic        i2c_reset_n;
+   always_comb i2c_reset = ~i2c_reset_n;
 
    always_ff @(posedge clk_100) begin     
       if (reset == 1'b1) begin
@@ -108,7 +110,7 @@ module clkrst_gen
          rst_delay_cnt <= '0; 
 
          cam_en        <= 1'b0;
-         i2c_reset     <= 1'b1;
+         i2c_reset_n   <= 1'b0;
       end 
       else if (strobe_400kHz == 1'b1) begin
 
@@ -127,7 +129,7 @@ module clkrst_gen
           
                 // I2C exists reset after 4 second, then starts 
                 // initializing camera
-                i2c_reset <= (rst_delay_cnt < 4'd4);
+                i2c_reset_n <= ~(rst_delay_cnt < 4'd4);
             end            
          end
          else begin 
