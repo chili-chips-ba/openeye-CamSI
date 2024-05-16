@@ -65,6 +65,9 @@ ifeq ($(SIM),$(filter $(SIM),icarus ICARUS))
         COMPILE_ARGS += -g2005-sv
 endif
 
+# Control sim runtime
+RUN_SIM_US ?= 15000
+export RUN_SIM_US := $(RUN_SIM_US)
 
 # Convert Xs for now
 export COCOTB_RESOLVE_X := ZEROS    
