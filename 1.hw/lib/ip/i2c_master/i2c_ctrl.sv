@@ -52,7 +52,7 @@ module i2c_ctrl (
    output logic        scl_di,
 
    input  logic        sda_do,
-   output logic        sda_di,
+   output logic        sda_di
 );
 
    typedef enum logic [3:0] {
