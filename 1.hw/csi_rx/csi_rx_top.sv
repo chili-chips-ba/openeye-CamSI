@@ -101,12 +101,10 @@ module csi_rx_top
          .DELAY      (DSKEW     [i])
       ) 
       u_phy_dat (      
+         .reset      (csi_reset),       //i
          .bit_clock  (bit_clock),       //i
          .byte_clock (csi_byte_clk),    //i     
 
-         .reset      (csi_reset),       //i
-         .enable     (cam_en),          //i
-       
          .dphy_hs    (cam_dphy_dat[i]), //i[1:0]
          .deser_out  (deser_data  [i])  //o[7:0]
       );

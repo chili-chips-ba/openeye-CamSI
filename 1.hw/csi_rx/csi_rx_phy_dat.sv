@@ -41,11 +41,9 @@ module csi_rx_phy_dat #(
    parameter          INVERT = 1'b0,// 1 to invert (if pairs are swapped on board)
    parameter bit[4:0] DELAY  = 5'd3 // IDELAY delay value for skew compensation
 )(
+   input  logic       reset,      // async reset, sync'd internally to byte clock
    input  logic       bit_clock,  // DDR bit clocks, buffered from D-PHY clock
    input  logic       byte_clock, // byte clock = input clock /4
-
-   input  logic       reset,      // async reset, sync'd internally to byte clock
-   input  logic       enable,     // active-1 enable for SERDES
 
    input  logic [1:0] dphy_hs,    // lane input: [1]=P; [0]=N
    output logic [7:0] deser_out   // deserialised byte output
@@ -105,17 +103,21 @@ module csi_rx_phy_dat #(
    end
    
 `ifdef ISERDES_SIM_MODEL
+ // Simplified 8:1 ISERDES model (functionality verified in Xsim)
+   logic FF0, FF1;
+   logic [7:0] SHIFT0, SHIFT1, SHIFT2, Q;
 
-// Simplified 8:1 ISERDES model (functionality verified in Xsim)
-logic FF0, FF1;
-logic [7:0] SHIFT0, SHIFT1, SHIFT2, Q;
-always @(posedge bit_clock) FF0 <= in_delayed;
-always @(negedge bit_clock) FF1 <= in_delayed;
-always @(posedge bit_clock) SHIFT0 <= {FF1, FF0, SHIFT0[7:2]};
-always @(posedge bit_clock) SHIFT1 <= SHIFT0;
-always @(posedge bit_clock) SHIFT2 <= SHIFT1;
-always @(posedge byte_clock) Q <= SHIFT2;
-always_comb serdes_out = Q;
+   always @(posedge bit_clock) FF0 <= in_delayed;
+   always @(negedge bit_clock) FF1 <= in_delayed;
+
+   always @(posedge bit_clock) begin
+      SHIFT0 <= {FF1, FF0, SHIFT0[7:2]};
+      SHIFT1 <= SHIFT0;
+      SHIFT2 <= SHIFT1;
+   end
+   
+   always @(posedge byte_clock) Q <= SHIFT2;
+   always_comb serdes_out = Q;
 
 `else
    ISERDESE2 #(

@@ -14,8 +14,7 @@ export SIM := $(SIM)
 
 TOPLEVEL_LANG ?= verilog
 
-XILINX = /tools/Xilinx/Vivado/2023.2
-XILINX_UNISIMS = $(XILINX)/data/verilog/src/unisims
+XILINX_ORIG = ../../models/no-change
 
 HW_SRC	:= $(realpath ../../../1.hw)
 
@@ -25,13 +24,13 @@ VERILOG_SOURCES += $(TOP_FILELIST:%=$(HW_SRC)/%)
 
 # Xilinx primitives      
 VERILOG_SOURCES += \
-        $(XILINX)/data/verilog/src/glbl.v \
-        $(XILINX_UNISIMS)/BUFG.v \
-        $(XILINX_UNISIMS)/OBUFDS.v \
-        $(XILINX_UNISIMS)/BUFMR.v \
-        $(XILINX_UNISIMS)/IBUFDS.v \
-        $(XILINX_UNISIMS)/IDELAYCTRL.v \
-        $(XILINX_UNISIMS)/IOBUF.v 
+        $(XILINX_ORIG)/glbl.v \
+        $(XILINX_ORIG)/BUFG.v \
+	$(XILINX_ORIG)/OBUFDS.v \
+	$(XILINX_ORIG)/BUFMR.v \
+	$(XILINX_ORIG)/IBUFDS.v \
+	$(XILINX_ORIG)/IDELAYCTRL.v \
+	$(XILINX_ORIG)/IOBUF.v 
 
 VERILOG_SOURCES += \
         ../../models/BUFR.v \

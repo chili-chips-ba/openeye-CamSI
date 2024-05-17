@@ -170,11 +170,13 @@ RM/Yimin:
 // Main FSM
 //----------------------
 
-   always_ff @(posedge clock or posedge reset) begin
+   always_ff @(posedge reset or posedge clock) begin
       if (reset == 1'b1) begin
          state        <= INIT;
          sync_seq     <= 1'b0;
 
+         bytes_read   <= '0;
+         packet_data  <= '0;
          packet_len_q <= '0;
       end 
       else if (enable == 1'b1) begin

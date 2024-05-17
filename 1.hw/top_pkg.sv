@@ -100,11 +100,12 @@ package top_pkg;
    localparam bus5_t[NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3};
 `endif
    
-   typedef diff_t [NUM_LANE-1:0] lane_diff_t;
-   typedef bus5_t [NUM_LANE-1:0] lane_dly_t;
+   typedef diff_t [NUM_LANE-1   :0] lane_diff_t;
+   typedef bus5_t [NUM_LANE-1   :0] lane_dly_t;
 
-   typedef logic  [NUM_LANE-1:0] lane_vld_t;
-   typedef bus8_t [NUM_LANE-1:0] lane_data_t;
+   typedef logic  [NUM_LANE-1   :0] lane_vld_t;
+   typedef bus8_t [NUM_LANE-1   :0] lane_data_t;
+   typedef logic  [NUM_LANE*8-1 :0] lane_mem_t;
 
 endpackage: top_pkg
 `endif //__TOP_PKG__

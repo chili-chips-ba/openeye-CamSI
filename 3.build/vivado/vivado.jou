@@ -1,0 +1,54 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Thu May 16 22:26:06 2024
+# Process ID: 14156
+# Current directory: D:/Projects/GitHub-repo/openeye-CamSI/3.build/vivado
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent13464 D:\Projects\GitHub-repo\openeye-CamSI\3.build\vivado\vivado.xpr
+# Log file: D:/Projects/GitHub-repo/openeye-CamSI/3.build/vivado/vivado.log
+# Journal file: D:/Projects/GitHub-repo/openeye-CamSI/3.build/vivado\vivado.jou
+# Running On: LAB32G, OS: Windows, CPU Frequency: 3691 MHz, CPU Physical cores: 4, Host memory: 34030 MB
+#-----------------------------------------------------------
+start_gui
+open_project D:/Projects/GitHub-repo/openeye-CamSI/3.build/vivado/vivado.xpr
+reset_run synth_1
+launch_runs impl_1 -jobs 4
+wait_on_run impl_1
+reset_run synth_1
+launch_runs impl_1 -jobs 4
+wait_on_run impl_1
+open_run impl_1
+reset_run synth_1
+launch_runs impl_1 -jobs 4
+wait_on_run impl_1
+close_design
+reset_run synth_1
+launch_runs impl_1 -jobs 4
+wait_on_run impl_1
+open_run impl_1
+add_files -fileset constrs_1 -norecurse D:/Projects/GitHub-repo/openeye-CamSI/3.build/vivado/top.COMMON.xdc
+reset_run synth_1
+launch_runs impl_1 -jobs 4
+wait_on_run impl_1
+close_design
+open_run impl_1
+set_false_path -from [get_pins {u_clkrst_gen/srst_reg[1]/C}] \
+               -to   [get_pins u_csi_rx_top/u_clk_det/reset_in_demet_reg/D]
+set_false_path -from [get_pins u_clkrst_gen/u_pll_top/srst_reg_replica/C] \
+               -to   [get_pins {u_clkrst_gen/srst_reg[1]/PRE}]
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+set_input_delay 1 [all_inputs]
+set_output_delay 1 [all_outputs]
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+create_clock -period 2.19 -name cam_dphy_clk -waveform {0.000 5.000} -add [get_ports cam_dphy_clk[1]]
+create_clock -period  2.190 -name cam_dphy_clk -waveform {0.000 1.095} -add [get_ports cam_dphy_clk[1]]
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+set_input_delay  -setup 0 [all_inputs]
+set_input_delay -help
+set_input_delay  -max 0 [all_inputs]
+set_input_delay  -min 2 [all_inputs]
+set_output_delay -max 0 [all_outputs]
+set_output_delay -min 2 [all_outputs]
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1

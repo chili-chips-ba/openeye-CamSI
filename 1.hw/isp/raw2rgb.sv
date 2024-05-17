@@ -88,22 +88,28 @@ module raw2rgb
     end    
    
    logic [3:0] wen;
-   assign wen[0] = writing & data_valid & (wr_line_sel == 2'd0);
-   assign wen[1] = writing & data_valid & (wr_line_sel == 2'd1);
-   assign wen[2] = writing & data_valid & (wr_line_sel == 2'd2);
-   assign wen[3] = writing & data_valid & (wr_line_sel == 2'd3);
    
    // Definition of arrays to store 2 lines of data
-   (* ram_style = "block" *) lane_data_t line0_buffer[LINE_LENGTH:0];
-   (* ram_style = "block" *) lane_data_t line1_buffer[LINE_LENGTH:0];
-   (* ram_style = "block" *) lane_data_t line2_buffer[LINE_LENGTH:0];
-   (* ram_style = "block" *) lane_data_t line3_buffer[LINE_LENGTH:0];
+   //  1) Vivado 'ram_style' synth attributes: 
+   //       block, distributed, registers, ultra, mixed, auto
+   //  2) Yosys  'ram_style' synth attributes: 
+   //       block, distributed
+   (* ram_style = "block" *) lane_mem_t line0_mem[LINE_LENGTH:0];
+   (* ram_style = "block" *) lane_mem_t line1_mem[LINE_LENGTH:0];
+   (* ram_style = "block" *) lane_mem_t line2_mem[LINE_LENGTH:0];
+   (* ram_style = "block" *) lane_mem_t line3_mem[LINE_LENGTH:0];
+
+   always_comb begin
+      for (int i=0; i<4; i++) begin
+         wen[i] = writing & data_valid & (wr_line_sel == 2'(i));
+      end
+   end
    
    always_ff @(posedge clk) begin
-      if(wen[0] == 1'b1) line0_buffer[write_count] <= data_in;
-      if(wen[1] == 1'b1) line1_buffer[write_count] <= data_in;
-      if(wen[2] == 1'b1) line2_buffer[write_count] <= data_in;
-      if(wen[3] == 1'b1) line3_buffer[write_count] <= data_in;
+      if (wen[0] == 1'b1) line0_mem[write_count] <= data_in;
+      if (wen[1] == 1'b1) line1_mem[write_count] <= data_in;
+      if (wen[2] == 1'b1) line2_mem[write_count] <= data_in;
+      if (wen[3] == 1'b1) line3_mem[write_count] <= data_in;
    end
    
 
@@ -152,27 +158,26 @@ module raw2rgb
 
    always_ff @(posedge clk) begin
       if (reading == 1'b1) begin
-
-         line0_green0 <= line0_buffer[read_count]    [1];
-         line0_blue0  <= line0_buffer[read_count]    [0];
-         line0_green1 <= line0_buffer[read_count_nxt][1];
-         line0_blue1  <= line0_buffer[read_count_nxt][0];
+         //                           line                  lane
+         line0_green0 <= line0_mem[read_count]    [15:8]; //1
+         line0_blue0  <= line0_mem[read_count]    [ 7:0]; //0
+         line0_green1 <= line0_mem[read_count_nxt][15:8];
+         line0_blue1  <= line0_mem[read_count_nxt][7:0];
          
-         line1_red0   <= line1_buffer[read_count]    [1];
-         line1_green0 <= line1_buffer[read_count]    [0];
-         line1_red1   <= line1_buffer[read_count_nxt][1];
-         line1_green1 <= line1_buffer[read_count_nxt][0];
+         line1_red0   <= line1_mem[read_count]    [15:8];
+         line1_green0 <= line1_mem[read_count]    [7:0];
+         line1_red1   <= line1_mem[read_count_nxt][15:8];
+         line1_green1 <= line1_mem[read_count_nxt][7:0];
          
-         line2_green0 <= line2_buffer[read_count]    [1];
-         line2_blue0  <= line2_buffer[read_count]    [0];
-         line2_green1 <= line2_buffer[read_count_nxt][1];
-         line2_blue1  <= line2_buffer[read_count_nxt][0];
+         line2_green0 <= line2_mem[read_count]    [15:8];
+         line2_blue0  <= line2_mem[read_count]    [7:0];
+         line2_green1 <= line2_mem[read_count_nxt][15:8];
+         line2_blue1  <= line2_mem[read_count_nxt][7:0];
          
-         line3_red0   <= line3_buffer[read_count]    [1];
-         line3_green0 <= line3_buffer[read_count]    [0];  
-         line3_red1   <= line3_buffer[read_count_nxt][1];
-         line3_green1 <= line3_buffer[read_count_nxt][0];
-
+         line3_red0   <= line3_mem[read_count]    [15:8];
+         line3_green0 <= line3_mem[read_count]    [7:0];  
+         line3_red1   <= line3_mem[read_count_nxt][15:8];
+         line3_green1 <= line3_mem[read_count_nxt][7:0];
       end
    end  
 

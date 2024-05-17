@@ -58,6 +58,20 @@ module csi_rx_clk_det (
    logic [2:0] byte_clk_cnt;
    logic       byte_clk_fail;
 
+   // this is also a mini-CDC, as 'reset_in' comes from another clock
+   logic       reset_in_demet;
+   always_ff @(posedge ref_clock) reset_in_demet <= reset_in;
+
+
+   always_ff @(posedge reset_in_demet or posedge ref_clock) begin
+      if (reset_in_demet == 1'b1) begin
+         byte_clk_fail <= 1'b1;
+      end
+      else begin
+         byte_clk_fail <= (byte_clk_cnt >= 3'd5);
+      end
+   end
+
    always_ff @(posedge ref_clock) begin
       byte_clk_demet <= {byte_clk_demet[0], byte_clock};
       
@@ -69,9 +83,6 @@ module csi_rx_clk_det (
       else if (byte_clk_fail == 1'b0) begin
          byte_clk_cnt <= 3'(byte_clk_cnt + 3'd1);
       end
-
-      byte_clk_fail <= reset_in
-                     | (byte_clk_cnt >= 3'd5);
    end
 
 

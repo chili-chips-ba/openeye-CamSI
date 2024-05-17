@@ -52,7 +52,7 @@ module i2c_ctrl (
    output logic        scl_di,
 
    input  logic        sda_do,
-   output logic        sda_di,
+   output logic        sda_di
 );
 
    typedef enum logic [3:0] {
@@ -79,7 +79,6 @@ module i2c_ctrl (
    assign bit_cnt_dec = 4'(bit_cnt - 4'd1);
    
 
-   
    always_ff @(posedge reset or posedge clk) begin
       if (reset == 1'b1) begin
          register_done         <= 1'b0;

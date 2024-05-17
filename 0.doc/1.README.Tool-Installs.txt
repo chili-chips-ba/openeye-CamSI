@@ -184,9 +184,10 @@ setenv PATH            "${VERILATOR_ROOT}/bin:${PATH}"
 
 
 #####################
-# Install cocoTB
+# Install Icarus simulator
+#   https://steveicarus.github.io/iverilog/usage/installation.html
+#     Icarus Verilog version 13.0 (devel)
 #####################
- pip3 install cocotb
 
 
 #####################
@@ -224,6 +225,23 @@ cd  gtkwave-3.3.118
       however not strictly necessary.
 
 7) cd ..; rm -rf gtkwave-3.3.118
+
+
+#####################
+# Install and run cocoTB
+#####################
+pip3 install cocotb
+
+pip3 install https://github.com/alexforencich/cocotbext-i2c/archive/master.zip
+  --- Not available in PyPI, must install from git. For more, see:
+  --- https://github.com/alexforencich/cocotbext-i2c/blob/master/README.md
+
+
+cd 2.sim/cocotb/top
+make WAVES=1
+   or 'make SIM=icarus WAVES=1'
+   or 'make SIM=verilator WAVES=1'
+   or another combination. See Makefile for details
 
 
 #####################

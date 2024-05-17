@@ -61,24 +61,40 @@ module clkrst_gen
 // Clock and reset gen
 //--------------------------------
    BUFG u_ibufio (.I(clk_ext), .O(clk_100));
+
+   logic srst0, srst1;
    
    fpga_pll_top u_pll_top (
       .areset   (reset_ext), //i
       .clk_in   (clk_100),   //i 100MHz
 
-      .srst     (reset),     //o
+      .srst     (srst0),     //o
       .clk_out0 (),          //o: 228MHz 
       .clk_out1 (clk_200)    //o: 200MHz
    );
 
+
+//--------------------------------
+// Reset fanout, for easier timing closure
+//--------------------------------
+   always_ff @(posedge srst0 or posedge clk_100) begin
+      if (srst0 == 1'b1) begin
+         reset <= 1'b1;
+         srst1 <= 1'b1;
+      end
+      else begin   
+         reset <= 1'b0;
+         srst1 <= 1'b0;
+      end
+   end
    
 //--------------------------------
 // 400kHz Strobe generator for I2C Master
 //--------------------------------
    cnt_400khz_t cnt_400khz;
 
-   always_ff @(posedge clk_100) begin
-      if (reset == 1'b1) begin
+   always_ff @(posedge srst1 or posedge clk_100) begin
+      if (srst1 == 1'b1) begin
          cnt_400khz    <= '0;
          strobe_400kHz <= 1'b0;
       end 
@@ -100,41 +116,39 @@ module clkrst_gen
 //--------------------------------
    cnt_1hz_t    cnt_1hz;
    logic [3:0]  rst_delay_cnt;
-   logic        i2c_reset_n;
-   always_comb i2c_reset = ~i2c_reset_n;
 
-   always_ff @(posedge clk_100) begin     
-      if (reset == 1'b1) begin
+   always_ff @(posedge srst1 or posedge clk_100) begin     
+      if (srst1 == 1'b1) begin
          cnt_1hz       <= '0;
          clk_1hz       <= 1'b0;   
          rst_delay_cnt <= '0; 
 
          cam_en        <= 1'b0;
-         i2c_reset_n   <= 1'b0;
+         i2c_reset     <= 1'b1;
       end 
       else if (strobe_400kHz == 1'b1) begin
 
          // -1, since counter starts at 0
-         if (cnt_1hz == cnt_1hz_t'(NUM_CLK_FOR_1HZ-1)) begin
+         if (cnt_1hz != cnt_1hz_t'(NUM_CLK_FOR_1HZ-1)) begin
+            cnt_1hz <= cnt_1hz_t'(cnt_1hz + cnt_1hz_t'(1));
+         end
+         else begin
             cnt_1hz <= '0;            
             clk_1hz <= ~clk_1hz;
           
             if (rst_delay_cnt < 4'd8) begin
                 rst_delay_cnt <= 4'(rst_delay_cnt + 4'(1));
           
-                // Enable CMOS power after 2 secs to give supply
-                // time to stabilize. In reality, while only a few
-                // msec is needed, it's simpler to use this timer
-                cam_en <= (rst_delay_cnt >= 4'd2);
+                // Enable CMOS power after 2 secs to give pwr supply
+                // ample time to stabilize. In reality, while only a 
+                // few msec is needed, it's simpler to use this timer
+                cam_en <= (rst_delay_cnt > 4'd1);
           
-                // I2C exists reset after 4 second, then starts 
-                // initializing camera
-                i2c_reset_n <= ~(rst_delay_cnt < 4'd4);
+                // I2C exits reset after 4 secs, 
+                //  to then start initializing camera
+                i2c_reset <= (rst_delay_cnt < 4'd4);
             end            
          end
-         else begin 
-            cnt_1hz <= cnt_1hz_t'(cnt_1hz + cnt_1hz_t'(1));
-         end 
       end // if (strobe_400kHz == 1'b1)
    end // always_ff @ (posedge clk_100)
 
@@ -145,7 +159,7 @@ module clkrst_gen
    IDELAYCTRL u_idelayctrl (
       .RDY    (),        //o Not used, thus connected to nothing
       .REFCLK (clk_200), //i Reference clock input
-      .RST    (reset)    //i Reset input
+      .RST    (srst0)    //i Reset input
    );
    
 endmodule: clkrst_gen

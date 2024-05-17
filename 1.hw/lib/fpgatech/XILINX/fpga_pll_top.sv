@@ -50,13 +50,15 @@ module fpga_pll_top (
    logic uclk_out0;
    logic uclk_out1;
 
+
 `ifdef COCOTB_SIM
-// PLL outputs driven from cocotb
-initial begin
-    pll_lock = 0;
-    uclk_out0 = 'x;
-    uclk_out1 = 'x;
-end
+   // PLL outputs driven from cocotb
+   initial begin
+      pll_lock  = 1'b0;
+      uclk_out0 = 'x;
+      uclk_out1 = 'x;
+   end
+
 `else
    MMCME2_BASE #(
       .BANDWIDTH   ("OPTIMIZED"), // Jitter programming (OPTIMIZED, HIGH, LOW)
@@ -103,13 +105,13 @@ end
       .STARTUP_WAIT("FALSE")     // Delays DONE until MMCM is locked (FALSE, TRUE)
    ) 
    uMMCME2_BASE (
-      .CLKOUT0  (uclk_out0),     //o: CLKOUT0
+      .CLKOUT0   (uclk_out0),    //o: CLKOUT0
       .CLKOUT0B  (),             //o
 
       .CLKOUT1   (),             //o
       .CLKOUT1B  (),             //o
 
-      .CLKOUT2  (uclk_out1),     //o: CLKOUT2
+      .CLKOUT2   (uclk_out1),    //o: CLKOUT2
       .CLKOUT2B  (),             //o
 
       .CLKOUT3   (),             //o 
@@ -119,12 +121,12 @@ end
       .CLKOUT5   (),             //o 
       .CLKOUT6   (),             //o 
 
-      .CLKFBOUT (clkfb),         //o: Feedback clock
-      .LOCKED   (pll_lock),      //o: LOCK
+      .CLKFBOUT  (clkfb),        //o: Feedback clock
+      .LOCKED    (pll_lock),     //o: LOCK
 
-      .CLKIN1   (clk_in),        //i: Clock
-      .CLKFBIN  (clkfb),         //i: Feedback clock
-      .CLKFBOUTB(),              //o
+      .CLKIN1    (clk_in),       //i: Clock
+      .CLKFBIN   (clkfb),        //i: Feedback clock
+      .CLKFBOUTB (),             //o
 
       .PWRDWN    (1'b0),         //i
       .RST       (1'b0)          //i

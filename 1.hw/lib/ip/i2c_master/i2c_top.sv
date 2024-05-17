@@ -33,9 +33,9 @@
 //              https://opensource.org/license/bsd-3-clause
 //------------------------------------------------------------------------
 // Description: Top-level for I2C Master. It:
-//   - creates 400kHz strobe
-//   - implements state machine for serving data to I2C Controller
+//   - implements state machine for sending data to I2C Controller
 //   - instantiates the I2C Controller itself
+//   - for most part operates in sync with external 400kHz strobe
 //========================================================================
 
 module i2c_top (

@@ -4,16 +4,8 @@
 #======================================================================== 
 
 #-------------------------------------------------------------------------
-# Configuration options, can be used for all designs
-set_property CONFIG_VOLTAGE 3.3 [current_design]
-set_property CFGBVS VCCO        [current_design]
-
-#-------------------------------------------------------------------------
 # clk, reset and misc
 set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS33} [get_ports clk_ext]
-create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports clk_ext]
-
-#set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets u_csi_rx_top/u_phy_clk/u_bufmr]
 
 set_property -dict {PACKAGE_PIN F13 IOSTANDARD LVCMOS25} [get_ports areset]
 set_property -dict {PACKAGE_PIN C14 IOSTANDARD LVCMOS25} [get_ports cam_en]
