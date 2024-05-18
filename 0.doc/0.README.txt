@@ -1,3 +1,4 @@
+---------------------------------------------------------------
 Our Inspirations:
    https://github.com/StereoNinja/StereoNinjaFPGA
    https://github.com/ryuz/jelly/blob/master/projects/zybo_z7/zybo_z7_imx219/README.md   
@@ -47,17 +48,18 @@ Our 4-lane sensor: IMX283
 ---------------------------------------------------------------
 Migen + Proprietary D-PHY
    https://antmicro.com/blog/2023/10/fully-open-source-fpga-design-for-sdi-mipi-video-converter
----------------------------------------------------------------
 
+---------------------------------------------------------------
 Xilinx I/OSERDESE2 examples:
  
 1) LiteDRAM: https://github.com/enjoy-digital/litedram/blob/master/litedram/phy/s7ddrphy.py
 
 2) HDMI Core: https://github.com/litex-hub/litevideo/blob/master/litevideo/output/hdmi/s7.py
 
-Hans: Both of those cores have been tested working. I did not do any Fmax tests. Your mileage may vary.
----------------------------------------------------------------
+Hans: Both of those cores have been tested working.
+      I did not do any Fmax tests. Your mileage may vary.
 
+---------------------------------------------------------------
 @Yimin Gu made a CRUVI to Flatflex adapter for the Oneincheye sensor.
 BEWARE: This adapter was never used / tested, and it could be buggy.
         It indeed was, shorting the power!!
@@ -66,15 +68,39 @@ BEWARE: This adapter was never used / tested, and it could be buggy.
 https://www.chili-chips.xyz/blog/untwisting-rpi5-camera-connectivity/
 
 ---------------------------------------------------------------
-
 Sonix WebCam chip
    https://www.sonix.com.tw/article-en-995-7860
+   
 ---------------------------------------------------------------
-
 Good ISP Read:
    https://www.eecs.yorku.ca/~mbrown/ICCV19_Tutorial_MSBrown.pdf
+   
 ---------------------------------------------------------------
-
 HDMI spec:
    https://github.com/Glenwing/glenwing.github.io/blob/b0521b94b5a12efc6ddce825195de4cb28a65845/docs/HDMI-2.0.pdf
+   
+---------------------------------------------------------------
+Misc ISP IP:
+  -https://10xengineers.ai/
+   https://github.com/10x-Engineers/Infinite-ISP
+     in Python, for KV260 PYNQ framework
+   https://www.linkedin.com/pulse/from-pixels-perfection-glimpse-infinite-isp-tuning-tool
+   https://www.linkedin.com/posts/10x-engineers_gold-mine-of-opportunities-infinite-isp-activity-7182980525404409856-UG4Q/?utm_source=share&utm_medium=member_android
+
+
+  -https://qoiformat.org  unique image compression algorithm in 300 lines of C
+   Dan has (untested) Verilog RTL that implements it
+   
+---------------------------------------------------------------
+Possible next steps:
+  -X320 Event Sensor (datasheet is available, 1-lane CSI + Parallel)
+   https://www.prophesee.ai/2023/10/16/prophesee-launches-genx320
+
+  -Polarization Sensor
+   https://www.sony-semicon.com/en/technology/industry/polarsens.html
+
+  -Time of Flight (TOF) or Far-Infrared sensor
+
+  -Complex, AI-based ISP functions, such as Background Removal
+   
 ---------------------------------------------------------------
