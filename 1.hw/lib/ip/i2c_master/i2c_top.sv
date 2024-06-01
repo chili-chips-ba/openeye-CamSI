@@ -108,8 +108,8 @@ module i2c_top (
     end
 `endif
    
-    always_ff @(posedge reset or posedge clk) begin
-       if (reset == 1'b1) begin
+    always_ff @(negedge reset or posedge clk) begin
+       if (reset == 1'b0) begin
           i2c_enable       <= 1'b1;
           i2c_read_write   <= 1'b0;
           i2c_slave_addr   <= '0;

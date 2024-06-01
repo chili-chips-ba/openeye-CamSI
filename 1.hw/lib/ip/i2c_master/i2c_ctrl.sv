@@ -79,8 +79,8 @@ module i2c_ctrl (
    assign bit_cnt_dec = 4'(bit_cnt - 4'd1);
    
 
-   always_ff @(posedge reset or posedge clk) begin
-      if (reset == 1'b1) begin
+   always_ff @(negedge reset or posedge clk) begin
+      if (reset == 1'b0) begin
          register_done         <= 1'b0;
          state                 <= IDLE;
          post_state            <= IDLE;
