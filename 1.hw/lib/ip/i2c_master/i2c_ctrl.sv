@@ -39,7 +39,7 @@
 module i2c_ctrl (
    input  logic        clk,
    input  logic        strobe_400kHz,
-   input  logic        reset,
+   input  logic        areset_n,
 
    input  logic        enable,
    input  logic        read_write,
@@ -79,8 +79,8 @@ module i2c_ctrl (
    assign bit_cnt_dec = 4'(bit_cnt - 4'd1);
    
 
-   always_ff @(posedge reset or posedge clk) begin
-      if (reset == 1'b1) begin
+   always_ff @(negedge areset_n or posedge clk) begin
+      if (areset_n == 1'b0) begin
          register_done         <= 1'b0;
          state                 <= IDLE;
          post_state            <= IDLE;

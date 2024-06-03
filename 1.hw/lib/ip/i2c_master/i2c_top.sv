@@ -43,7 +43,7 @@ module i2c_top (
  //clocks and resets
    input  logic  clk,
    input  logic  strobe_400kHz, // 400kHz strobe synchrnous to 'clk'
-   input  logic  reset,         // active-1 synchronous reset
+   input  logic  areset_n,      // active-1 synchronous reset
 
  //I/O pads
    inout  wire   i2c_scl,
@@ -75,7 +75,7 @@ module i2c_top (
     i2c_ctrl u_ctrl (
        .clk              (clk),            //i 
        .strobe_400kHz    (strobe_400kHz),  //i 
-       .reset            (reset),          //i 
+       .areset_n         (areset_n),          //i 
 
        .enable           (i2c_enable),     //i 
        .read_write       (i2c_read_write), //i 
@@ -108,8 +108,8 @@ module i2c_top (
     end
 `endif
    
-    always_ff @(posedge reset or posedge clk) begin
-       if (reset == 1'b1) begin
+    always_ff @(negedge areset_n or posedge clk) begin
+       if (areset_n == 1'b0) begin
           i2c_enable       <= 1'b1;
           i2c_read_write   <= 1'b0;
           i2c_slave_addr   <= '0;
