@@ -146,7 +146,7 @@ module clkrst_gen
           
                 // I2C exits reset after 4 secs, 
                 //  to then start initializing camera
-                i2c_reset <= (rst_delay_cnt > 4'd4);
+                i2c_reset <= (rst_delay_cnt > 4'd3);
             end            
          end
       end // if (strobe_400kHz == 1'b1)
