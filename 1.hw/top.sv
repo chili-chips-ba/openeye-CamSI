@@ -103,11 +103,13 @@ glbl glbl();
 //--------------------------------
 // I2C Master
 //--------------------------------
-   i2c_top u_i2c  (
+   i2c_top  #(
+      .I2C_SLAVE_ADDR (7'd16)
+   ) u_i2c  (
      //clocks and resets
       .clk           (clk_100),       //i
       .strobe_400kHz (strobe_400kHz), //i
-      .reset         (i2c_reset),     //i
+      .areset_n      (i2c_reset),     //i
 
      //I2C_Master to Camera
       .i2c_scl       (i2c_scl),       //io 

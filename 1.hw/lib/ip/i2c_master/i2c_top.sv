@@ -38,12 +38,14 @@
 //   - for most part operates in sync with external 400kHz strobe
 //========================================================================
 
-module i2c_top (
+module i2c_top #(
+   parameter I2C_SLAVE_ADDR = 7'd16 
+)(
 
  //clocks and resets
    input  logic  clk,
    input  logic  strobe_400kHz, // 400kHz strobe synchrnous to 'clk'
-   input  logic  reset,         // active-1 synchronous reset
+   input  logic  areset_n,      // active-0 asynchronous reset
 
  //I/O pads
    inout  wire   i2c_scl,
@@ -56,7 +58,6 @@ module i2c_top (
 //--------------------------------
     logic        i2c_enable;
     logic        i2c_read_write;
-    logic [6:0]  i2c_slave_addr;
 
     logic [15:0] i2c_reg_addr;
     logic [6:0]  i2c_reg_cnt;
@@ -75,11 +76,11 @@ module i2c_top (
     i2c_ctrl u_ctrl (
        .clk              (clk),            //i 
        .strobe_400kHz    (strobe_400kHz),  //i 
-       .reset            (reset),          //i 
+       .areset_n         (areset_n),          //i 
 
        .enable           (i2c_enable),     //i 
        .read_write       (i2c_read_write), //i 
-       .slave_address    (i2c_slave_addr), //i[6:0] 
+       .slave_address    (I2C_SLAVE_ADDR), //i[6:0] 
        .register_address (i2c_reg_addr),   //i[15:0] 
        .data_in          (i2c_data_in),    //i[7:0] 
        .register_done    (i2c_reg_done),   //o 
@@ -108,11 +109,10 @@ module i2c_top (
     end
 `endif
    
-    always_ff @(posedge reset or posedge clk) begin
-       if (reset == 1'b1) begin
+    always_ff @(negedge areset_n or posedge clk) begin
+       if (areset_n == 1'b0) begin
           i2c_enable       <= 1'b1;
           i2c_read_write   <= 1'b0;
-          i2c_slave_addr   <= '0;
           i2c_reg_addr     <= '0;
           i2c_reg_cnt      <= '0;
           i2c_reg_cnt_done <= 1'b0;
@@ -120,12 +120,11 @@ module i2c_top (
        end 
        else if ({strobe_400kHz, i2c_reg_cnt_done} == 2'b10) begin
           i2c_enable       <= 1'b1;
-          i2c_slave_addr   <= 7'd16;   
           i2c_reg_addr     <= i2c_data_init[i2c_reg_cnt][23:8];
           i2c_data_in      <= i2c_data_init[i2c_reg_cnt][7:0];
 
           if (i2c_reg_done == 1'd1) begin
-             if (i2c_reg_cnt < 7'd65) begin
+             if (i2c_reg_cnt < 7'd64) begin
                 i2c_reg_cnt <= 7'(i2c_reg_cnt + 7'd1);
              end
              else begin
