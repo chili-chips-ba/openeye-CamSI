@@ -56,96 +56,85 @@ module i2c_top #(
 //--------------------------------
 // I2C Master
 //--------------------------------
-    logic        i2c_enable;
-    logic        i2c_read_write;
+   logic        i2c_enable;
 
-    logic [15:0] i2c_reg_addr;
-    logic [6:0]  i2c_reg_cnt;
-    logic        i2c_reg_cnt_done;
-    logic        i2c_reg_done;
+   logic [15:0] i2c_reg_addr;
+   logic [6:0]  i2c_reg_cnt;
+   logic        i2c_reg_done;
 
-    logic [23:0] i2c_data_init[65];
-    logic [7:0]  i2c_data_in;
+   logic [23:0] i2c_data_init[65];
+   logic [7:0]  i2c_data_in;
 
-    logic        i2c_scl_do;
-    logic        i2c_scl_di;
+   logic        i2c_scl_do;
+   logic        i2c_scl_di;
 
-    logic        i2c_sda_do; 
-    logic        i2c_sda_di;
-   
-    i2c_ctrl u_ctrl (
-       .clk              (clk),            //i 
-       .strobe_400kHz    (strobe_400kHz),  //i 
-       .areset_n         (areset_n),          //i 
+   logic        i2c_sda_do; 
+   logic        i2c_sda_di;
 
-       .enable           (i2c_enable),     //i 
-       .read_write       (i2c_read_write), //i 
-       .slave_address    (I2C_SLAVE_ADDR), //i[6:0] 
-       .register_address (i2c_reg_addr),   //i[15:0] 
-       .data_in          (i2c_data_in),    //i[7:0] 
-       .register_done    (i2c_reg_done),   //o 
+   i2c_ctrl u_ctrl (
+      .clk              (clk),            //i 
+      .strobe_400kHz    (strobe_400kHz),  //i 
+      .areset_n         (areset_n),       //i 
 
-       .scl_do           (i2c_scl_do),     //i 
-       .scl_di           (i2c_scl_di),     //o 
+      .enable           (i2c_enable),     //i 
+      .slave_address    (I2C_SLAVE_ADDR), //i[6:0] 
+      .register_address (i2c_reg_addr),   //i[15:0] 
+      .data_in          (i2c_data_in),    //i[7:0] 
+      .register_done    (i2c_reg_done),   //o 
 
-       .sda_do           (i2c_sda_do),     //i 
-       .sda_di           (i2c_sda_di)      //o 
-    );
+      .scl_do           (i2c_scl_do),     //i 
+      .scl_di           (i2c_scl_di),     //o 
+
+      .sda_do           (i2c_sda_do),     //i 
+      .sda_di           (i2c_sda_di)      //o 
+   );
 
 
 `ifndef SIM_ONLY
-    initial $readmemh("i2c_init.mem", i2c_data_init);
+   initial $readmemh("i2c_init.mem", i2c_data_init);
 
 `else
-    string i2c_init_mem_file;
+   string i2c_init_mem_file;
 
-    initial begin
-       if ($value$plusargs("i2c_init_mem_file=%s", i2c_init_mem_file)) begin
-          $readmemh(i2c_init_mem_file, i2c_data_init);
-       end
-       else begin
-          $readmemh("../../../1.hw/lib/ip/i2c_master/i2c_init.mem", i2c_data_init);
-       end
-    end
+   initial begin
+      if ($value$plusargs("i2c_init_mem_file=%s", i2c_init_mem_file)) begin
+         $readmemh(i2c_init_mem_file, i2c_data_init);
+      end
+      else begin
+         $readmemh("../../../1.hw/lib/ip/i2c_master/i2c_init.mem", i2c_data_init);
+      end
+   end
 `endif
-   
-    always_ff @(negedge areset_n or posedge clk) begin
-       if (areset_n == 1'b0) begin
-          i2c_enable       <= 1'b1;
-          i2c_read_write   <= 1'b0;
-          i2c_reg_addr     <= '0;
-          i2c_reg_cnt      <= '0;
-          i2c_reg_cnt_done <= 1'b0;
-          i2c_data_in      <= '0;
-       end 
-       else if ({strobe_400kHz, i2c_reg_cnt_done} == 2'b10) begin
-          i2c_enable       <= 1'b1;
-          i2c_reg_addr     <= i2c_data_init[i2c_reg_cnt][23:8];
-          i2c_data_in      <= i2c_data_init[i2c_reg_cnt][7:0];
 
-          if (i2c_reg_done == 1'd1) begin
-             if (i2c_reg_cnt < 7'd64) begin
-                i2c_reg_cnt <= 7'(i2c_reg_cnt + 7'd1);
-             end
-             else begin
-                i2c_reg_cnt_done <= 1'b1;
-             end
-          end
-       end 
-    end
-   
-    IOBUF #(
-       .DRIVE        (12), 
-       .IBUF_LOW_PWR ("TRUE"), // Low Power:"TRUE", High Performance:"FALSE"
-       .IOSTANDARD   ("DEFAULT"),
-       .SLEW         ("SLOW") 
-    ) 
-    u_i2c_iobuf[1:0] (
-       .IO ({ i2c_sda,    i2c_scl    }), //io pad
-       .O  ({ i2c_sda_do, i2c_scl_do }), //o
-       .I  ({ 1'b0,       1'b0       }), //i
-       .T  ({ i2c_sda_di, i2c_scl_di })  //i: 3-state enable: 1=input, 0=output
-    );
+   assign i2c_enable   = (i2c_reg_cnt < 7'd65);
+   assign i2c_reg_addr = i2c_data_init[i2c_reg_cnt][23:8];
+   assign i2c_data_in  = i2c_data_init[i2c_reg_cnt][7:0];
+
+   always_ff @(negedge areset_n or posedge clk) begin
+      if (areset_n == 1'b0) begin
+         i2c_reg_cnt    <= '0;
+      end 
+      else if ({strobe_400kHz, i2c_enable} == 2'b11) begin
+         if (i2c_reg_done == 1'd1) begin
+            if (i2c_reg_cnt < 7'd65) begin
+               i2c_reg_cnt <= 7'(i2c_reg_cnt + 7'd1);
+            end
+         end
+      end 
+   end
+
+   IOBUF #(
+      .DRIVE        (12), 
+      .IBUF_LOW_PWR ("TRUE"), // Low Power:"TRUE", High Performance:"FALSE"
+      .IOSTANDARD   ("DEFAULT"),
+      .SLEW         ("SLOW") 
+   ) 
+   u_i2c_iobuf[1:0] (
+      .IO ({ i2c_sda,    i2c_scl    }), //io pad
+      .O  ({ i2c_sda_do, i2c_scl_do }), //o
+      .I  ({ 1'b0,       1'b0       }), //i
+      .T  ({ i2c_sda_di, i2c_scl_di })  //i: 3-state enable: 1=input, 0=output
+   );
    
 endmodule: i2c_top
 
