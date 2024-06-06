@@ -42,7 +42,6 @@ module i2c_ctrl (
    input  logic        areset_n,
 
    input  logic        enable,
-   input  logic        read_write,
    input  logic [6:0]  slave_address,
    input  logic [15:0] register_address,
    input  logic [7:0]  data_in,
@@ -103,7 +102,7 @@ module i2c_ctrl (
                process_cnt           <= '0;
                bit_cnt               <= '0;
                acknowledge_bit       <= 1'b0;
-               slave_address_plus_rw <= {slave_address, read_write};
+               slave_address_plus_rw <= {slave_address, 1'b0};
                scl_di                <= 1'b1;
                sda_di                <= 1'b1;
 
@@ -261,15 +260,8 @@ module i2c_ctrl (
                   end
                   2'd3: begin
                      if (bit_cnt == 4'd0) begin
-                        if (read_write == 1'b0) begin
-                           post_serial_data <= data_in[3'd7];
-                           post_state       <= WRITE_REG_DATA;
-                        end
-                        else begin
-                         //post_state <= RESTART; // for read operation
-                           post_serial_data <= 1'b1;
-                        end
-
+                        post_serial_data <= data_in[3'd7];
+                        post_state       <= WRITE_REG_DATA;
                         state   <= CHECK_ACK;
                         bit_cnt <= 4'd8;
                      end

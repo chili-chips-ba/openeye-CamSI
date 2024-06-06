@@ -1,6 +1,6 @@
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import RisingEdge, Timer
+from cocotb.triggers import RisingEdge, Timer, FallingEdge
 from cocotbext.i2c import I2cDevice
 
 import os
@@ -47,7 +47,7 @@ async def test_0(dut):
    cocotb.start_soon(i2c_slave_tb.i2c_slave._run())
 
    # Wait for I2C register count done signal
-   await RisingEdge(dut.u_i2c.i2c_reg_cnt_done)
+   await FallingEdge(dut.u_i2c.i2c_enable)
    
    # Wait for some time to allow further processing
    await Timer(100, units='us')
