@@ -83,7 +83,7 @@ glbl glbl();
 //--------------------------------
 // Clock and reset gen
 //--------------------------------
-   logic reset, i2c_reset;
+   logic reset, i2c_areset_n;
    logic clk_100, clk_200, clk_1hz, strobe_400kHz;
 
    clkrst_gen u_clkrst_gen (
@@ -97,7 +97,7 @@ glbl glbl();
 
       .reset         (reset),         //o
       .cam_en        (cam_en),        //o
-      .i2c_reset     (i2c_reset)      //o
+      .i2c_areset_n  (i2c_areset_n)   //o
    );
 
 //--------------------------------
@@ -109,7 +109,7 @@ glbl glbl();
      //clocks and resets
       .clk           (clk_100),       //i
       .strobe_400kHz (strobe_400kHz), //i
-      .areset_n      (i2c_reset),     //i
+      .areset_n      (i2c_areset_n),  //i
 
      //I2C_Master to Camera
       .i2c_scl       (i2c_scl),       //io 

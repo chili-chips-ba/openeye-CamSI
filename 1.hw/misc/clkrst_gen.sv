@@ -53,7 +53,7 @@ module clkrst_gen
 
    output logic  reset,
    output logic  cam_en,
-   output logic  i2c_reset
+   output logic  i2c_areset_n
 );
 
    
@@ -124,7 +124,7 @@ module clkrst_gen
          rst_delay_cnt <= '0; 
 
          cam_en        <= 1'b0;
-         i2c_reset     <= 1'b0;
+         i2c_areset_n  <= 1'b0;
       end 
       else if (strobe_400kHz == 1'b1) begin
 
@@ -144,9 +144,9 @@ module clkrst_gen
                 // few msec is needed, it's simpler to use this timer
                 cam_en <= (rst_delay_cnt > 4'd1);
           
-                // I2C exits reset after 4 secs, 
+                // I2C exits reset 4 secs after reset is deasserted,
                 //  to then start initializing camera
-                i2c_reset <= (rst_delay_cnt > 4'd3);
+                i2c_areset_n <= (rst_delay_cnt > 4'd3);
             end            
          end
       end // if (strobe_400kHz == 1'b1)
