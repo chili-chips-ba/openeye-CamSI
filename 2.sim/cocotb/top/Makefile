@@ -12,6 +12,10 @@ SIM ?= verilator
 #SIM ?= icarus
 export SIM := $(SIM)
 
+# Control testcase
+TESTCASE ?= test_0
+export TESTCASE := $(TESTCASE)
+
 TOPLEVEL_LANG ?= verilog
 
 XILINX_ORIG = ../../models/no-change

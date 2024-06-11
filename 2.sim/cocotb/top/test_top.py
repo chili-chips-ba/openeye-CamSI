@@ -51,3 +51,65 @@ async def test_0(dut):
    
    # Wait for some time to allow further processing
    await Timer(100, units='us')
+
+async def drive_diff_clock(signal, period_ns):
+    """
+    Coroutine to drive a differential signal.
+    """
+    while True:
+        # Drive one part of the differential pair high, the other low
+        signal.value = 0b01
+        await Timer(period_ns / 2, units='ns')
+        # Drive one part of the differential pair low, the other high
+        signal.value = 0b10
+        await Timer(period_ns / 2, units='ns')
+
+async def send_byte_on_lane(signal, lane, byte, period_ns):
+    """
+    Coroutine to send a specific byte on a given differential lane.
+    """
+    while True:
+        for bit in range(8):
+            bit_value = (byte >> bit) & 0x1
+            # Positive bit is at (lane*2 + 1), negative bit is at (lane*2)
+            signal[lane*2 + 1].value = bit_value  # Positive bit
+            signal[lane*2].value = ~bit_value & 0x1  # Negative bit (inverse)
+            await Timer(period_ns, units='ns')
+
+async def drive_diff_counter(signal, period_ns, num_lanes, data_bytes):
+    """
+    Coroutine to drive a differential signal as a counter with specified bytes for each lane.
+    """
+    # Start parallel coroutines for each lane
+    for lane in range(num_lanes):
+        cocotb.start_soon(send_byte_on_lane(signal, lane, data_bytes[lane], period_ns))
+
+@cocotb.test()
+async def test_1(dut):
+    # Get simulation runtime from environment variable, default to 15 microseconds
+    run_sim_us = float(os.environ.get('RUN_SIM_US', 15))
+    run_sim_cycles_100MHz = int(run_sim_us * 1000 / 10)
+
+    # Initialize PLL instances for top and HDMI clocks
+    pllt = fpga_pll.fpga_pll(dut, 'top')
+    pllh = fpga_pll.fpga_pll(dut, 'hdmi')
+
+    # Start external clock generation at 100 MHz
+    cocotb.start_soon(Clock(dut.clk_ext, 10, units="ns").start())
+
+    # Wait for Cam to start
+    await RisingEdge(dut.cam_en)
+    
+    # Start driving the differential clock signal
+    cocotb.start_soon(drive_diff_clock(dut.cam_dphy_clk, period_ns=5))
+
+    # Specify the data bytes for each lane
+    data_bytes = [0b10111000, 0b01000111]  # Example bytes for 2 lanes
+
+    await Timer(45, units='ns')
+
+    # Start driving the differential lane signals with specified bytes in parallel
+    cocotb.start_soon(drive_diff_counter(dut.cam_dphy_dat, period_ns=2.5, num_lanes=2, data_bytes=data_bytes))
+
+    # Wait for some time to allow further processing
+    await Timer(100, units='us')
