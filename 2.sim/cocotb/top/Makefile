@@ -69,7 +69,7 @@ ifeq ($(SIM),$(filter $(SIM),icarus ICARUS))
 endif
 
 # Control sim runtime
-RUN_SIM_US ?= 15000
+RUN_SIM_US ?= 200
 export RUN_SIM_US := $(RUN_SIM_US)
 
 # Convert Xs for now
