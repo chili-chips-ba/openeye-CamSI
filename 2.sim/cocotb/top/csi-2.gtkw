@@ -1,0 +1,94 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Thu Jun 13 13:50:36 2024
+[*]
+[dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/sim_build/top.fst"
+[dumpfile_mtime] "Thu Jun 13 13:06:18 2024"
+[dumpfile_size] 1179430
+[savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/sim_build/csi-2.gtkw"
+[timestart] 69292500
+[size] 1588 827
+[pos] -304 -27
+*-15.966154 69470000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.u_csi_rx_top.
+[treeopen] top.u_csi_rx_top.lane[0].
+[treeopen] top.u_csi_rx_top.lane[1].
+[treeopen] top.u_csi_rx_top.u_depacket.
+[sst_width] 305
+[signals_width] 262
+[sst_expanded] 1
+[sst_vpaned_height] 488
+@200
+-top
+@28
+top.areset
+top.clk_ext
+top.cam_en
+@c00028
+top.cam_dphy_clk[1:0]
+@28
+(0)top.cam_dphy_clk[1:0]
+(1)top.cam_dphy_clk[1:0]
+@1401200
+-group_end
+@28
+top.u_csi_rx_top.bit_clock
+top.u_csi_rx_top.csi_byte_clk
+@c00022
+top.u_csi_rx_top.cam_dphy_dat[3:0]
+@28
+(0)top.u_csi_rx_top.cam_dphy_dat[3:0]
+(1)top.u_csi_rx_top.cam_dphy_dat[3:0]
+(2)top.u_csi_rx_top.cam_dphy_dat[3:0]
+(3)top.u_csi_rx_top.cam_dphy_dat[3:0]
+@1401200
+-group_end
+@28
+top.csi_in_frame
+top.csi_in_line
+@22
+top.csi_word_data[15:0]
+@28
+top.csi_word_valid
+@200
+-top/u_csi_rx_top
+@28
+top.u_csi_rx_top.ref_clock
+@22
+top.u_csi_rx_top.word_data[15:0]
+@28
+top.u_csi_rx_top.word_valid
+top.u_csi_rx_top.byte_packet_done
+top.u_csi_rx_top.csi_sync_seq
+top.u_csi_rx_top.wait_for_sync
+@200
+-top/u_csi_rx_top/u_depacket
+@22
+top.u_csi_rx_top.u_depacket.packet_data[31:0]
+top.u_csi_rx_top.u_depacket.packet_type[5:0]
+@23
+top.u_csi_rx_top.u_depacket.expected_ecc[7:0]
+@28
+top.u_csi_rx_top.u_depacket.valid_packet
+@22
+top.u_csi_rx_top.u_depacket.packet_len[15:0]
+top.u_csi_rx_top.u_depacket.packet_len_q[15:0]
+@28
+top.u_csi_rx_top.u_depacket.data_valid
+top.u_csi_rx_top.u_depacket.long_packet
+@c00028
+top.u_csi_rx_top.u_depacket.state[2:0]
+@28
+(0)top.u_csi_rx_top.u_depacket.state[2:0]
+(1)top.u_csi_rx_top.u_depacket.state[2:0]
+(2)top.u_csi_rx_top.u_depacket.state[2:0]
+@1401200
+-group_end
+@200
+-top/u_csi_rx_top/u_align_byte
+@22
+top.u_csi_rx_top.u_align_byte[0].data_out[7:0]
+top.u_csi_rx_top.u_align_byte[1].data_out[7:0]
+[pattern_trace] 1
+[pattern_trace] 0
