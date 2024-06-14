@@ -32,6 +32,9 @@ Our Cards:
   CRUVI IAS Camera (for OnSemi Camera)
     https://vhdplus.com/docs/components/overview/#ias-camera-extension
 
+  CRUVI we did not use 
+    https://shop.trenz-electronic.de/en/CR00300-01-Camera-Adapter
+    https://shop.trenz-electronic.de/en/CR00240-01-P001-CRUVI-HDMI-Adapter
 
 Trenz support:
    antti.lukats@trenz-electronic.de
