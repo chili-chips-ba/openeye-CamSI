@@ -79,10 +79,6 @@ Good ISP Read:
    https://www.eecs.yorku.ca/~mbrown/ICCV19_Tutorial_MSBrown.pdf
    
 ---------------------------------------------------------------
-HDMI spec:
-   https://github.com/Glenwing/glenwing.github.io/blob/b0521b94b5a12efc6ddce825195de4cb28a65845/docs/HDMI-2.0.pdf
-   
----------------------------------------------------------------
 Misc ISP IP:
   -https://10xengineers.ai/
    https://github.com/10x-Engineers/Infinite-ISP
@@ -91,8 +87,16 @@ Misc ISP IP:
    https://www.linkedin.com/posts/10x-engineers_gold-mine-of-opportunities-infinite-isp-activity-7182980525404409856-UG4Q/?utm_source=share&utm_medium=member_android
 
 
-  -https://qoiformat.org  unique image compression algorithm in 300 lines of C
+   https://qoiformat.org  unique image compression algorithm in 300 lines of C
    Dan has (untested) Verilog RTL that implements it
+
+---------------------------------------------------------------
+Misc interesting projects in this space:
+   https://github.com/hao-yao/ipu6-sensor-guide
+
+---------------------------------------------------------------
+HDMI spec:
+   https://github.com/Glenwing/glenwing.github.io/blob/b0521b94b5a12efc6ddce825195de4cb28a65845/docs/HDMI-2.0.pdf
    
 ---------------------------------------------------------------
 Possible next steps:
