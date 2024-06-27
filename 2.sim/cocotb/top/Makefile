@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Robert Metchev
+#
+# SPDX-License-Identifier: CERN-OHL-P-2.0
+
 #
 # Authored by: Robert Metchev / Chips & Scripts (rmetchev@ieee.org)
 #

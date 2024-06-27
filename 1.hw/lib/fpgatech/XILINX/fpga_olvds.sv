@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Chili.CHIPS*ba
+//
+// SPDX-License-Identifier: BSD-3-Clause
+
 //========================================================================
 // openeye-CamSI * NLnet-sponsored open-source core for Camera I/F with ISP
 //------------------------------------------------------------------------
