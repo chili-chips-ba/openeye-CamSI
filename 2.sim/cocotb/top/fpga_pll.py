@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Chili.CHIPS*ba
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles, RisingEdge, FallingEdge, Timer, with_timeout
