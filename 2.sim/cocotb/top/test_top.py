@@ -93,3 +93,5 @@ async def test_2(dut):
     
    # Run the CSI class to send frames
    await csi.run(3)  # Sending 3 frames as an example
+   
+   await Timer(1, units='us')

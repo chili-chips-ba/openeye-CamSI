@@ -22,6 +22,35 @@ class CSI:
       if self.dinvert[lane]:
          return ~byte & 0xFF
       return byte
+   
+   def calculate_ecc(self, byte1, byte2, byte3):
+      """
+      Calculate the ECC for the given three bytes.
+      The ECC is computed over the 24 bits formed by concatenating the three bytes.
+      """
+      data = (byte1 << 16) | (byte2 << 8) | byte3
+
+      ecc = 0
+
+      ecc_bit5 = ((data >> 10) & 1) ^ ((data >> 11) & 1) ^ ((data >> 12) & 1) ^ ((data >> 13) & 1) ^ ((data >> 14) & 1) ^ ((data >> 15) & 1) ^ ((data >> 16) & 1) ^ ((data >> 17) & 1) ^ ((data >> 18) & 1) ^ ((data >> 19) & 1) ^ ((data >> 21) & 1) ^ ((data >> 22) & 1) ^ ((data >> 23) & 1)
+      ecc |= ecc_bit5 << 5
+
+      ecc_bit4 = ((data >> 4) & 1) ^ ((data >> 5) & 1) ^ ((data >> 6) & 1) ^ ((data >> 7) & 1) ^ ((data >> 8) & 1) ^ ((data >> 9) & 1) ^ ((data >> 16) & 1) ^ ((data >> 17) & 1) ^ ((data >> 18) & 1) ^ ((data >> 19) & 1) ^ ((data >> 20) & 1) ^ ((data >> 22) & 1) ^ ((data >> 23) & 1)
+      ecc |= ecc_bit4 << 4
+
+      ecc_bit3 = ((data >> 1) & 1) ^ ((data >> 2) & 1) ^ ((data >> 3) & 1) ^ ((data >> 7) & 1) ^ ((data >> 8) & 1) ^ ((data >> 9) & 1) ^ ((data >> 13) & 1) ^ ((data >> 14) & 1) ^ ((data >> 15) & 1) ^ ((data >> 19) & 1) ^ ((data >> 20) & 1) ^ ((data >> 21) & 1) ^ ((data >> 23) & 1)
+      ecc |= ecc_bit3 << 3
+
+      ecc_bit2 = ((data >> 0) & 1) ^ ((data >> 2) & 1) ^ ((data >> 3) & 1) ^ ((data >> 5) & 1) ^ ((data >> 6) & 1) ^ ((data >> 9) & 1) ^ ((data >> 11) & 1) ^ ((data >> 12) & 1) ^ ((data >> 15) & 1) ^ ((data >> 18) & 1) ^ ((data >> 20) & 1) ^ ((data >> 21) & 1) ^ ((data >> 22) & 1)
+      ecc |= ecc_bit2 << 2
+
+      ecc_bit1 = ((data >> 0) & 1) ^ ((data >> 1) & 1) ^ ((data >> 3) & 1) ^ ((data >> 4) & 1) ^ ((data >> 6) & 1) ^ ((data >> 8) & 1) ^ ((data >> 10) & 1) ^ ((data >> 12) & 1) ^ ((data >> 14) & 1) ^ ((data >> 17) & 1) ^ ((data >> 20) & 1) ^ ((data >> 21) & 1) ^ ((data >> 22) & 1) ^ ((data >> 23) & 1)
+      ecc |= ecc_bit1 << 1
+
+      ecc_bit0 = ((data >> 0) & 1) ^ ((data >> 1) & 1) ^ ((data >> 2) & 1) ^ ((data >> 4) & 1) ^ ((data >> 5) & 1) ^ ((data >> 7) & 1) ^ ((data >> 10) & 1) ^ ((data >> 11) & 1) ^ ((data >> 13) & 1) ^ ((data >> 16) & 1) ^ ((data >> 20) & 1) ^ ((data >> 21) & 1) ^ ((data >> 22) & 1) ^ ((data >> 23) & 1)
+      ecc |= ecc_bit0
+
+      return ecc
 
    async def send_combined_bytes(self, byte0, byte1, byte2=0x00, byte3=0x00):
       """
@@ -66,30 +95,34 @@ class CSI:
       """
       Coroutine to send the start of a frame.
       """
+      ecc = self.calculate_ecc(0x00, 0x12, 0x00)
+
       if self.num_lane == 2:
          await self.send_data_pattern(0x00, 0x00, repeat_count=1)  # Some random data at the start of the sequence
          await self.send_data_pattern(0xB8, 0xB8, repeat_count=1)  # Sync bytes b8b8
          await self.send_data_pattern(0x12, 0x00, repeat_count=1)  # Start of frame
-         await self.send_data_pattern(0x00, 0x00, repeat_count=6)  # Some random data at the end of the sequence
+         await self.send_data_pattern(ecc, 0x00, repeat_count=6)  # Some random data at the end of the sequence
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
          await self.send_data_pattern(0xB8, 0xB8, 0xB8, 0xB8, 1)
-         await self.send_data_pattern(0x12, 0x00, 0x00, 0x00, 1)
+         await self.send_data_pattern(0x12, 0x00, ecc, 0x00, 1)
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 6)
 
    async def end_frame(self):
       """
       Coroutine to send the end of a frame.
       """
+      ecc = self.calculate_ecc(0x00, 0x12, 0x01)
+
       if self.num_lane == 2:
          await self.send_data_pattern(0x00, 0x00, repeat_count=1)  # Some random data at the start of the sequence
          await self.send_data_pattern(0xB8, 0xB8, repeat_count=1)  # Sync bytes b8b8
          await self.send_data_pattern(0x12, 0x01, repeat_count=1)  # End of frame
-         await self.send_data_pattern(0x00, 0x00, repeat_count=6)  # Some random data at the end of the sequence
+         await self.send_data_pattern(ecc, 0x00, repeat_count=6)  # Some random data at the end of the sequence
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
          await self.send_data_pattern(0xB8, 0xB8, 0xB8, 0xB8, 1)
-         await self.send_data_pattern(0x12, 0x01, 0x00, 0x00, 1)
+         await self.send_data_pattern(0x12, 0x01, ecc, 0x00, 1)
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 6)
 
    async def send_embedded_data(self, data):
@@ -98,18 +131,19 @@ class CSI:
       """
       length_high = (self.line_length >> 8) & 0xFF
       length_low = self.line_length & 0xFF
-      
+      ecc = self.calculate_ecc(length_high, length_low, 0x12)
+
       if self.num_lane == 2:
          await self.send_data_pattern(0x00, 0x00, repeat_count=1)  # Some random data at the start of the sequence
          await self.send_data_pattern(0xB8, 0xB8, repeat_count=1)  # Sync bytes b8b8
          await self.send_data_pattern(length_low, 0x12, repeat_count=1)  # Start of long packet - EMBEDDED DATA
-         await self.send_data_pattern(0x11, length_high, repeat_count=1)
+         await self.send_data_pattern(ecc, length_high, repeat_count=1)
          await self.send_data_pattern(data, data, repeat_count=int(self.line_length/self.num_lane)) # DATA
          await self.send_data_pattern(0x00, 0x00, repeat_count=self.line_blank)  # Some random data at the end of the sequence
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
          await self.send_data_pattern(0xB8, 0xB8, 0xB8, 0xB8, 1)
-         await self.send_data_pattern(length_low, 0x12, 0x11, length_high, 1)
+         await self.send_data_pattern(length_low, 0x12, 0xecc, length_high, 1)
          await self.send_data_pattern(data, data, data, data, int(self.line_length/self.num_lane))
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, self.line_blank)
          
@@ -119,18 +153,19 @@ class CSI:
       """
       length_high = (self.line_length >> 8) & 0xFF
       length_low = self.line_length & 0xFF
+      ecc = self.calculate_ecc(length_high, length_low, 0x28)
       
       if self.num_lane == 2:
          await self.send_data_pattern(0x00, 0x00, repeat_count=1)  # Some random data at the start of the sequence
          await self.send_data_pattern(0xB8, 0xB8, repeat_count=1)  # Sync bytes b8b8
          await self.send_data_pattern(length_low, 0x28, repeat_count=1)  # Start of long packet - START OF LINE
-         await self.send_data_pattern(0x11, length_high, repeat_count=1)
+         await self.send_data_pattern(ecc, length_high, repeat_count=1)
          await self.send_data_pattern(data, data, repeat_count=int(self.line_length/self.num_lane)) # DATA
          await self.send_data_pattern(0x00, 0x00, repeat_count=self.line_blank)  # Some random data at the end of the sequence
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
          await self.send_data_pattern(0xB8, 0xB8, 0x00, 0x00, 1)
-         await self.send_data_pattern(length_low, 0x28, 0x11, length_high, 1)
+         await self.send_data_pattern(length_low, 0x28, ecc, length_high, 1)
          await self.send_data_pattern(data, data, data, data, int(self.line_length/self.num_lane))
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, self.line_blank)
 

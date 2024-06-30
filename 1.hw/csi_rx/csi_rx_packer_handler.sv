@@ -146,8 +146,8 @@ RM/Yimin:
       packet_len     = packet_data[23:8];
       packet_for_ecc = packet_data[23:0];
 
-      //valid_packet   = (packet_data[31:24] == expected_ecc) 
-      valid_packet   = is_allowed_type(packet_type) 
+      valid_packet   = (packet_data[31:24] == expected_ecc) 
+                     & is_allowed_type(packet_type) 
                      & (packet_data[7:6] == 2'd0);
 
       ecc_out        = (packet_data[31:24] == expected_ecc);
