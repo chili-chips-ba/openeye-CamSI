@@ -189,6 +189,46 @@ setenv PATH            "${VERILATOR_ROOT}/bin:${PATH}"
 #     Icarus Verilog version 13.0 (devel)
 #####################
 
+cd  0.git-repo
+git clone https://github.com/steveicarus/iverilog.git
+cd  iverilog
+git pull
+
+sh  autoconf.sh
+./configure
+make
+
+sudo su
+make install # this will intall it to /usr/local/bin/iverilog
+exit
+
+#put this in your .cshrc:
+setenv PATH     "/usr/local/bin:${PATH}"
+
+iverilog -v
+# Icarus Verilog version 13.0 (devel) (s20221226-520-g8ac44a38b)
+
+
+#####################
+# Install SV2V
+#   https://github.com/zachjs/sv2v
+#####################
+install 'Stack' prerequisite:
+curl -sSL https://get.haskellstack.org/ | sh
+
+
+cd  0.git-repo
+git clone https://github.com/zachjs/sv2v.git
+cd  sv2v
+make
+
+#put this in your .cshrc:
+setenv SV2V_ROOT  ${HOME}/0.git-repo/sv2v
+setenv PATH       "${SV2V_ROOT}/bin:${PATH}"
+
+sv2v --version
+sv2v v0.0.12-3-gfdfa597
+
 
 #####################
 # Install GTKWave (version 3.1.118), for waveform viewing
