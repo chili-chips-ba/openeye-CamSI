@@ -81,77 +81,95 @@ module csi_rx_align_word
 );                                     //   with 'valid_out=1' is the CSI packet header
 
 //--------------------------------
-   lane_data_t word_in_pipe [2]; //-\ this circuit can absorb up to
-   lane_vld_t  valid_in_pipe[2]; //-/ 2 cycles of skew between lanes 
 
-   typedef bus2_t [NUM_LANE-1:0] taps_t; // per-Lane indicator of delay tap to take 
-   taps_t taps;                          // each byte from. Valid values: 0, 1, 2
+   logic [(NUM_LANE*8)-1:0] word_dly_0;
+   logic [(NUM_LANE*8)-1:0] word_dly_1;
+   logic [(NUM_LANE*8)-1:0] word_dly_2;
+
+   logic [NUM_LANE-1:0] valid_dly_0;
+   logic [NUM_LANE-1:0] valid_dly_1;
+   logic [NUM_LANE-1:0] valid_dly_2;
+
+`ifdef ICARUS
+   typedef logic [NUM_LANE-1:0] [4] taps_t;
+`else
+   typedef logic [NUM_LANE-1:0] taps_t [4];
+`endif
+
+   taps_t taps;
+   taps_t next_taps;
+
+   logic valid = 1'b0;
+   logic next_valid;
+   logic invalid_start = 1'b0;
+   logic [(NUM_LANE*8)-1:0] aligned_word;
    
-   logic  valid_in_all;
-   assign valid_in_all = &valid_in; //all input byte lanes must be valid
-
-
+   
+   // Process handling the word_clock
    always_ff @(posedge byte_clock) begin
-      if (enable == 1'b1) begin
-         word_in_pipe [0] <= word_in;
-         valid_in_pipe[0] <= valid_in;
-
-         word_in_pipe [1] <= word_in_pipe [0];
-         valid_in_pipe[1] <= valid_in_pipe[0];
-
-       //taps-based word alignment
-         for (int i=0; i<NUM_LANE; i++) unique case (taps[i])
-            2'd2   : word_out[i] <= word_in_pipe[1][i];
-            2'd1   : word_out[i] <= word_in_pipe[0][i];
-            default: word_out[i] <= word_in        [i];
-         endcase
-      end
-
       if (reset == 1'b1) begin
-         valid_out <= 1'b0;
-         taps      <= '0; // start without delay
-      end 
-      else if (enable == 1'b1) begin
-         if (packet_done == 1'b1) begin
-            valid_out <= 1'b0;
+         valid <= 0;
+`ifdef ICARUS
+         taps = '0; // Reset taps
+`else
+         taps = '{2'b00, 2'b00, 2'b00, 2'b00}; // Reset taps
+`endif         
+      end else if (enable == 1'b1) begin
+         word_dly_0  <= word_in;
+         valid_dly_0 <= valid_in;
+         word_dly_1  <= word_dly_0;
+         valid_dly_1 <= valid_dly_0;
+         word_dly_2  <= word_dly_1;
+         valid_dly_2 <= valid_dly_1;
+         valid_out   <= valid;
+         word_out    <= aligned_word;
+         if ({next_valid, valid, wait_for_sync} == 3'b101) begin
+            valid <= 1'b1;
+            taps  <= next_taps;
+         end else if (packet_done == 1'b1) begin
+            valid <= 1'b0;
          end
-         else if ({wait_for_sync, valid_in_all, valid_out} == 3'b110) begin
-            valid_out <= 1'b1;
+      end
+   end
 
-            for (int i=0; i<NUM_LANE; i++) begin
-               if (valid_in_pipe[1][i]) begin
-                  taps[i] <= 2'd2;
-               end 
-               else if (valid_in_pipe[0][i]) begin
-                  taps[i] <= 2'd1;
-               end 
-               else begin
-                  taps[i] <= 2'd0;
-               end
-            end
-         end // if ({wait_for_sync, valid_in_all, valid_out} == 3'b110)
-      end // if (enable == 1'b1)
-   end // always_ff @ (posedge byte_clock)
-   
-//--------------------------------
-   logic is_triggered;
-
+   // Process handling valid delay logic and tap calculation
    always_comb begin
+      logic next_valid_int;
+      logic is_triggered = 1'b0;
 
-     //check if any of the lanes triggered
-      is_triggered = 1'b0;
-      for (int i=0; i<NUM_LANE; i++) begin
-         if ({valid_in        [i], 
-              valid_in_pipe[0][i], 
-              valid_in_pipe[1][i]} == 3'b111) begin
+      next_valid_int = &valid_dly_0;
+      is_triggered   = 1'b0;
+      for (int i = 0; i <= NUM_LANE-1; i++) begin
+         if ({valid_dly_0[i], valid_dly_1[i], valid_dly_2[i]} == 3'b111) begin
             is_triggered = 1'b1;
          end
       end
-
-     // "Invalid Start" is when one of the lanes triggerred, but not all
-      packet_done_out = packet_done 
-                      | (~valid_in_all & is_triggered); 
+      invalid_start <= (!next_valid_int) && is_triggered;
+      next_valid    <= next_valid_int;
+      for (int i = 0; i <= NUM_LANE-1; i++) begin
+         if (valid_dly_2[i]) begin
+            next_taps[i] = 2'b10;
+         end else if (valid_dly_1[i]) begin
+            next_taps[i] = 2'b01;
+         end else begin
+            next_taps[i] = 2'b00;
+         end
+      end
    end
+
+   // Process handling word alignment
+   always_comb begin
+      for (int i = 0; i <= NUM_LANE-1; i++) begin
+         case (taps[i])
+            2'b10: aligned_word[(8*i)+7 -: 8] = word_dly_2[(8*i)+7 -: 8];
+            2'b01: aligned_word[(8*i)+7 -: 8] = word_dly_1[(8*i)+7 -: 8];
+            default: aligned_word[(8*i)+7 -: 8] = word_dly_0[(8*i)+7 -: 8];
+         endcase
+      end
+   end
+
+   // Update packet_done_out
+   assign packet_done_out = packet_done || invalid_start;
    
 endmodule: csi_rx_align_word
 

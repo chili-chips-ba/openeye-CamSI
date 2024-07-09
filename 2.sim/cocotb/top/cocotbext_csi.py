@@ -105,7 +105,7 @@ class CSI:
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
          await self.send_data_pattern(0xB8, 0xB8, 0xB8, 0xB8, 1)
-         await self.send_data_pattern(0x12, 0x00, ecc, 0x00, 1)
+         await self.send_data_pattern(ecc, 0x00, 0x12, 0x00, 1)
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 6)
 
    async def end_frame(self):
@@ -122,7 +122,7 @@ class CSI:
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
          await self.send_data_pattern(0xB8, 0xB8, 0xB8, 0xB8, 1)
-         await self.send_data_pattern(0x12, 0x01, ecc, 0x00, 1)
+         await self.send_data_pattern(ecc, 0x00, 0x12, 0x01, 1)
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 6)
 
    async def send_embedded_data(self, data):
@@ -143,7 +143,7 @@ class CSI:
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
          await self.send_data_pattern(0xB8, 0xB8, 0xB8, 0xB8, 1)
-         await self.send_data_pattern(length_low, 0x12, 0xecc, length_high, 1)
+         await self.send_data_pattern(ecc, length_high, length_low, 0x12, 1)
          await self.send_data_pattern(data, data, data, data, int(self.line_length/self.num_lane))
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, self.line_blank)
          
@@ -164,8 +164,9 @@ class CSI:
          await self.send_data_pattern(0x00, 0x00, repeat_count=self.line_blank)  # Some random data at the end of the sequence
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
-         await self.send_data_pattern(0xB8, 0xB8, 0x00, 0x00, 1)
-         await self.send_data_pattern(length_low, 0x28, ecc, length_high, 1)
+         await self.send_data_pattern(0xB8, 0xB8, 0xB8, 0xB8, 1)
+         #await self.send_data_pattern(length_low, 0x28, ecc, length_high, 1)
+         await self.send_data_pattern(ecc, length_high, length_low, 0x28, 1)
          await self.send_data_pattern(data, data, data, data, int(self.line_length/self.num_lane))
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, self.line_blank)
 
@@ -176,8 +177,8 @@ class CSI:
       await self.start_frame()
       line_data = 0x22  # Example data for a line
 
-      for i in range(5):  # (self.frame_length + self.frame_blank) instead of 5
-         if i > 2:        # (self.frame_length - 1) instead of 2
+      for i in range(7):  # (self.frame_length + self.frame_blank) instead of 5
+         if i > 10:        # (self.frame_length - 1) instead of 2
             line_data = 0x11
          await self.send_line(line_data)
 

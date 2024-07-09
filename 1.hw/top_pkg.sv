@@ -41,6 +41,7 @@
 `define HDMI_720p60
 //`define HDMI_1080p30
 //`define HDMI_1080p60 /*Artix-7 cannot do this option*/ 
+`define MIPI_4_LANE
 
 
 package top_pkg;

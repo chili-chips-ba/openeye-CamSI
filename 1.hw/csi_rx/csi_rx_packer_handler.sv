@@ -195,7 +195,11 @@ RM/Yimin:
                bytes_read <= '0;
 
                if (data_valid == 1'b1) begin
+              `ifdef MIPI_4_LANE
+                  state <= SYNC1;
+              `else
                   state <= SYNC0;
+              `endif 
                end
             end
 
@@ -227,10 +231,10 @@ RM/Yimin:
 
             LONG_READ: begin// Rx long packet
                // FIXME: adapt to 4-lane case
-               if (   (bytes_read < (packet_len_q - 16'd2)) 
+               if (   (bytes_read < (packet_len_q - 16'd1 * NUM_LANE)) 
                    && (bytes_read < 16'd8192)
                ) begin
-                  bytes_read <= bytes_read + 16'd2;
+                  bytes_read <= bytes_read + 16'd1 * NUM_LANE;
                end
                else begin
                   state <= DONE;
@@ -281,7 +285,7 @@ RM/Yimin:
    end
    
    assign sync_wait     =  (state == START);
-   assign payload_out   =  (state == LONG_READ) ? packet_data[15:0] : '0; // FIXME: adapt to 4-lane case
+   assign payload_out   =  (state == LONG_READ) ? packet_data[(NUM_LANE*8)-1:0] : '0; // FIXME: adapt to 4-lane case
    assign packet_done   =  (state == DONE);
    assign payload_valid =  (state == LONG_READ);
    assign debug_out     = {(state == LONG_READ), long_packet};

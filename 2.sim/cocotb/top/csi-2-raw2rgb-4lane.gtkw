@@ -1,0 +1,107 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Tue Jul  9 22:34:11 2024
+[*]
+[dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/dump.fst"
+[dumpfile_mtime] "Tue Jul  9 22:32:13 2024"
+[dumpfile_size] 3169758
+[savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/csi-2-raw2rgb-4lane.gtkw"
+[timestart] 108631700
+[size] 1588 827
+[pos] -341 -77
+*-15.966154 108781072 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] .
+[treeopen] .top.
+[treeopen] .top.u_csi_rx_top.
+[treeopen] .top.u_csi_rx_top.lane[0].
+[treeopen] .top.u_csi_rx_top.lane[0].u_phy_dat.
+[treeopen] .top.u_isp.
+[treeopen] .top.u_isp.u_raw2rgb.
+[sst_width] 305
+[signals_width] 302
+[sst_expanded] 1
+[sst_vpaned_height] 488
+@200
+-top
+@28
+top.areset
+top.clk_ext
+top.cam_en
+@c00028
+top.cam_dphy_clk[1:0]
+@28
+(0)top.cam_dphy_clk[1:0]
+(1)top.cam_dphy_clk[1:0]
+@1401200
+-group_end
+@28
+top.u_csi_rx_top.bit_clock
+top.u_csi_rx_top.csi_byte_clk
+@c00028
+top.cam_dphy_dat[0][1:0]
+@28
+(0)top.cam_dphy_dat[0][1:0]
+(1)top.cam_dphy_dat[0][1:0]
+@1401200
+-group_end
+@c00028
+top.cam_dphy_dat[1][1:0]
+@28
+(0)top.cam_dphy_dat[1][1:0]
+(1)top.cam_dphy_dat[1][1:0]
+@1401200
+-group_end
+@28
+top.csi_in_frame
+top.csi_in_line
+@22
+top.csi_word_data[0][7:0]
+top.csi_word_data[1][7:0]
+top.csi_word_data[2][7:0]
+top.csi_word_data[3][7:0]
+@28
+top.csi_word_valid
+@200
+-top/u_isp/u_raw2rgb
+@420
+top.u_isp.u_raw2rgb.LINE_LENGTH
+@22
+top.u_isp.u_raw2rgb.data_in[0][7:0]
+top.u_isp.u_raw2rgb.data_in[1][7:0]
+top.u_isp.u_raw2rgb.data_in[2][7:0]
+top.u_isp.u_raw2rgb.data_in[3][7:0]
+@28
+top.u_isp.u_raw2rgb.data_valid
+@22
+top.u_isp.u_raw2rgb.rgb_out[23:0]
+@28
+top.u_isp.u_raw2rgb.reading
+@22
+top.u_isp.u_raw2rgb.read_count[8:0]
+top.u_isp.u_raw2rgb.read_count_nxt[8:0]
+@28
+top.u_isp.u_raw2rgb.temp_4lane
+@29
+top.u_isp.u_raw2rgb.odd_pixel
+@28
+top.u_isp.u_raw2rgb.writing
+@22
+top.u_isp.u_raw2rgb.wen[3:0]
+top.u_isp.u_raw2rgb.line0_blue0[7:0]
+top.u_isp.u_raw2rgb.line0_blue1[7:0]
+top.u_isp.u_raw2rgb.line0_green0[7:0]
+top.u_isp.u_raw2rgb.line0_green1[7:0]
+top.u_isp.u_raw2rgb.line1_green0[7:0]
+top.u_isp.u_raw2rgb.line1_green1[7:0]
+top.u_isp.u_raw2rgb.line1_red0[7:0]
+top.u_isp.u_raw2rgb.line1_red1[7:0]
+top.u_isp.u_raw2rgb.line2_blue0[7:0]
+top.u_isp.u_raw2rgb.line2_blue1[7:0]
+top.u_isp.u_raw2rgb.line2_green0[7:0]
+top.u_isp.u_raw2rgb.line2_green1[7:0]
+top.u_isp.u_raw2rgb.line3_green0[7:0]
+top.u_isp.u_raw2rgb.line3_green1[7:0]
+top.u_isp.u_raw2rgb.line3_red0[7:0]
+top.u_isp.u_raw2rgb.line3_red1[7:0]
+[pattern_trace] 1
+[pattern_trace] 0
