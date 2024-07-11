@@ -40,19 +40,20 @@
 // to then COMPENSATE FOR UP TO 2 CLOCK CYCLES OF SKEW BETWEEN LANES.
 //
 // It also resets byte aligners' sync stat us (via 'packet_done_out')
-// when SYNC pattern is not found by byte aligners on all lanes.
+// when SYNC pattern is not found by the byte aligners on all lanes.
 //
 // Similarly to the byte aligner, it locks the alignment taps when a 
 // valid word is found and until 'packet_done' is asserted.
 //
+// It also effectively filters out the 0xB8 sync bytes from output data.
 //------------------------------------------------------------------------
-// Here is an illustration of 2-lane case with 2-clock-cycle skew between 
-// them. This RTL is written to work for any number of lanes.
+// Here is an illustration for the 2-lane case with 2-clock-cycle skew 
+// between lanes. This RTL is written to work for any number of lanes.
 //   
 //    clk            | 1 | 2 |         |n-1| n |
 //                   |___|___|_________|   |   |
 //    lane0 vld_in __|                 |_____________
-//          data_in  |<===============>     |
+//          data_in  |<===============>    |
 //                   |                 
 //                   |<--2-->|_________________
 //    lane1 vld_in __________|                 |_____
@@ -82,8 +83,8 @@ module csi_rx_align_word
    output logic       packet_done_out, // 'packet_done' output to byte aligners
    output lane_data_t word_out,        // aligned word out to packet handler
    output logic       valid_out        // goes high once alignment is valid: First word
-);                                     //   with 'valid_out=1' is the CSI packet header
-
+);                                     //  with 'valid_out=1' is the CSI packet header,
+                                       //  i.e. the 0xB8 Sync byte is filtered out 
 //--------------------------------
    lane_data_t word_in_pipe [2]; //-\ this circuit can absorb up to
    lane_vld_t  valid_in_pipe[2]; //-/ 2 cycles of skew between lanes 
