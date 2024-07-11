@@ -1,0 +1,14 @@
+for questions concerning the camera please ask
+   thomas.ludemann@open-visions.com
+
+Lukas Henkel:
+   Our image sensor is packaged in a BGA package with
+   a total height close to 1mm, not a bare die. On a bare
+   die assembly the image plane sits about 150um above the
+   board level. The BGA image sensor does not fit under the
+   low-profile lens I have here. I have searched a bit more
+   and found a lens that should work for testing. It´s only
+   US$15 a piece, I´ll order some for the bringup and switch
+   to the custom low profile lense holder once everything
+   works, or see if I can find bare die sensors in the meantime
+   
