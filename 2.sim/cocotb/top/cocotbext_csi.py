@@ -2,18 +2,20 @@ import cocotb
 from cocotb.triggers import Timer
 
 class CSI:
-   def __init__(self, dut, signal, period_ns, fps_Hz, line_length, frame_length, frame_blank, num_lane, dinvert):
-      self.dut = dut
-      self.signal = signal
-      self.period_ns = period_ns
-      self.fps_Hz = fps_Hz
-      self.line_length = line_length
+   def __init__(self, dut, signal, period_ns, fps_Hz, line_length, frame_length, frame_blank, num_lane, dinvert, uniform_data=True, start_value=0x00):
+      self.dut          = dut
+      self.signal       = signal
+      self.period_ns    = period_ns
+      self.fps_Hz       = fps_Hz
+      self.line_length  = line_length
       self.frame_length = frame_length
-      self.frame_blank = frame_blank
-      self.num_lane = num_lane
-      self.dinvert = dinvert
-      self.temp_var = (1_000_000_000 / fps_Hz) / (8 * period_ns)
-      self.line_blank = int(self.temp_var / (frame_length + frame_blank)) - int(line_length / num_lane)
+      self.frame_blank  = frame_blank
+      self.num_lane     = num_lane
+      self.dinvert      = dinvert
+      self.uniform_data = uniform_data
+      self.start_value  = start_value
+      self.temp_var     = (1_000_000_000 / fps_Hz) / (8 * period_ns)
+      self.line_blank   = int(self.temp_var / (frame_length + frame_blank)) - int(line_length / num_lane)
 
    def invert_byte(self, byte, lane):
       """
@@ -75,6 +77,21 @@ class CSI:
          
          await Timer(self.period_ns, units='ns')
 
+   async def send_incrementing_data(self, start_value, repeat_count=1):
+      value = start_value
+      for _ in range(repeat_count):
+         byte3 = self.invert_byte(value & 0xFF, 3)
+         byte2 = self.invert_byte((value >> 8) & 0xFF, 2)
+         byte1 = self.invert_byte((value >> 16) & 0xFF, 1)
+         byte0 = self.invert_byte((value >> 24) & 0xFF, 0)
+
+         if self.num_lane == 2:
+            await self.send_combined_bytes(byte1, byte0) #Because of the inversion of CSI2 protocol [1,0], not [0,1]
+         elif self.num_lane == 4:
+            await self.send_combined_bytes(byte0, byte1, byte2, byte3)
+         
+         value += 1
+
    async def send_data_pattern(self, byte0, byte1, byte2=0x00, byte3=0x00, repeat_count=1):
       """
       Coroutine to send a specific data pattern on a given lane for a specified number of repetitions.
@@ -101,7 +118,8 @@ class CSI:
          await self.send_data_pattern(0x00, 0x00, repeat_count=1)  # Some random data at the start of the sequence
          await self.send_data_pattern(0xB8, 0xB8, repeat_count=1)  # Sync bytes b8b8
          await self.send_data_pattern(0x12, 0x00, repeat_count=1)  # Start of frame
-         await self.send_data_pattern(ecc, 0x00, repeat_count=6)  # Some random data at the end of the sequence
+         await self.send_data_pattern(ecc, 0x00, repeat_count=1)   # ECC
+         await self.send_data_pattern(0x00, 0x00, repeat_count=6)  # Some random data at the end of the sequence
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
          await self.send_data_pattern(0xB8, 0xB8, 0xB8, 0xB8, 1)
@@ -118,7 +136,8 @@ class CSI:
          await self.send_data_pattern(0x00, 0x00, repeat_count=1)  # Some random data at the start of the sequence
          await self.send_data_pattern(0xB8, 0xB8, repeat_count=1)  # Sync bytes b8b8
          await self.send_data_pattern(0x12, 0x01, repeat_count=1)  # End of frame
-         await self.send_data_pattern(ecc, 0x00, repeat_count=6)  # Some random data at the end of the sequence
+         await self.send_data_pattern(ecc, 0x00, repeat_count=1)   # ECC
+         await self.send_data_pattern(0x00, 0x00, repeat_count=5)  # Some random data at the end of the sequence
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
          await self.send_data_pattern(0xB8, 0xB8, 0xB8, 0xB8, 1)
@@ -134,8 +153,8 @@ class CSI:
       ecc = self.calculate_ecc(length_high, length_low, 0x12)
 
       if self.num_lane == 2:
-         await self.send_data_pattern(0x00, 0x00, repeat_count=1)  # Some random data at the start of the sequence
-         await self.send_data_pattern(0xB8, 0xB8, repeat_count=1)  # Sync bytes b8b8
+         await self.send_data_pattern(0x00, 0x00, repeat_count=1)        # Some random data at the start of the sequence
+         await self.send_data_pattern(0xB8, 0xB8, repeat_count=1)        # Sync bytes b8b8
          await self.send_data_pattern(length_low, 0x12, repeat_count=1)  # Start of long packet - EMBEDDED DATA
          await self.send_data_pattern(ecc, length_high, repeat_count=1)
          await self.send_data_pattern(data, data, repeat_count=int(self.line_length/self.num_lane)) # DATA
@@ -156,18 +175,27 @@ class CSI:
       ecc = self.calculate_ecc(length_high, length_low, 0x28)
       
       if self.num_lane == 2:
-         await self.send_data_pattern(0x00, 0x00, repeat_count=1)  # Some random data at the start of the sequence
-         await self.send_data_pattern(0xB8, 0xB8, repeat_count=1)  # Sync bytes b8b8
+         await self.send_data_pattern(0x00, 0x00, repeat_count=1)        # Some random data at the start of the sequence
+         await self.send_data_pattern(0xB8, 0xB8, repeat_count=1)        # Sync bytes b8b8
          await self.send_data_pattern(length_low, 0x28, repeat_count=1)  # Start of long packet - START OF LINE
          await self.send_data_pattern(ecc, length_high, repeat_count=1)
-         await self.send_data_pattern(data, data, repeat_count=int(self.line_length/self.num_lane)) # DATA
+         
+         if self.uniform_data:
+            await self.send_data_pattern(data, data, repeat_count=int(self.line_length/self.num_lane)) # DATA
+         else:
+            await self.send_incrementing_data(self.start_value, repeat_count=int(self.line_length/self.num_lane)) #DATA
+         
          await self.send_data_pattern(0x00, 0x00, repeat_count=self.line_blank)  # Some random data at the end of the sequence
       elif self.num_lane == 4: # adjust as needed
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, 1)
          await self.send_data_pattern(0xB8, 0xB8, 0xB8, 0xB8, 1)
-         #await self.send_data_pattern(length_low, 0x28, ecc, length_high, 1)
          await self.send_data_pattern(ecc, length_high, length_low, 0x28, 1)
-         await self.send_data_pattern(data, data, data, data, int(self.line_length/self.num_lane))
+
+         if self.uniform_data:
+            await self.send_data_pattern(data, data, data, data, repeat_count=int(self.line_length/self.num_lane)) # DATA
+         else:
+            await self.send_incrementing_data(self.start_value, repeat_count=int(self.line_length/self.num_lane)) #DATA
+
          await self.send_data_pattern(0x00, 0x00, 0x00, 0x00, self.line_blank)
 
    async def send_frame(self):

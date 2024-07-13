@@ -155,8 +155,8 @@ glbl glbl();
    logic  rgb_reading;
 
    isp_top #(
-      .LINE_LENGTH (640),           // number of data entries per line
-      .RGB_WIDTH   ($bits(pix_t))   // width of RGB data (24-bit)
+      .LINE_LENGTH (HSCREEN/NUM_LANE),  // number of data entries per line
+      .RGB_WIDTH   ($bits(pix_t))       // width of RGB data (24-bit)
    )
    u_isp (
       .clk        (csi_byte_clk),   //i           

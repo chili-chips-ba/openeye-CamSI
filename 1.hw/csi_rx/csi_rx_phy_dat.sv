@@ -108,7 +108,7 @@ module csi_rx_phy_dat #(
    logic [7:0] SHIFT0, SHIFT1, SHIFT2, Q;
 
    always @(posedge bit_clock) FF0 <= in_se;
-   always @(negedge bit_clock) FF1 <= in_se; 
+   always @(negedge bit_clock) FF1 <= in_se;
 
    always @(posedge bit_clock) begin
       SHIFT0 <= {FF1, FF0, SHIFT0[7:2]};

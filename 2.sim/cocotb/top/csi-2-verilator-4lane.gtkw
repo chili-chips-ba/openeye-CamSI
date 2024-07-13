@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Tue Jul  9 18:04:04 2024
+[*] Sat Jul 13 14:01:27 2024
 [*]
 [dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/dump.fst"
-[dumpfile_mtime] "Tue Jul  9 17:47:25 2024"
-[dumpfile_size] 1547599
+[dumpfile_mtime] "Sat Jul 13 12:41:38 2024"
+[dumpfile_size] 3255537
 [savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/csi-2-verilator-4lane.gtkw"
-[timestart] 0
+[timestart] 71514900
 [size] 1588 827
-[pos] -111 -79
-*-24.966154 69482896 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -413 -125
+*-15.966154 69693328 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] .
 [treeopen] .top.
 [treeopen] .top.u_csi_rx_top.
@@ -52,13 +52,16 @@ top.cam_dphy_dat[1][1:0]
 (1)top.cam_dphy_dat[1][1:0]
 @1401200
 -group_end
+@29
+top.cam_dphy_dat[2][1:0]
+top.cam_dphy_dat[3][1:0]
 @28
 top.csi_in_frame
 top.csi_in_line
-@22
+@24
 top.csi_word_data[0][7:0]
+@22
 top.csi_word_data[1][7:0]
-@23
 top.csi_word_data[2][7:0]
 top.csi_word_data[3][7:0]
 @28
