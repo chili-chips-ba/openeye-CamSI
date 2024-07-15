@@ -114,67 +114,67 @@ module csi_rx_align_byte (
 */
   
 //--------------------------------
-    localparam bit[7:0] SYNC = 8'b1011_1000;
+   localparam bit[7:0] SYNC = 8'b1011_1000;
 
-    always_comb begin: _comb
+   always_comb begin: _comb
 
-      //---find SYNC pattern and its bit-offset
-        found  = 1'b0;
-        offset = 3'd0;
+   //---find SYNC pattern and its bit-offset
+      found  = 1'b0;
+      offset = 3'd0;
 
-      //for (int i = 8; i < 16; i++) begin
-      //  if((curr_byte[i -:8] == SYNC) && is_zero(curr_byte, i-8)) begin
-      //      found  = 1'b1;
-      //      offset = i-8;
-      //   end
-      //end
+   //for (int i = 8; i < 16; i++) begin
+   //  if((curr_byte[i -:8] == SYNC) && is_zero(curr_byte, i-8)) begin
+   //      found  = 1'b1;
+   //      offset = i-8;
+   //   end
+   //end
 
-        if ({curr_byte[0],   last_byte} == {SYNC, 1'd0}) begin
-            found  = 1'b1;
-            offset = 3'd0;
-        end
-        if ({curr_byte[1:0], last_byte} == {SYNC, 2'd0}) begin
-            found  = 1'b1;
-            offset = 3'd1;
-        end 
-        if ({curr_byte[2:0], last_byte} == {SYNC, 3'd0}) begin
-            found  = 1'b1;
-            offset = 3'd2;
-        end 
-        if ({curr_byte[3:0], last_byte} == {SYNC, 4'd0}) begin
-            found  = 1'b1;
-            offset = 3'd3;
-        end      
-        if ({curr_byte[4:0], last_byte} == {SYNC, 5'd0}) begin
-            found  = 1'b1;
-            offset = 3'd4;
-        end
-        if ({curr_byte[5:0], last_byte} == {SYNC, 6'd0}) begin
-            found  = 1'b1;
-            offset = 3'd5;
-        end   
-        if ({curr_byte[6:0], last_byte} == {SYNC, 7'd0}) begin
-            found  = 1'b1;
-            offset = 3'd6;
-        end                            
-        if (curr_byte[7:0] == SYNC) begin
-            found  = 1'b1;
-            offset = 3'd7;
-        end
+      if ({curr_byte[0],   last_byte} == {SYNC, 1'd0}) begin
+         found  = 1'b1;
+         offset = 3'd0;
+      end
+      if ({curr_byte[1:0], last_byte} == {SYNC, 2'd0}) begin
+         found  = 1'b1;
+         offset = 3'd1;
+      end 
+      if ({curr_byte[2:0], last_byte} == {SYNC, 3'd0}) begin
+         found  = 1'b1;
+         offset = 3'd2;
+      end 
+      if ({curr_byte[3:0], last_byte} == {SYNC, 4'd0}) begin
+         found  = 1'b1;
+         offset = 3'd3;
+      end      
+      if ({curr_byte[4:0], last_byte} == {SYNC, 5'd0}) begin
+         found  = 1'b1;
+         offset = 3'd4;
+      end
+      if ({curr_byte[5:0], last_byte} == {SYNC, 6'd0}) begin
+         found  = 1'b1;
+         offset = 3'd5;
+      end   
+      if ({curr_byte[6:0], last_byte} == {SYNC, 7'd0}) begin
+         found  = 1'b1;
+         offset = 3'd6;
+      end                            
+      if (curr_byte[7:0] == SYNC) begin
+         found  = 1'b1;
+         offset = 3'd7;
+      end
 
-      //---then barrel-shift input data to align output
-        unique case (data_offs)
-           3'd7   : shifted_byte =  curr_byte;
-           3'd6   : shifted_byte = {curr_byte[6:0], last_byte[7]};
-           3'd5   : shifted_byte = {curr_byte[5:0], last_byte[7:6]};
-           3'd4   : shifted_byte = {curr_byte[4:0], last_byte[7:5]};
-           3'd3   : shifted_byte = {curr_byte[3:0], last_byte[7:4]};
-           3'd2   : shifted_byte = {curr_byte[2:0], last_byte[7:3]};
-           3'd1   : shifted_byte = {curr_byte[1:0], last_byte[7:2]}; 
-           default: shifted_byte = {curr_byte[0],   last_byte[7:1]};
-        endcase
+   //---then barrel-shift input data to align output
+      unique case (data_offs)
+         3'd7   : shifted_byte =  curr_byte;
+         3'd6   : shifted_byte = {curr_byte[6:0], last_byte[7]};
+         3'd5   : shifted_byte = {curr_byte[5:0], last_byte[7:6]};
+         3'd4   : shifted_byte = {curr_byte[4:0], last_byte[7:5]};
+         3'd3   : shifted_byte = {curr_byte[3:0], last_byte[7:4]};
+         3'd2   : shifted_byte = {curr_byte[2:0], last_byte[7:3]};
+         3'd1   : shifted_byte = {curr_byte[1:0], last_byte[7:2]}; 
+         default: shifted_byte = {curr_byte[0],   last_byte[7:1]};
+      endcase
 
-    end: _comb
+   end: _comb
    
 endmodule: csi_rx_align_byte
 

@@ -1,0 +1,54 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Wed Jun  5 21:41:45 2024
+[*]
+[dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/sim_build/top.fst"
+[dumpfile_mtime] "Wed Jun  5 21:20:43 2024"
+[dumpfile_size] 11807435
+[savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/i2c.gtkw"
+[timestart] 0
+[size] 1588 827
+[pos] 32767 32767
+*-28.586885 2054290000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[sst_width] 214
+[signals_width] 238
+[sst_expanded] 1
+[sst_vpaned_height] 488
+@200
+-top
+@28
+top.u_i2c.areset_n
+top.u_i2c.strobe_400kHz
+@200
+-top/u_i2c
+@22
+top.u_i2c.i2c_data_in[7:0]
+top.u_i2c.i2c_reg_addr[15:0]
+@28
+top.u_i2c.i2c_read_write
+top.u_i2c.i2c_scl
+top.u_i2c.i2c_scl_di
+top.u_i2c.i2c_scl_do
+top.u_i2c.i2c_sda
+top.u_i2c.i2c_sda_di
+top.u_i2c.i2c_sda_do
+top.u_i2c.i2c_enable
+@23
+top.u_i2c.i2c_reg_cnt[6:0]
+@200
+-top/u_i2c/u_ctrl
+@28
+top.u_i2c.u_ctrl.acknowledge_bit
+@22
+top.u_i2c.u_ctrl.bit_cnt[3:0]
+top.u_i2c.u_ctrl.bit_cnt_dec[3:0]
+@28
+top.u_i2c.u_ctrl.process_cnt[1:0]
+@22
+top.u_i2c.u_ctrl.slave_address[6:0]
+top.u_i2c.u_ctrl.slave_address_plus_rw[7:0]
+@100000028
+top.u_i2c.u_ctrl.state[3:0]
+[pattern_trace] 1
+[pattern_trace] 0

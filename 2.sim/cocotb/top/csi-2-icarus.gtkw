@@ -1,0 +1,128 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Thu Jun 20 10:28:55 2024
+[*]
+[dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/sim_build/top.fst"
+[dumpfile_mtime] "Thu Jun 20 10:12:28 2024"
+[dumpfile_size] 399574
+[savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/csi-2-icarus.gtkw"
+[timestart] 69320000
+[size] 1588 827
+[pos] 32767 32767
+*-15.966154 69370000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.u_csi_rx_top.
+[treeopen] top.u_csi_rx_top.lane[0].
+[treeopen] top.u_csi_rx_top.lane[1].
+[treeopen] top.u_csi_rx_top.u_align_word.
+[treeopen] top.u_csi_rx_top.u_depacket.
+[sst_width] 305
+[signals_width] 302
+[sst_expanded] 1
+[sst_vpaned_height] 488
+@200
+-top
+@28
+top.areset
+top.clk_ext
+top.cam_en
+@c00028
+top.cam_dphy_clk[1:0]
+@28
+(0)top.cam_dphy_clk[1:0]
+(1)top.cam_dphy_clk[1:0]
+@1401200
+-group_end
+@28
+top.u_csi_rx_top.bit_clock
+top.u_csi_rx_top.csi_byte_clk
+@800022
+top.u_csi_rx_top.cam_dphy_dat[3:0]
+@28
+(0)top.u_csi_rx_top.cam_dphy_dat[3:0]
+(1)top.u_csi_rx_top.cam_dphy_dat[3:0]
+(2)top.u_csi_rx_top.cam_dphy_dat[3:0]
+(3)top.u_csi_rx_top.cam_dphy_dat[3:0]
+@1001200
+-group_end
+@28
+top.csi_in_frame
+top.csi_in_line
+@22
+top.csi_word_data[15:0]
+@28
+top.csi_word_valid
+@200
+-top/u_csi_rx_top
+@28
+top.u_csi_rx_top.ref_clock
+@22
+top.u_csi_rx_top.word_data[15:0]
+@28
+top.u_csi_rx_top.word_valid
+top.u_csi_rx_top.byte_packet_done
+top.u_csi_rx_top.csi_sync_seq
+top.u_csi_rx_top.wait_for_sync
+@200
+-top/u_csi_rx_top/lane[0]/u_phy_dat
+@29
+top.u_csi_rx_top.lane[0].u_phy_dat.dphy_hs[1:0]
+@28
+top.u_csi_rx_top.lane[0].u_phy_dat.in_se
+top.u_csi_rx_top.lane[0].u_phy_dat.in_delayed
+@22
+top.u_csi_rx_top.lane[0].u_phy_dat.serdes_out[7:0]
+@200
+-top/u_csi_rx_top/u_depacket
+@22
+top.u_csi_rx_top.u_depacket.packet_data[31:0]
+top.u_csi_rx_top.u_depacket.packet_type[5:0]
+top.u_csi_rx_top.u_depacket.expected_ecc[7:0]
+@28
+top.u_csi_rx_top.u_depacket.valid_packet
+@22
+top.u_csi_rx_top.u_depacket.packet_len[15:0]
+top.u_csi_rx_top.u_depacket.packet_len_q[15:0]
+@28
+top.u_csi_rx_top.u_depacket.data_valid
+top.u_csi_rx_top.u_depacket.long_packet
+@c00028
+top.u_csi_rx_top.u_depacket.state[2:0]
+@28
+(0)top.u_csi_rx_top.u_depacket.state[2:0]
+(1)top.u_csi_rx_top.u_depacket.state[2:0]
+(2)top.u_csi_rx_top.u_depacket.state[2:0]
+@1401200
+-group_end
+@200
+-top/u_csi_rx_top/u_align_byte
+@22
+top.u_csi_rx_top.u_align_byte[0].deser_in[7:0]
+top.u_csi_rx_top.u_align_byte[1].deser_in[7:0]
+top.u_csi_rx_top.u_align_byte[0].data_out[7:0]
+top.u_csi_rx_top.u_align_byte[1].data_out[7:0]
+@28
+top.u_csi_rx_top.u_align_byte[0].data_vld
+top.u_csi_rx_top.u_align_byte[1].data_vld
+@200
+-top/u_csi_rx_top/u_align_word
+@22
+top.u_csi_rx_top.u_align_word.word_in[15:0]
+top.u_csi_rx_top.u_align_word.word_out[15:0]
+top.u_csi_rx_top.u_align_word.taps[3:0]
+@28
+top.u_csi_rx_top.u_align_word.valid_in[1:0]
+@22
+top.u_csi_rx_top.u_align_word.word_in[15:0]
+@28
+top.u_csi_rx_top.u_align_word.reset
+top.u_csi_rx_top.u_align_word.is_triggered
+top.u_csi_rx_top.u_align_word.packet_done
+top.u_csi_rx_top.u_align_word.valid_out
+top.u_csi_rx_top.u_align_word.wait_for_sync
+top.u_csi_rx_top.u_align_word.valid_in_all
+top.u_csi_rx_top.u_align_word.valid_out
+top.u_csi_rx_top.u_align_word.packet_done_out
+top.u_csi_rx_top.u_align_word.valid
+[pattern_trace] 1
+[pattern_trace] 0

@@ -124,7 +124,7 @@ module raw2rgb
    cnt_t       read_count_nxt;
    assign      read_count_nxt = cnt_t'(read_count + cnt_t'(1));
      
-   logic       odd_pixel, line_end;
+   logic       odd_pixel, line_end, temp_4lane;
    logic [1:0] line_not_read;
 
    always_ff @(posedge clk) begin
@@ -133,6 +133,7 @@ module raw2rgb
          reading       <= 1'b0;
          odd_pixel     <= 1'b0;
          line_not_read <= 2'd3;
+         temp_4lane    <= 1'b0;
       end 
 
       else if ({data_valid, reading} == 2'b10) begin
@@ -145,11 +146,19 @@ module raw2rgb
             reading       <= 1'b0; // Stop reading
             odd_pixel     <= 1'b0;
             line_not_read <= 2'(line_not_read + 2'd1);
+            temp_4lane    <= 1'b0;
          end 
          else begin
             if (odd_pixel == 1'b1) begin
-               read_count <= read_count_nxt;
+               temp_4lane <= ~temp_4lane;
             end
+           `ifdef MIPI_4_LANE 
+            if (temp_4lane == 1'b1 && odd_pixel == 1'b1)
+               read_count <= read_count_nxt;
+           `else
+            if (odd_pixel == 1'b1)
+               read_count <= read_count_nxt;
+           `endif
             odd_pixel     <= ~odd_pixel;
          end
       end
@@ -161,6 +170,54 @@ module raw2rgb
    logic [7:0] line3_red0,   line3_green0, line3_red1,   line3_green1;  
 
    always_ff @(posedge clk) begin
+     `ifdef MIPI_4_LANE
+      if (reading == 1'b1) begin
+         //                           line                  lane
+         if (temp_4lane == 1'b0) begin
+            line0_green0 <= line0_mem[read_count][31:24]; //1
+            line0_blue0  <= line0_mem[read_count][23:16]; //0
+            line0_green1 <= line0_mem[read_count][15:8];
+            line0_blue1  <= line0_mem[read_count][ 7:0];
+            
+            line1_red0   <= line1_mem[read_count][31:24];
+            line1_green0 <= line1_mem[read_count][23:16];
+            line1_red1   <= line1_mem[read_count][15:8];
+            line1_green1 <= line1_mem[read_count][ 7:0];
+            
+            line2_green0 <= line2_mem[read_count][31:24];
+            line2_blue0  <= line2_mem[read_count][23:16];
+            line2_green1 <= line2_mem[read_count][15:8];
+            line2_blue1  <= line2_mem[read_count][7:0];
+            
+            line3_red0   <= line3_mem[read_count][31:24];
+            line3_green0 <= line3_mem[read_count][23:16]; 
+            line3_red1   <= line3_mem[read_count][15:8];
+            line3_green1 <= line3_mem[read_count][7:0];
+         end
+         else begin
+         //                           line                  lane
+         line0_green0 <= line0_mem[read_count]    [15:8]; //1
+         line0_blue0  <= line0_mem[read_count]    [ 7:0]; //0
+         line0_green1 <= line0_mem[read_count_nxt][31:24];
+         line0_blue1  <= line0_mem[read_count_nxt][23:16];
+         
+         line1_red0   <= line1_mem[read_count]    [15:8];
+         line1_green0 <= line1_mem[read_count]    [7:0];
+         line1_red1   <= line1_mem[read_count_nxt][31:24];
+         line1_green1 <= line1_mem[read_count_nxt][23:16];
+         
+         line2_green0 <= line2_mem[read_count]    [15:8];
+         line2_blue0  <= line2_mem[read_count]    [7:0];
+         line2_green1 <= line2_mem[read_count_nxt][31:24];
+         line2_blue1  <= line2_mem[read_count_nxt][23:16];
+         
+         line3_red0   <= line3_mem[read_count]    [15:8];
+         line3_green0 <= line3_mem[read_count]    [7:0];  
+         line3_red1   <= line3_mem[read_count_nxt][31:24];
+         line3_green1 <= line3_mem[read_count_nxt][23:16];
+         end
+      end
+     `else
       if (reading == 1'b1) begin
          //                           line                  lane
          line0_green0 <= line0_mem[read_count]    [15:8]; //1
@@ -183,6 +240,7 @@ module raw2rgb
          line3_red1   <= line3_mem[read_count_nxt][15:8];
          line3_green1 <= line3_mem[read_count_nxt][7:0];
       end
+     `endif
    end  
 
    logic [RGB_WIDTH-1:0] rgb_out1;         

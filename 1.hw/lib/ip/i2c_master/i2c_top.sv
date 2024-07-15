@@ -143,4 +143,5 @@ endmodule: i2c_top
 Version History:
 ------------------------------------------------------------------------------
  2024/2/30 Isam Vrce: Initial creation
+ 2024/6/6  Armin Zunic: More improvements
 */

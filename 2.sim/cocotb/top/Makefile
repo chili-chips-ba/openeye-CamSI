@@ -16,6 +16,10 @@ SIM ?= verilator
 #SIM ?= icarus
 export SIM := $(SIM)
 
+# Control testcase
+TESTCASE ?= test_0
+export TESTCASE := $(TESTCASE)
+
 TOPLEVEL_LANG ?= verilog
 
 XILINX_ORIG = ../../models/no-change
@@ -69,7 +73,7 @@ ifeq ($(SIM),$(filter $(SIM),icarus ICARUS))
 endif
 
 # Control sim runtime
-RUN_SIM_US ?= 15000
+RUN_SIM_US ?= 200
 export RUN_SIM_US := $(RUN_SIM_US)
 
 # Convert Xs for now
