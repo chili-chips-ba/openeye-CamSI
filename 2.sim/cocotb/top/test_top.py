@@ -93,7 +93,7 @@ async def test_2(dut):
    num_lane = 4
    dinvert = [0, 1] if num_lane == 2 else [0, 1, 0, 1]
     
-   csi = CSI(dut, dut.cam_dphy_dat, period_ns=1.096, fps_Hz=60, line_length=1280, frame_length=720, frame_blank=130, num_lane=num_lane, dinvert=dinvert, uniform_data=True)
+   csi = CSI(dut, dut.cam_dphy_dat, period_ns=1.096, fps_Hz=60, line_length=1280, frame_length=720, frame_blank=130, num_lane=num_lane, dinvert=dinvert, uniform_data=False)
     
    # Run the CSI class to send frames
    await csi.run(1)  # Sending 3 frames as an example

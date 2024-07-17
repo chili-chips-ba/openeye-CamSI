@@ -57,7 +57,7 @@ module afifo_ctrl #(
    /////////////////////////////////////////////
 
    // Cross the read Gray pointer into the write clock domain
-   always_ff @(posedge i_wclk /*or negedge i_wrst_n*/) begin
+   always_ff @(posedge i_wclk) begin
       if (i_wrst_n == 1'b0) begin
           { wq2_rgray, wq1_rgray } <= '0;
       end
@@ -71,11 +71,13 @@ module afifo_ctrl #(
    assign wgray_next = (wbin_next >> 1) ^ wbin_next;
    assign o_waddr    = wbin[AW-1:0];
 
-   always_ff @(posedge i_wclk /*or negedge i_wrst_n*/ ) begin
-      if (i_wrst_n == 1'b0)
+   always_ff @(posedge i_wclk) begin
+      if (i_wrst_n == 1'b0) begin
          { wbin, wgray } <= '0;
-      else
+      end 
+      else begin
          { wbin, wgray } <= { wbin_next, wgray_next };
+      end
    end
 
    assign o_wfull = (wgray == 
@@ -89,11 +91,13 @@ module afifo_ctrl #(
    ////////////////////////////////////////////////////////////////////////
 
    // Cross the write Gray pointer into the read clock domain
-   always_ff @(posedge i_rclk /* or negedge i_rrst_n */) begin 
-      if (i_rrst_n == 1'b0)
+   always_ff @(posedge i_rclk) begin 
+      if (i_rrst_n == 1'b0) begin
           { rq2_wgray, rq1_wgray } <= '0;
-      else
+      end 
+      else begin
           { rq2_wgray, rq1_wgray } <= { rq1_wgray, wgray };
+      end
    end
 
 
@@ -102,11 +106,13 @@ module afifo_ctrl #(
    assign rbin_next  = ptr_t'(rbin + {{AW{1'b0}}, o_rd});
    assign rgray_next = (rbin_next >> 1) ^ rbin_next;
 
-   always_ff @(posedge i_rclk /*or negedge i_rrst_n*/) begin 
-      if (i_rrst_n == 1'b0)
+   always_ff @(posedge i_rclk) begin 
+      if (i_rrst_n == 1'b0) begin
          { rbin, rgray } <= '0;
-      else
+      end
+      else begin
          { rbin, rgray } <= { rbin_next, rgray_next };
+      end
    end
 
    assign o_raddr  = rbin[AW-1:0];

@@ -44,6 +44,8 @@
 //      until at least 3 good byte_clock cycles have been detected
 //========================================================================
 
+// verilator lint_off SYNCASYNCNET
+
 module csi_rx_clk_det (
    input  logic ref_clock,  // ref.clock, MUST NOT BE SYNCHRONISED to ext_clock
    input  logic byte_clock, // external byte clock that's subject to detection
@@ -109,6 +111,8 @@ module csi_rx_clk_det (
    end
 
 endmodule: csi_rx_clk_det
+
+// verilator lint_on SYNCASYNCNET
 
 /*
 ------------------------------------------------------------------------------

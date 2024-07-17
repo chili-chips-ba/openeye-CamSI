@@ -1,3 +1,6 @@
+// verilator lint_off LATCH
+// verilator lint_off BLKSEQ
+
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 1995/2005 Xilinx, Inc.
 // All Right Reserved.
@@ -126,58 +129,61 @@ module BUFR (O, CE, CLR, I);
 
 `ifdef HACKED_UNISIM
     always @(gsr_in or clr_in)
-  if (gsr_in == 1'b1 || clr_in == 1'b1) begin
-      o_out_divide = 1'b0;
-      count = 0;
-      first_rise = 1'b1;
-      half_period_done = 1'b0;
-      if (gsr_in == 1'b1) begin
-    ce_enable1 = 1'b0;
-    ce_enable2 = 1'b0;
-    ce_enable3 = 1'b0;
-    ce_enable4 = 1'b0;
-      end      
-  end  
+       if (gsr_in == 1'b1 || clr_in == 1'b1) begin
+          o_out_divide     = 1'b0;
+          count            = 0;
+          first_rise       = 1'b1;
+          half_period_done = 1'b0;
+
+          if (gsr_in == 1'b1) begin
+             ce_enable1 = 1'b0;
+             ce_enable2 = 1'b0;
+             ce_enable3 = 1'b0;
+             ce_enable4 = 1'b0;
+          end      
+       end  
+
 `else
     always @(gsr_in or clr_in)
-  if (gsr_in == 1'b1 || clr_in == 1'b1) begin
-      assign o_out_divide = 1'b0;
-      assign count = 0;
-      assign first_rise = 1'b1;
-      assign half_period_done = 1'b0;
-      if (gsr_in == 1'b1) begin
-    assign ce_enable1 = 1'b0;
-    assign ce_enable2 = 1'b0;
-    assign ce_enable3 = 1'b0;
-    assign ce_enable4 = 1'b0;
-      end      
-  end  
-  else if (gsr_in == 1'b0 || clr_in == 1'b0) begin
-      deassign o_out_divide;      
-      deassign count;
-      deassign first_rise;
-      deassign half_period_done;
-      if (gsr_in == 1'b0) begin
-    deassign ce_enable1;
-    deassign ce_enable2;
-    deassign ce_enable3;
-    deassign ce_enable4;
-      end    
-  end
+       if (gsr_in == 1'b1 || clr_in == 1'b1) begin
+          assign o_out_divide = 1'b0;
+          assign count = 0;
+          assign first_rise = 1'b1;
+          assign half_period_done = 1'b0;
+
+          if (gsr_in == 1'b1) begin
+             assign ce_enable1 = 1'b0;
+             assign ce_enable2 = 1'b0;
+             assign ce_enable3 = 1'b0;
+             assign ce_enable4 = 1'b0;
+         end      
+       end  
+       else if (gsr_in == 1'b0 || clr_in == 1'b0) begin
+         deassign o_out_divide;      
+         deassign count;
+         deassign first_rise;
+         deassign half_period_done;
+
+         if (gsr_in == 1'b0) begin
+            deassign ce_enable1;
+            deassign ce_enable2;
+            deassign ce_enable3;
+            deassign ce_enable4;
+         end    
+     end
 `endif //HACKED_UNISIM
 
-    always @(negedge i_in) 
-    begin
+    always @(negedge i_in) begin
 `ifdef HACKED_UNISIM
-  ce_enable1 = ce_in;
-  ce_enable2 = ce_enable1;
-  ce_enable3 = ce_enable2;
-  ce_enable4 = ce_enable3;
+       ce_enable1 = ce_in;
+       ce_enable2 = ce_enable1;
+       ce_enable3 = ce_enable2;
+       ce_enable4 = ce_enable3;
 `else    
-  ce_enable1 <= ce_in;
-  ce_enable2 <= ce_enable1;
-  ce_enable3 <= ce_enable2;
-  ce_enable4 <= ce_enable3;
+       ce_enable1 <= ce_in;
+       ce_enable2 <= ce_enable1;
+       ce_enable3 <= ce_enable2;
+       ce_enable4 <= ce_enable3;
 `endif //HACKED_UNISIM
     end
 
@@ -272,3 +278,6 @@ module BUFR (O, CE, CLR, I);
 endmodule // BUFR
 
 `endcelldefine
+
+// verilator lint_on LATCH
+// verilator lint_on BLKSEQ

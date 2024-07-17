@@ -1,3 +1,6 @@
+// verilator lint_off BLKSEQ
+// verilator lint_off SYNCASYNCNET
+  
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 1995/2004 Xilinx, Inc.
 // All Right Reserved.
@@ -597,3 +600,6 @@ module IDELAYE2 (CNTVALUEOUT, DATAOUT, C, CE, CINVCTRL, CNTVALUEIN, DATAIN, IDAT
 endmodule // IDELAYE2
 
 `endcelldefine
+
+// verilator lint_on BLKSEQ
+// verilator lint_on SYNCASYNCNET

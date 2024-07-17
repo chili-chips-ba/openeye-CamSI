@@ -174,7 +174,7 @@ RM/Yimin:
 // Main FSM
 //----------------------
 
-   always_ff @(posedge reset or posedge clock) begin
+   always_ff @(posedge clock) begin
       if (reset == 1'b1) begin
          state        <= INIT;
          sync_seq     <= 1'b0;
@@ -258,7 +258,7 @@ RM/Yimin:
    end
    
    
-   always_ff @(posedge reset or posedge clock) begin
+   always_ff @(posedge clock) begin
       if (reset == 1'b1) begin
          in_frame <= 1'b0;
          in_line  <= 1'b0;

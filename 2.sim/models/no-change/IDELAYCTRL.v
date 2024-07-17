@@ -1,3 +1,8 @@
+// verilator lint_off BLKSEQ
+// verilator lint_off INITIALDLY
+// verilator lint_off SYNCASYNCNET
+// verilator lint_off MULTIDRIVEN
+                                                                                   
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 1995/2015 Xilinx, Inc.
 // All Right Reserved.
@@ -196,3 +201,8 @@ module IDELAYCTRL #(
 endmodule
 
 `endcelldefine
+
+// verilator lint_on BLKSEQ
+// verilator lint_on INITIALDLY
+// verilator lint_on SYNCASYNCNET
+// verilator lint_on MULTIDRIVEN

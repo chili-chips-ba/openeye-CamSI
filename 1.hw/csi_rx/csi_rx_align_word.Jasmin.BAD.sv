@@ -53,7 +53,7 @@
 //    clk            | 1 | 2 |         |n-1| n |
 //                   |___|___|_________|   |   |
 //    lane0 vld_in __|                 |_____________
-//          data_in  |<===============>
+//          data_in  |<===============>    |
 //                   |                 
 //                   |<--2-->|_________________
 //    lane1 vld_in __________|                 |_____
@@ -86,88 +86,76 @@ module csi_rx_align_word
 );                                     //  with 'valid_out=1' is the CSI packet header,
                                        //  i.e. the 0xB8 Sync byte is filtered out 
 //--------------------------------
-
-   lane_data_t word_dly_0;
-   lane_data_t word_dly_1;
-   lane_data_t word_dly_2;
-
-   lane_vld_t  valid_dly_0;
-   lane_vld_t  valid_dly_1;
-   lane_vld_t  valid_dly_2;
+   lane_data_t word_in_pipe [2]; //-\ this circuit can absorb up to
+   lane_vld_t  valid_in_pipe[2]; //-/ 2 cycles of skew between lanes 
 
    typedef bus2_t [NUM_LANE-1:0] taps_t; // per-Lane indicator of delay tap to take 
-   taps_t  taps, next_taps;              // each byte from. Valid values: 0, 1, 2
-
-   logic   valid, next_valid;
-   logic   invalid_start;
+   taps_t taps;                          // each byte from. Valid values: 0, 1, 2
    
+   logic  valid_in_all;
+   assign valid_in_all = &valid_in; //all input byte lanes must be valid
+
+
    always_ff @(posedge byte_clock) begin
-      word_dly_0  <= word_in;
-      word_dly_1  <= word_dly_0;
-      word_dly_2  <= word_dly_1;
+      if (enable == 1'b1) begin
+         word_in_pipe [0] <= word_in;
+         valid_in_pipe[0] <= valid_in;
 
-      valid_dly_0 <= valid_in;
-      valid_dly_1 <= valid_dly_0;
-      valid_dly_2 <= valid_dly_1;
+         word_in_pipe [1] <= word_in_pipe [0];
+         valid_in_pipe[1] <= valid_in_pipe[0];
 
-      valid_out   <= valid;
+       //taps-based word alignment
+         for (int i=0; i<NUM_LANE; i++) unique case (taps[i])
+            2'd2   : word_out[i] <= word_in_pipe[1][i];
+            2'd1   : word_out[i] <= word_in_pipe[0][i];
+            default: word_out[i] <= word_in        [i];
+         endcase
+      end
 
       if (reset == 1'b1) begin
-         taps      <= '0;
-         word_out  <= '0;
-         valid     <= '0;
+         valid_out <= 1'b0;
+         taps      <= '0; // start without delay
       end 
       else if (enable == 1'b1) begin
-         for (int i=0; i<=NUM_LANE-1; i++) begin
-            unique case (taps[i])
-               2'd2   : word_out[i] <= word_dly_2[i];
-               2'd1   : word_out[i] <= word_dly_1[i];
-               default: word_out[i] <= word_dly_0[i];
-            endcase
+         if (packet_done == 1'b1) begin
+            valid_out <= 1'b0;
          end
+         else if ({wait_for_sync, valid_in_all, valid_out} == 3'b110) begin
+            valid_out <= 1'b1;
 
-         if ({next_valid, valid, wait_for_sync} == 3'b101) begin
-            valid <= 1'b1;
-            taps  <= next_taps;
-         end 
-         else if (packet_done == 1'b1) begin
-            valid <= 1'b0;
-         end
-
-      end
-   end
-
-   // Process handling valid delay logic and tap calculation
-   logic valid_in_all;
-   logic is_triggered;
+            for (int i=0; i<NUM_LANE; i++) begin
+               if (valid_in_pipe[1][i]) begin
+                  taps[i] <= 2'd2;
+               end 
+               else if (valid_in_pipe[0][i]) begin
+                  taps[i] <= 2'd1;
+               end 
+               else begin
+                  taps[i] <= 2'd0;
+               end
+            end
+         end // if ({wait_for_sync, valid_in_all, valid_out} == 3'b110)
+      end // if (enable == 1'b1)
+   end // always_ff @ (posedge byte_clock)
    
-   always_comb begin
-      valid_in_all = &valid_dly_0; //all input byte lanes must be valid
-      is_triggered = 1'b0;
+//--------------------------------
+   logic is_triggered;
 
-      for (int i = 0; i <= NUM_LANE-1; i++) begin
-         if ({valid_dly_0[i], valid_dly_1[i], valid_dly_2[i]} == 3'b111) begin
+   always_comb begin
+
+     //check if any of the lanes triggered
+      is_triggered = 1'b0;
+      for (int i=0; i<NUM_LANE; i++) begin
+         if ({valid_in        [i], 
+              valid_in_pipe[0][i], 
+              valid_in_pipe[1][i]} == 3'b111) begin
             is_triggered = 1'b1;
          end
       end
 
-      invalid_start = ~valid_in_all & is_triggered;
-      next_valid    =  valid_in_all;
-
-      for (int i=0; i<=NUM_LANE-1; i++) begin
-         if (valid_dly_2[i] == 1'b1) begin
-            next_taps[i] = 2'd2;
-         end 
-         else if (valid_dly_1[i] == 1'b1) begin
-            next_taps[i] = 2'd1;
-         end 
-         else begin
-            next_taps[i] = 2'd0;
-         end
-      end
-
-      packet_done_out = packet_done | invalid_start;
-
+     // "Invalid Start" is when one of the lanes triggerred, but not all
+      packet_done_out = packet_done 
+                      | (~valid_in_all & is_triggered); 
    end
    
 endmodule: csi_rx_align_word

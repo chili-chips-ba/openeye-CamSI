@@ -1,3 +1,6 @@
+// verilator lint_off UNDRIVEN
+// verilator lint_off UNUSEDSIGNAL
+
 // $Header: /devl/xcs/repo/env/Databases/CAEInterfaces/verunilibs/data/glbl.v,v 1.14 2010/10/28 20:44:00 fphillip Exp $
 `ifndef GLBL
 `define GLBL
@@ -82,3 +85,6 @@ module glbl ();
 
 endmodule
 `endif
+
+// verilator lint_on UNDRIVEN
+// verilator lint_on UNUSEDSIGNAL

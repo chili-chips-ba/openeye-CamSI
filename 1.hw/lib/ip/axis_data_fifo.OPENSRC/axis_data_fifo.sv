@@ -20,18 +20,35 @@ module axis_data_fifo #(
    localparam AW = $clog2(DEPTH);
 
 //-------------------------
-// 1. Syncronize reset
+// 1. Syncronize reset to both clocks
 //-------------------------
-   logic m_axis_aresetn_0, m_axis_aresetn;
 
-   always_ff @(posedge m_axis_aclk or negedge s_axis_aresetn) begin
+//__SCLK
+   logic srst_n_sclk, srst_n_sclk_0;
+
+   always_ff @(negedge s_axis_aresetn or posedge s_axis_aclk) begin
       if (s_axis_aresetn == 1'b0) begin
-          {m_axis_aresetn, m_axis_aresetn_0} <= '0;
+         {srst_n_sclk, srst_n_sclk_0} <= '0;
       end
       else begin
-          {m_axis_aresetn, m_axis_aresetn_0} <= {m_axis_aresetn_0, 1'b1};
+         {srst_n_sclk, srst_n_sclk_0} <= {srst_n_sclk_0, 1'b1};
       end
    end   
+
+
+//__MCLK
+   logic srst_n_mclk, srst_n_mclk_0;
+
+   always_ff @(negedge s_axis_aresetn or posedge m_axis_aclk) begin
+      if (s_axis_aresetn == 1'b0) begin
+         {srst_n_mclk, srst_n_mclk_0} <= '0;
+      end
+      else begin
+         {srst_n_mclk, srst_n_mclk_0} <= {srst_n_mclk_0, 1'b1};
+      end
+   end   
+
+
 
 //-------------------------
 // 2. Async FIFO Controller
@@ -45,7 +62,7 @@ module axis_data_fifo #(
    afifo_ctrl #(.DW(DW), .AW(AW)) u_afifo_ctrl (
     // Write side
       .i_wclk   (s_axis_aclk),
-      .i_wrst_n (s_axis_aresetn), 
+      .i_wrst_n (srst_n_sclk), 
       .i_wr     (s_axis_tvalid),
 
       .o_wr     (wr),
@@ -54,7 +71,7 @@ module axis_data_fifo #(
     
     // Read side 
       .i_rclk   (m_axis_aclk),
-      .i_rrst_n (m_axis_aresetn),
+      .i_rrst_n (srst_n_mclk),
       .i_rd     (~m_axis_tvalid | m_axis_tready),
 
       .o_rd     (rd),

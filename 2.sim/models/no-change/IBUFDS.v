@@ -1,3 +1,5 @@
+// verilator lint_off INITIALDLY
+
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 1995/2004 Xilinx, Inc.
 // All Right Reserved.
@@ -147,3 +149,5 @@ end
 endmodule
 
 `endcelldefine
+
+// verilator lint_on INITIALDLY
