@@ -45,7 +45,10 @@
 `define HDMI_720p60
 //`define HDMI_1080p30
 //`define HDMI_1080p60 /*Artix-7 cannot do this option*/ 
+
 `define MIPI_4_LANE
+//`define MIPI_2_LANE
+//`define MIPI_1_LANE
 
 
 package top_pkg;
@@ -89,20 +92,26 @@ package top_pkg;
    // (400kHz / 1 Hz) * 50% duty cycle ==> (400_000 / 1) * 0.5 = 200_000
 `endif
 
-   typedef logic[$clog2(NUM_CLK_FOR_400kHZ)-1:0] cnt_400khz_t;
-   typedef logic[$clog2(NUM_CLK_FOR_1HZ)   -1:0] cnt_1hz_t;
+   typedef logic[$clog2(NUM_CLK_FOR_400kHZ) -1:0] cnt_400khz_t;
+   typedef logic[$clog2(NUM_CLK_FOR_1HZ)    -1:0] cnt_1hz_t;
 
 
    
 // number of CSI lanes
 `ifdef MIPI_4_LANE
-   localparam                      NUM_LANE = 4; 
-   localparam bit   [NUM_LANE-1:0] DINVERT  = 4'b1010; // adjust as needed
-   localparam bus5_t[NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3, 5'd3, 5'd3};
-`else
-   localparam                      NUM_LANE = 2;
-   localparam bit   [NUM_LANE-1:0] DINVERT  = 2'b10; // this is based on Trenz board
-   localparam bus5_t[NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3};
+   localparam                       NUM_LANE = 4; 
+   localparam bit    [NUM_LANE-1:0] DINVERT  = 4'b1010; // based on Trenz board, adjust as needed
+   localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3, 5'd3, 5'd3};
+
+`elsif MIPI_2_LANE
+   localparam                       NUM_LANE = 2;
+   localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b10; // based on Trenz board, adjust as needed
+   localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3};
+
+`else // MIPI_1_LANE is default
+   localparam                       NUM_LANE = 1; 
+   localparam bit    [NUM_LANE-1:0] DINVERT  = 1'b0; // based on Trenz board, adjust as needed
+   localparam bus5_t [NUM_LANE-1:0] DSKEW    = 5'd3;
 `endif
    
    typedef diff_t [NUM_LANE-1   :0] lane_diff_t;
@@ -113,10 +122,13 @@ package top_pkg;
    typedef logic  [NUM_LANE*8-1 :0] lane_mem_t;
 
 endpackage: top_pkg
+
 `endif //__TOP_PKG__
+
 /*
 ------------------------------------------------------------------------------
 Version History:
 ------------------------------------------------------------------------------
  2024/4/24 Isam Vrce: Initial creation 
+ 2024/7/17 Isam Vrce: Added MIPI_1_LANE option
  */

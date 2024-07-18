@@ -68,7 +68,7 @@ module csi_rx_packet_handler
 );
 
 //----------------------
-// Header parser / decoder
+// Header parser & decoder
 //----------------------
    typedef enum logic [2:0] {
       INIT      = 3'd0,
@@ -95,6 +95,7 @@ module csi_rx_packet_handler
 
    logic [15:0] bytes_read;
    
+ //___
    function logic is_allowed_type(
       input logic [5:0] packet_type
    );
@@ -102,7 +103,7 @@ module csi_rx_packet_handler
 
 `ifdef ICARUS
       // sorry: "inside" expressions not supported yet.
-      case(packet_type)
+      case (packet_type)
          /*SYNC*/ 
          6'h00, 6'h01, 6'h02, 6'h03,
 
@@ -115,6 +116,7 @@ module csi_rx_packet_handler
          
          default: result = 1'b0;
       endcase
+
 `else
       result = 1'b0;
 
@@ -134,13 +136,7 @@ module csi_rx_packet_handler
    endfunction: is_allowed_type
    
    
-/*
-RM/Yimin:
-../../../1.hw/csi_rx/csi_rx_packer_handler.sv:138: error: Unable to bind wire/reg/memory `expected_ecc' in `top.u_csi_rx_top.u_depacket'
-../../../1.hw/csi_rx/csi_rx_packer_handler.sv:151:      : A symbol with that name was declared here. Check for declaration after use.
-../../../1.hw/csi_rx/csi_rx_packer_handler.sv:142: error: Unable to bind wire/reg/memory `expected_ecc' in `top.u_csi_rx_top.u_depacket'
-../../../1.hw/csi_rx/csi_rx_packer_handler.sv:151:      : A symbol with that name was declared here. Check for declaration after use.
-*/
+ //___
    logic [7:0]  expected_ecc;
 
    always_comb begin
@@ -162,8 +158,7 @@ RM/Yimin:
 
 //----------------------
 // ECC Calculation
-//----------------------
-   
+//----------------------   
    csi_rx_hdr_ecc u_ecc (
       .data (packet_for_ecc), //i[23:0]
       .ecc  (expected_ecc)    //o[7:0]
@@ -173,7 +168,6 @@ RM/Yimin:
 //----------------------
 // Main FSM
 //----------------------
-
    always_ff @(posedge clock) begin
       if (reset == 1'b1) begin
          state        <= INIT;
@@ -184,10 +178,15 @@ RM/Yimin:
          packet_len_q <= '0;
       end 
       else if (enable == 1'b1) begin
+
       `ifdef MIPI_4_LANE
          packet_data  <= data;
-      `else
+
+      `elsif MIPI_2_LANE
          packet_data  <= {data, packet_data[31:16]};
+
+      `else // MIPI_1_LANE is default
+         packet_data  <= {data, packet_data[31:8]};
       `endif
 
          unique case (state)
@@ -201,13 +200,17 @@ RM/Yimin:
                if (data_valid == 1'b1) begin
               `ifdef MIPI_4_LANE
                   state <= SYNC1;
-              `else
+
+              `elsif MIPI_2_LANE
+                  state <= SYNC0;
+
+              `else // MIPI_1_LANE is default
                   state <= SYNC0;
               `endif 
                end
             end
 
-            SYNC0: begin // sync sequence 0xB8B8
+            SYNC0: begin // sync sequence 0xB8B8(MIPI_2_LANE) or 0xB8(MIPI_1_LANE)??
                sync_seq <= 1'b1;
                state    <= SYNC1;
             end
@@ -234,7 +237,7 @@ RM/Yimin:
                state <= LONG_READ; // header completed go to read long packet
 
             LONG_READ: begin// Rx long packet
-               // FIXME: adapt to 4-lane case
+               // FIXME: adapt for 4-lane and 1-lane cases
                if (   (bytes_read < (packet_len_q - 16'd1 * NUM_LANE)) 
                    && (bytes_read < 16'd8192)
                ) begin
@@ -277,9 +280,12 @@ RM/Yimin:
          if ({is_hdr, valid_packet, packet_type[5:4]} == {2'b11, 2'd2}) begin
             in_line <= 1'b1;
          end
+
 `ifdef ICARUS 
          // sorry: "inside" expressions not supported yet.
-         else if ((state==SYNC0 || state==SYNC1 || state==LONG_WAIT || state==LONG_READ) == 1'b0) begin
+         else if (!(    (state==SYNC0)     || (state==SYNC1) 
+                     || (state==LONG_WAIT) || (state==LONG_READ))
+                 ) begin
 `else
          else if ((state inside {SYNC0, SYNC1, LONG_WAIT, LONG_READ}) == 1'b0) begin
 `endif //ICARUS
@@ -289,7 +295,10 @@ RM/Yimin:
    end
    
    assign sync_wait     =  (state == START);
-   assign payload_out   =  (state == LONG_READ) ? packet_data[(NUM_LANE*8)-1:0] : '0; // FIXME: adapt to 4-lane case
+
+   assign payload_out   =  (state == LONG_READ) ? packet_data[0 +: (NUM_LANE*8)]
+                                                : '0; 
+
    assign packet_done   =  (state == DONE);
    assign payload_valid =  (state == LONG_READ);
    assign debug_out     = {(state == LONG_READ), long_packet};
@@ -302,4 +311,3 @@ Version History:
 ------------------------------------------------------------------------------
  2024/3/10 AnelH: Initial creation
 */
-

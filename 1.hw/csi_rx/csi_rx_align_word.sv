@@ -85,8 +85,16 @@ module csi_rx_align_word
    output logic       valid_out        // goes high once alignment is valid: First word
 );                                     //  with 'valid_out=1' is the CSI packet header,
                                        //  i.e. the 0xB8 Sync byte is filtered out 
-//--------------------------------
 
+// there is no need for Word alignment when we have only one byte
+//--------------------------------
+`ifdef MIPI_1_LANE
+   assign packet_done_out = packet_done;
+   assign word_out        = word_in;
+   assign valid_out       = valid_in;
+   
+//--------------------------------
+`else   
    lane_data_t word_dly_0;
    lane_data_t word_dly_1;
    lane_data_t word_dly_2;
@@ -169,6 +177,8 @@ module csi_rx_align_word
       packet_done_out = packet_done | invalid_start;
 
    end
+
+`endif // !MIPI_1_LANE
    
 endmodule: csi_rx_align_word
 
