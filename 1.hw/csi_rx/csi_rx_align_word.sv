@@ -39,14 +39,15 @@
 // Description: This modules receives aligned bytes with their valid flags
 // to then COMPENSATE FOR UP TO 2 CLOCK CYCLES OF SKEW BETWEEN LANES.
 //
-// It also resets byte aligners' sync stat us (via 'packet_done_out')
+// It also resets byte aligners' sync status (via 'packet_done_out')
 // when SYNC pattern is not found by the byte aligners on all lanes.
 //
-// Similarly to the byte aligner, it locks the alignment taps when a 
-// valid word is found and until 'packet_done' is asserted.
+// Similarly to the byte aligner, it locks (latches) the alignment 
+// taps when a valid word is found and until 'packet_done' is asserted.
 //
 // It also effectively filters out the 0xB8 sync bytes from output data.
 //------------------------------------------------------------------------
+//
 // Here is an illustration for the 2-lane case with 2-clock-cycle skew 
 // between lanes. This RTL is written to work for any number of lanes.
 //   
@@ -61,10 +62,10 @@
 //                   |   |   |
 //    taps           0   1   2
 //                            _________
-//      vld_in_all __________|         |_____________
+//    valid_in_all __________|         |_____________
 //
 // In this case, taps[0]=2, taps[1]=0, i.e. take: 
-//   - lane0 byte after delay by 2 clocks
+//   - lane0 byte after 2-clock delay
 //   - lane1 byte without any delay
 //========================================================================
 
@@ -95,89 +96,79 @@ module csi_rx_align_word
    
 //--------------------------------
 `else   
-   lane_data_t word_dly_0;
    lane_data_t word_dly_1;
    lane_data_t word_dly_2;
 
-   lane_vld_t  valid_dly_0;
    lane_vld_t  valid_dly_1;
    lane_vld_t  valid_dly_2;
 
    typedef bus2_t [NUM_LANE-1:0] taps_t; // per-Lane indicator of delay tap to take 
-   taps_t  taps, next_taps;              // each byte from. Valid values: 0, 1, 2
+   taps_t  taps;                         // each byte from. Valid values: 0, 1, 2
 
-   logic   valid, next_valid;
-   logic   invalid_start;
-   
-   always_ff @(posedge byte_clock) begin
-      word_dly_0  <= word_in;
-      word_dly_1  <= word_dly_0;
-      word_dly_2  <= word_dly_1;
+   logic   valid, valid_in_all;
+   logic   is_triggered;
 
-      valid_dly_0 <= valid_in;
-      valid_dly_1 <= valid_dly_0;
-      valid_dly_2 <= valid_dly_1;
-
-      valid_out   <= valid;
-
-      if (reset == 1'b1) begin
-         taps      <= '0;
-         word_out  <= '0;
-         valid     <= '0;
-      end 
-      else if (enable == 1'b1) begin
-         for (int i=0; i<=NUM_LANE-1; i++) begin
-            unique case (taps[i])
-               2'd2   : word_out[i] <= word_dly_2[i];
-               2'd1   : word_out[i] <= word_dly_1[i];
-               default: word_out[i] <= word_dly_0[i];
-            endcase
-         end
-
-         if ({next_valid, valid, wait_for_sync} == 3'b101) begin
-            valid <= 1'b1;
-            taps  <= next_taps;
-         end 
-         else if (packet_done == 1'b1) begin
-            valid <= 1'b0;
-         end
-
-      end
-   end
-
-   // Process handling valid delay logic and tap calculation
-   logic valid_in_all;
-   logic is_triggered;
-   
    always_comb begin
-      valid_in_all = &valid_dly_0; //all input byte lanes must be valid
+      valid_in_all = &valid_in; // all input byte lanes must be valid
+
+     // look for VLD on all three pipeline stages for at least one lane
       is_triggered = 1'b0;
 
       for (int i = 0; i <= NUM_LANE-1; i++) begin
-         if ({valid_dly_0[i], valid_dly_1[i], valid_dly_2[i]} == 3'b111) begin
+         if ({valid_in[i], valid_dly_1[i], valid_dly_2[i]} == 3'b111) begin
             is_triggered = 1'b1;
          end
       end
 
-      invalid_start = ~valid_in_all & is_triggered;
-      next_valid    =  valid_in_all;
+      packet_done_out =  packet_done 
+                      | (is_triggered & ~valid_in_all); //"invalid_start" error
+   end
 
-      for (int i=0; i<=NUM_LANE-1; i++) begin
-         if (valid_dly_2[i] == 1'b1) begin
-            next_taps[i] = 2'd2;
+   always_ff @(posedge byte_clock) begin: ff
+
+      word_dly_1  <= word_in;
+      word_dly_2  <= word_dly_1;
+
+      valid_dly_1 <= valid_in;
+      valid_dly_2 <= valid_dly_1;
+
+      if (reset == 1'b1) begin
+         valid     <= '0;
+      end 
+      else if (enable == 1'b1) begin
+         if ({valid_in_all, valid, wait_for_sync} == 3'b101) begin
+            valid <= 1'b1;
+
+            for (int i = 0; i <= NUM_LANE-1; i++) begin
+               if (valid_dly_2[i] == 1'b1) begin
+                  taps[i] <= 2'd2;
+               end 
+               else if (valid_dly_1[i] == 1'b1) begin
+                  taps[i] <= 2'd1;
+               end 
+               else begin
+                  taps[i] <= 2'd0;
+               end
+            end
          end 
-         else if (valid_dly_1[i] == 1'b1) begin
-            next_taps[i] = 2'd1;
-         end 
-         else begin
-            next_taps[i] = 2'd0;
+         else if (packet_done == 1'b1) begin
+            valid <= 1'b0;
          end
       end
 
-      packet_done_out = packet_done | invalid_start;
+    //---
+      if (valid == 1'b1) for (int i = 0; i <= NUM_LANE-1; i++) begin
+         unique case (taps[i])
+            2'd2   : word_out[i] <= word_dly_2[i];
+            2'd1   : word_out[i] <= word_dly_1[i];
+            default: word_out[i] <= word_in   [i];
+         endcase
+      end
 
-   end
+      valid_out <= valid;
 
+   end: ff
+   
 `endif // !MIPI_1_LANE
    
 endmodule: csi_rx_align_word
@@ -187,4 +178,5 @@ endmodule: csi_rx_align_word
 Version History:
 ------------------------------------------------------------------------------
  2024/2/18  Armin Zunic: Initial creation
+ 2024/7/18  Armin Zunic: Optimized for area by removing one pipeline stage
 */

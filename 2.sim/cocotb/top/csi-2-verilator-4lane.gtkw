@@ -1,15 +1,15 @@
 [*]
-[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sat Jul 13 14:01:27 2024
+[*] GTKWave Analyzer v3.3.118 (w)1999-2023 BSI
+[*] Fri Jul 19 05:21:56 2024
 [*]
-[dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/dump.fst"
-[dumpfile_mtime] "Sat Jul 13 12:41:38 2024"
-[dumpfile_size] 3255537
-[savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/csi-2-verilator-4lane.gtkw"
-[timestart] 71514900
-[size] 1588 827
-[pos] -413 -125
-*-15.966154 69693328 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[dumpfile] "/mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/cocotb/top/dump.fst"
+[dumpfile_mtime] "Fri Jul 19 04:56:27 2024"
+[dumpfile_size] 3289498
+[savefile] "/mnt/d/Projects/GitHub-repo/openeye-CamSI/2.sim/cocotb/top/csi-2-verilator-4lane.gtkw"
+[timestart] 69356700
+[size] 1730 1029
+[pos] -116 -96
+*-15.524796 69447824 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] .
 [treeopen] .top.
 [treeopen] .top.u_csi_rx_top.
@@ -18,10 +18,10 @@
 [treeopen] .top.u_csi_rx_top.lane[1].
 [treeopen] .top.u_csi_rx_top.lane[2].
 [treeopen] .top.u_csi_rx_top.u_depacket.
-[sst_width] 305
-[signals_width] 302
+[sst_width] 253
+[signals_width] 363
 [sst_expanded] 1
-[sst_vpaned_height] 488
+[sst_vpaned_height] 490
 @200
 -top
 @28
@@ -52,10 +52,9 @@ top.cam_dphy_dat[1][1:0]
 (1)top.cam_dphy_dat[1][1:0]
 @1401200
 -group_end
-@29
+@28
 top.cam_dphy_dat[2][1:0]
 top.cam_dphy_dat[3][1:0]
-@28
 top.csi_in_frame
 top.csi_in_line
 @24
@@ -84,6 +83,7 @@ top.u_csi_rx_top.word_data[1][7:0]
 top.u_csi_rx_top.u_align_byte[0].packet_done
 top.u_csi_rx_top.u_align_byte[0].wait_for_sync
 top.u_csi_rx_top.u_align_byte[0].found
+@24
 top.u_csi_rx_top.u_align_byte[0].offset[2:0]
 @22
 top.u_csi_rx_top.u_align_byte[0].curr_byte[7:0]
@@ -98,6 +98,7 @@ top.u_csi_rx_top.u_align_byte[0].data_vld
 top.u_csi_rx_top.u_align_byte[1].packet_done
 top.u_csi_rx_top.u_align_byte[1].wait_for_sync
 top.u_csi_rx_top.u_align_byte[1].found
+@24
 top.u_csi_rx_top.u_align_byte[1].offset[2:0]
 @22
 top.u_csi_rx_top.u_align_byte[1].curr_byte[7:0]
@@ -112,6 +113,7 @@ top.u_csi_rx_top.u_align_byte[1].data_vld
 top.u_csi_rx_top.u_align_byte[2].packet_done
 top.u_csi_rx_top.u_align_byte[2].wait_for_sync
 top.u_csi_rx_top.u_align_byte[2].found
+@24
 top.u_csi_rx_top.u_align_byte[2].offset[2:0]
 @22
 top.u_csi_rx_top.u_align_byte[2].curr_byte[7:0]
@@ -128,19 +130,27 @@ top.u_csi_rx_top.u_align_byte[3].data_out[7:0]
 top.u_csi_rx_top.u_align_word.packet_done
 top.u_csi_rx_top.u_align_word.wait_for_sync
 @22
+top.u_csi_rx_top.u_align_word.valid_in[3:0]
 top.u_csi_rx_top.u_align_word.word_in[0][7:0]
 top.u_csi_rx_top.u_align_word.word_in[1][7:0]
 top.u_csi_rx_top.u_align_word.word_in[2][7:0]
 top.u_csi_rx_top.u_align_word.word_in[3][7:0]
+top.u_csi_rx_top.u_align_word.valid_dly_1[3:0]
+top.u_csi_rx_top.u_align_word.valid_dly_2[3:0]
 @28
+top.u_csi_rx_top.u_align_word.valid
+top.u_csi_rx_top.u_align_word.taps[0][1:0]
+top.u_csi_rx_top.u_align_word.taps[1][1:0]
+top.u_csi_rx_top.u_align_word.taps[2][1:0]
+top.u_csi_rx_top.u_align_word.taps[3][1:0]
 top.u_csi_rx_top.u_align_word.packet_done_out
+@29
+top.u_csi_rx_top.u_align_word.valid_out
 @22
 top.u_csi_rx_top.u_align_word.word_out[0][7:0]
 top.u_csi_rx_top.u_align_word.word_out[1][7:0]
 top.u_csi_rx_top.u_align_word.word_out[2][7:0]
 top.u_csi_rx_top.u_align_word.word_out[3][7:0]
-@28
-top.u_csi_rx_top.u_align_word.valid_out
 @200
 -top/u_csi_rx_top/u_depacket
 @22

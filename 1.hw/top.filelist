@@ -40,7 +40,10 @@ ${HW_SRC}/csi_rx/csi_rx_hdr_ecc.sv
 ${HW_SRC}/csi_rx/csi_rx_top.sv
 
 #---ISP
-${HW_SRC}/isp/raw2rgb.sv
+${HW_SRC}/isp/raw2rgb.8.sv
+#${HW_SRC}/isp/raw2rgb.10.sv
+#${HW_SRC}/isp/raw2rgb.12.sv
+#${HW_SRC}/isp/raw2rgb.14.sv
 ${HW_SRC}/isp/isp_top.sv
 
 

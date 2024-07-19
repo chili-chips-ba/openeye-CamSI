@@ -36,8 +36,8 @@
 //
 //              https://opensource.org/license/bsd-3-clause
 //------------------------------------------------------------------------
-// Description: This module provide de-Bayer filter. 
-// For more, see: https://en.wikipedia.org/wiki/Bayer_filter
+// Description: This module provide de-Bayer filter for 12-bit MIPI CSI2 
+//  Raw format. For more, see: https://en.wikipedia.org/wiki/Bayer_filter
 //
 //   FIXME: Adapt logic to 4-lane datapath
 //========================================================================

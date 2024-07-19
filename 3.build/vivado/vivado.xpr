@@ -196,7 +196,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../../1.hw/isp/raw2rgb.sv">
+      <File Path="$PPRDIR/../../1.hw/isp/raw2rgb.8.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
