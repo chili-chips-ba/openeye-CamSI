@@ -41,6 +41,9 @@
 //  - Receives aligned words and processes them
 //  - Keeps track of whether or not we are currently in a video line or frame
 //  - Pulls the video payload out of long packets of the correct type
+//------------------------------------------------------------------------
+// FIXME: Add description of packet format, to help the reader fully
+//        understand what is going on in this module
 //========================================================================
 
 module csi_rx_packet_handler 
