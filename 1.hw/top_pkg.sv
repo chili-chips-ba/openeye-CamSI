@@ -46,9 +46,14 @@
 //`define HDMI_1080p30
 //`define HDMI_1080p60 /*Artix-7 cannot do this option*/ 
 
-`define MIPI_4_LANE
-//`define MIPI_2_LANE
+//`define MIPI_4_LANE
+`define MIPI_2_LANE
 //`define MIPI_1_LANE
+
+`define RAW8
+//`define RAW10
+//`define RAW12
+//`define RAW14
 
 
 package top_pkg;
@@ -119,7 +124,20 @@ package top_pkg;
 
    typedef logic  [NUM_LANE-1   :0] lane_vld_t;
    typedef bus8_t [NUM_LANE-1   :0] lane_data_t;
+
+`ifdef RAW8
+   typedef logic  [NUM_LANE*8-1 :0] lane_raw_data_t;
    typedef logic  [NUM_LANE*8-1 :0] lane_mem_t;
+`elsif RAW10
+   typedef logic  [NUM_LANE*10-1:0] lane_raw_data_t;
+   typedef logic  [NUM_LANE*10-1:0] lane_mem_t;
+`elsif RAW12
+   typedef logic  [NUM_LANE*12-1:0] lane_raw_data_t;
+   typedef logic  [NUM_LANE*12-1:0] lane_mem_t;
+`else // RAW14
+   typedef logic  [NUM_LANE*14-1:0] lane_raw_data_t;
+   typedef logic  [NUM_LANE*14-1:0] lane_mem_t;
+`endif
 
 endpackage: top_pkg
 
