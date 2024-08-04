@@ -2,16 +2,17 @@ import cocotb
 from cocotb.triggers import Timer
 
 class CSI:
-   def __init__(self, dut, signal, period_ns, fps_Hz, line_length, frame_length, frame_blank, num_lane, dinvert, uniform_data=True, start_value=0x00):
+   def __init__(self, dut, signal, period_ns, fps_Hz, line_length, frame_length, frame_blank, num_lane, dinvert, raw=8, uniform_data=True, start_value=0x00):
       self.dut          = dut
       self.signal       = signal
       self.period_ns    = period_ns
       self.fps_Hz       = fps_Hz
-      self.line_length  = line_length
+      self.line_length  = line_length if raw == 8 else int(line_length * (5 / 4))
       self.frame_length = frame_length
       self.frame_blank  = frame_blank
       self.num_lane     = num_lane
       self.dinvert      = dinvert
+      self.raw          = raw
       self.uniform_data = uniform_data
       self.start_value  = start_value
       self.temp_var     = (1_000_000_000 / fps_Hz) / (8 * period_ns)
@@ -78,19 +79,32 @@ class CSI:
          await Timer(self.period_ns, units='ns')
 
    async def send_incrementing_data(self, start_value, repeat_count=1):
-      value = start_value
-      for _ in range(repeat_count):
-         byte3 = self.invert_byte(value & 0xFF, 3)
-         byte2 = self.invert_byte((value >> 8) & 0xFF, 2)
-         byte1 = self.invert_byte((value >> 16) & 0xFF, 1)
-         byte0 = self.invert_byte((value >> 24) & 0xFF, 0)
+      value0, value1, value2, value3 = (start_value,) * 4
+      for i in range(repeat_count):
+         byte3 = self.invert_byte(value0 & 0xFF, 3)
+         byte2 = self.invert_byte((value1 + 0) & 0xFF, 2)
+         byte1 = self.invert_byte((value2 + 0) & 0xFF, 1)
+         byte0 = self.invert_byte((value3 + 0) & 0xFF, 0)
 
          if self.num_lane == 2:
             await self.send_combined_bytes(byte1, byte0) #Because of the inversion of CSI2 protocol [1,0], not [0,1]
          elif self.num_lane == 4:
             await self.send_combined_bytes(byte0, byte1, byte2, byte3)
          
-         value += 1
+         if (self.raw == 8):
+            value0, value1, value2, value3 = map(lambda v: v + 1, (value0, value1, value2, value3))
+         elif (self.raw == 10):
+            if (i % 5 == 0):
+               value1, value2, value3 = map(lambda v: v + 1, (value1, value2, value3))
+            elif (i % 5 == 1):
+               value0, value2, value3 = map(lambda v: v + 1, (value0, value2, value3))
+            elif (i % 5 == 2):
+               value0, value1, value3 = map(lambda v: v + 1, (value0, value1, value3))
+            elif (i % 5 == 3):
+               value0, value1, value2 = map(lambda v: v + 1, (value0, value1, value2))
+            elif (i % 5 == 4):
+               value0, value1, value2, value3 = map(lambda v: v + 1, (value0, value1, value2, value3))
+
 
    async def send_data_pattern(self, byte0, byte1, byte2=0x00, byte3=0x00, repeat_count=1):
       """
@@ -205,7 +219,7 @@ class CSI:
       await self.start_frame()
       line_data = 0x22  # Example data for a line
 
-      for i in range(7):  # (self.frame_length + self.frame_blank) instead of 5
+      for i in range(10):  # (self.frame_length + self.frame_blank) instead of 5
          if i > 10:        # (self.frame_length - 1) instead of 2
             line_data = 0x11
          await self.send_line(line_data)

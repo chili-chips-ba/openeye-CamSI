@@ -50,24 +50,24 @@ module csi_rx_top
 (
 
  //clocks and resets
-   input  logic       ref_clock, // 200MHz refclk
-   input  logic       reset,     // active-1 synchronous reset
+   input  logic           ref_clock, // 200MHz refclk
+   input  logic           reset,     // active-1 synchronous reset
 
  //MIPI DPHY from/to Camera
-   input  diff_t      cam_dphy_clk,
-   input  lane_diff_t cam_dphy_dat,
-   input  logic       cam_en,
+   input  diff_t          cam_dphy_clk,
+   input  lane_diff_t     cam_dphy_dat,
+   input  logic           cam_en,
 
  //CSI to internal video pipeline
-   output logic       csi_byte_clk,
-   output lane_data_t csi_unpack_dat,
-   output logic       csi_unpack_dat_vld,
+   output logic           csi_byte_clk,
+   output lane_raw_data_t csi_unpack_raw_dat,
+   output logic           csi_unpack_raw_dat_vld,
     
-   output logic       csi_in_line,
-   output logic       csi_in_frame,   
+   output logic           csi_in_line,
+   output logic           csi_in_frame,   
 
  //Misc/Debug
-   output bus8_t      debug_pins
+   output bus8_t          debug_pins
 );
    
 //--------------------------------
@@ -159,8 +159,10 @@ module csi_rx_top
    );
 
 //--------------------------------
-   logic   csi_sync_seq;
-   bus2_t  debug_pkt;
+   lane_data_t csi_unpack_dat;
+   logic       csi_unpack_dat_vld;
+   logic       csi_sync_seq;
+   bus2_t      debug_pkt;
 
    csi_rx_packet_handler u_depacket (
       .clock           (csi_byte_clk),       //i 
@@ -183,6 +185,21 @@ module csi_rx_top
       .debug_out       (debug_pkt)           //o[1:0]
    );
 
+//--------------------------------
+`ifdef RAW8
+   assign csi_unpack_raw_dat     = csi_unpack_dat;
+   assign csi_unpack_raw_dat_vld = csi_unpack_dat_vld;
+`else // RAW10
+   csi_rx_10bit_unpack u_10bit_unpack (
+      .clock           (csi_byte_clk),          //i
+      .reset           (csi_reset),             //i
+      .enable          (cam_en),                //i
+      .data_in         (csi_unpack_dat),        //i'lane_data_t
+      .din_valid       (csi_unpack_dat_vld),    //i
+      .data_out        (csi_unpack_raw_dat),    //o'lane_raw_data_t
+      .dout_valid      (csi_unpack_raw_dat_vld) //o
+   );
+`endif
 
 //--------------------------------
 // Misc and Debug
@@ -238,14 +255,14 @@ module csi_rx_top
 
  */   
     
-    assign debug_pins = {
-       debug_pkt, 
-       byte_valid[1:0], 
-       csi_sync_seq, 
-       1'b0, 
-       csi_in_line, 
-       csi_in_frame
-    };
+   assign debug_pins = {
+      debug_pkt, 
+      byte_valid[1:0], 
+      csi_sync_seq, 
+      1'b0, 
+      csi_in_line, 
+      csi_in_frame
+   };
     
 endmodule: csi_rx_top
 

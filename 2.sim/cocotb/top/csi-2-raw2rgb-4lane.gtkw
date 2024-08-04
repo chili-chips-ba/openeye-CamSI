@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Tue Jul  9 22:34:11 2024
+[*] Sat Aug  3 15:40:56 2024
 [*]
 [dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/dump.fst"
-[dumpfile_mtime] "Tue Jul  9 22:32:13 2024"
-[dumpfile_size] 3169758
+[dumpfile_mtime] "Sat Aug  3 15:36:23 2024"
+[dumpfile_size] 4406399
 [savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/csi-2-raw2rgb-4lane.gtkw"
-[timestart] 108631700
+[timestart] 0
 [size] 1588 827
-[pos] -341 -77
-*-15.966154 108781072 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -111 -79
+*-25.775402 187263440 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] .
 [treeopen] .top.
 [treeopen] .top.u_csi_rx_top.
@@ -54,22 +54,11 @@ top.cam_dphy_dat[1][1:0]
 @28
 top.csi_in_frame
 top.csi_in_line
-@22
-top.csi_word_data[0][7:0]
-top.csi_word_data[1][7:0]
-top.csi_word_data[2][7:0]
-top.csi_word_data[3][7:0]
-@28
 top.csi_word_valid
 @200
 -top/u_isp/u_raw2rgb
 @420
 top.u_isp.u_raw2rgb.LINE_LENGTH
-@22
-top.u_isp.u_raw2rgb.data_in[0][7:0]
-top.u_isp.u_raw2rgb.data_in[1][7:0]
-top.u_isp.u_raw2rgb.data_in[2][7:0]
-top.u_isp.u_raw2rgb.data_in[3][7:0]
 @28
 top.u_isp.u_raw2rgb.data_valid
 @22
@@ -81,8 +70,10 @@ top.u_isp.u_raw2rgb.read_count[8:0]
 top.u_isp.u_raw2rgb.read_count_nxt[8:0]
 @28
 top.u_isp.u_raw2rgb.temp_4lane
-@29
 top.u_isp.u_raw2rgb.odd_pixel
+top.u_isp.u_raw2rgb.wr_line_sel[1:0]
+@23
+top.u_isp.u_raw2rgb.write_count[8:0]
 @28
 top.u_isp.u_raw2rgb.writing
 @22

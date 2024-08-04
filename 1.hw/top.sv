@@ -123,32 +123,32 @@ glbl glbl();
 //--------------------------------
 // CSI_RX
 //--------------------------------
-   logic       csi_byte_clk;
-   lane_data_t csi_word_data;
-   logic       csi_word_valid;
-   logic       csi_in_line, csi_in_frame;   
+   logic           csi_byte_clk;
+   lane_raw_data_t csi_word_data;
+   logic           csi_word_valid;
+   logic           csi_in_line, csi_in_frame;   
 
    bus8_t      debug_csi;
     
    csi_rx_top u_csi_rx_top (
-      .ref_clock          (clk_200),        //i 
-      .reset              (reset),          //i 
+      .ref_clock              (clk_200),        //i 
+      .reset                  (reset),          //i 
                           
      //MIPI DPHY from/to Camera
-      .cam_dphy_clk       (cam_dphy_clk),   //i'diff_t
-      .cam_dphy_dat       (cam_dphy_dat),   //i'lane_diff_t
-      .cam_en             (cam_en),         //o 
+      .cam_dphy_clk           (cam_dphy_clk),   //i'diff_t
+      .cam_dphy_dat           (cam_dphy_dat),   //i'lane_diff_t
+      .cam_en                 (cam_en),         //o 
 
      //CSI to internal video pipeline     
-      .csi_byte_clk       (csi_byte_clk),   //o
-      .csi_unpack_dat     (csi_word_data),  //o'lane_data_t
-      .csi_unpack_dat_vld (csi_word_valid), //o
+      .csi_byte_clk           (csi_byte_clk),   //o
+      .csi_unpack_raw_dat     (csi_word_data),  //o'lane_raw_data_t
+      .csi_unpack_raw_dat_vld (csi_word_valid), //o
 
-      .csi_in_line        (csi_in_line),    //o    
-      .csi_in_frame       (csi_in_frame),   //o
+      .csi_in_line            (csi_in_line),    //o    
+      .csi_in_frame           (csi_in_frame),   //o
 
      //Misc/Debug
-      .debug_pins         (debug_csi)       //o[7:0]
+      .debug_pins             (debug_csi)       //o[7:0]
    );
       
 //--------------------------------
@@ -166,8 +166,8 @@ glbl glbl();
       .clk        (csi_byte_clk),   //i           
       .rst        (reset),          //i
 
-      .data_in    (csi_word_data),  //i'lane_data_t
-      .data_valid (csi_in_line),    //i  
+      .data_in    (csi_word_data),  //i'lane_raw_data_t
+      .data_valid (csi_word_valid), //i  
       .rgb_valid  (rgb_valid),      //i
 
       .reading    (rgb_reading),    //o

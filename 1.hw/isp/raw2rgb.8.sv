@@ -42,22 +42,22 @@
 //   FIXME: Adapt logic to 4-lane datapath
 //========================================================================
 
-module raw2rgb 
+module raw2rgb_8 
   import top_pkg::*;
 #(
    parameter LINE_LENGTH = 640, // number of data entries per line
    parameter RGB_WIDTH   = 24   // width of RGB data (24-bit)
 )(
-   input  logic        clk,     // byte_clock      
-   input  logic        rst,
+   input  logic            clk, // byte_clock      
+   input  logic            rst,
                         
-   input  lane_data_t  data_in,
-   input  logic        data_valid,    
-   input  logic        rgb_valid,
+   input  lane_raw_data_t  data_in,
+   input  logic            data_valid,    
+   input  logic            rgb_valid,
                         
-   output logic        reading,
+   output logic            reading,
    output logic         
-      [RGB_WIDTH-1:0]  rgb_out
+      [RGB_WIDTH-1:0]      rgb_out
 );
 
    localparam CNT_WIDTH = $clog2(LINE_LENGTH);
@@ -80,8 +80,9 @@ module raw2rgb
           writing <= 1'b1;         
        end 
        else if (writing == 1'b1) begin
-          if (write_count < cnt_t'(LINE_LENGTH)) begin
-             write_count <= cnt_t'(write_count + cnt_t'(1));
+          if (write_count < cnt_t'(LINE_LENGTH-1)) begin
+             if(data_valid == 1'b1)
+               write_count <= cnt_t'(write_count + cnt_t'(1));
           end 
           else if (data_valid == 1'b0)  begin
              write_count <= '0;   // Reset write_count for the next cycle
@@ -98,10 +99,10 @@ module raw2rgb
    //       block, distributed, registers, ultra, mixed, auto
    //  2) Yosys  'ram_style' synth attributes: 
    //       block, distributed
-   (* ram_style = "block" *) lane_mem_t line0_mem[LINE_LENGTH:0];
-   (* ram_style = "block" *) lane_mem_t line1_mem[LINE_LENGTH:0];
-   (* ram_style = "block" *) lane_mem_t line2_mem[LINE_LENGTH:0];
-   (* ram_style = "block" *) lane_mem_t line3_mem[LINE_LENGTH:0];
+   (* ram_style = "block" *) lane_raw_data_t line0_mem[LINE_LENGTH:0];
+   (* ram_style = "block" *) lane_raw_data_t line1_mem[LINE_LENGTH:0];
+   (* ram_style = "block" *) lane_raw_data_t line2_mem[LINE_LENGTH:0];
+   (* ram_style = "block" *) lane_raw_data_t line3_mem[LINE_LENGTH:0];
 
    always_comb begin
       for (int i=0; i<4; i++) begin
@@ -382,7 +383,7 @@ module raw2rgb
                      ~rgb_out1[15:8], 
                       rgb_out1[7:0]}; 
 
-endmodule: raw2rgb
+endmodule: raw2rgb_8
 
 /*
 ------------------------------------------------------------------------------
