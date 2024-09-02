@@ -41,41 +41,59 @@
 
 module isp_top
   import top_pkg::*;
+  import hdmi_pkg::*;
 #(
    parameter LINE_LENGTH = 640, // number of data entries per line
    parameter RGB_WIDTH   = 24   // width of RGB data (24-bit)
 )(
-   input  logic        clk,     // byte_clock      
-   input  logic        rst,
+   input  logic            clk, // byte_clock      
+   input  logic            rst,
                         
-   input  lane_data_t  data_in,
-   input  logic        data_valid,    
-   input  logic        rgb_valid,
+   input  lane_raw_data_t  data_in,
+   input  logic            data_valid,    
+   input  logic            rgb_valid,
                         
-   output logic        reading,
+   output logic            reading,
    output logic         
-      [RGB_WIDTH-1:0]  rgb_out
+      [RGB_WIDTH-1:0]      rgb_out
 );
 
 //---------------------------------
 // Debayer ISP function
 //---------------------------------
-   raw2rgb #(
-      .LINE_LENGTH (LINE_LENGTH), // number of data entries per line
+`ifdef RAW8
+   raw2rgb_8 #(
+      .LINE_LENGTH (HSCREEN/NUM_LANE), // number of data entries per line
       .RGB_WIDTH   (RGB_WIDTH)    // width of RGB data (24-bit)
    )
    u_raw2rgb (
       .clk        (clk),          //i           
       .rst        (rst),          //i
 
-      .data_in    (data_in),      //i'lane_data_t
+      .data_in    (data_in),      //i'lane_raw_data_t
       .data_valid (data_valid),   //i  
       .rgb_valid  (rgb_valid),    //i
 
       .reading    (reading),      //o
       .rgb_out    (rgb_out)       //o[RGB_WIDTH-1:0]
    );
+`else // RAW10
+   raw2rgb_10 #(
+      .LINE_LENGTH (HSCREEN/NUM_LANE), // number of data entries per line
+      .RGB_WIDTH   (24)                // width of RGB data (24-bit)
+   )
+   u_raw2rgb (
+      .clk        (clk),          //i           
+      .rst        (rst),          //i
 
+      .data_in    (data_in),      //i'lane_raw_data_t
+      .data_valid (data_valid),   //i  
+      .rgb_valid  (rgb_valid),    //i
+
+      .reading    (reading),      //o
+      .rgb_out    (rgb_out)       //o[RGB_WIDTH-1:0]
+   );
+`endif
 //---------------------------------
 // More ISP functions to follow
 //---------------------------------
