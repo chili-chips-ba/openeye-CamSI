@@ -50,12 +50,12 @@ module i2c_ctrl (
    input  logic [15:0] register_address,
    input  logic [7:0]  data_in,
    output logic        register_done,
-        
-   input  logic        scl_do,
-   output logic        scl_di,
-
-   input  logic        sda_do,
-   output logic        sda_di
+  
+   output logic        scl_oe,      
+   input  logic        scl_di,
+   
+   output logic        sda_oe,
+   input  logic        sda_di
 );
 
    typedef enum logic [3:0] {
@@ -72,7 +72,8 @@ module i2c_ctrl (
    
    state_t state;
    state_t post_state;
-   
+      
+   logic       scl_do, sda_do;  
    logic [1:0] process_cnt;
    logic [7:0] slave_address_plus_rw;
    logic [3:0] bit_cnt, bit_cnt_dec;
@@ -81,7 +82,9 @@ module i2c_ctrl (
    
    assign bit_cnt_dec = 4'(bit_cnt - 4'd1);
    
-
+   assign scl_oe = ~((state == CHECK_ACK || state == IDLE) ? 1'b1 : scl_do);
+   assign sda_oe = ~((state == CHECK_ACK || state == IDLE) ? 1'b1 : sda_do);
+   
    always_ff @(negedge areset_n or posedge clk) begin
       if (areset_n == 1'b0) begin
          register_done         <= 1'b0;
@@ -92,8 +95,8 @@ module i2c_ctrl (
          bit_cnt               <= '0;
          post_serial_data      <= 1'b0;
          acknowledge_bit       <= 1'b0;
-         scl_di                <= 1'b1;
-         sda_di                <= 1'b1;
+         scl_do                <= 1'b1;
+         sda_do                <= 1'b1;
       end 
       else begin
 `ifndef ICARUS
@@ -107,8 +110,8 @@ module i2c_ctrl (
                bit_cnt               <= '0;
                acknowledge_bit       <= 1'b0;
                slave_address_plus_rw <= {slave_address, 1'b0};
-               scl_di                <= 1'b1;
-               sda_di                <= 1'b1;
+               scl_do                <= 1'b1;
+               sda_do                <= 1'b1;
 
                if (enable == 1'b1) begin
                   register_done   <= 1'b0;
@@ -124,7 +127,7 @@ module i2c_ctrl (
                      process_cnt <= 2'd1;
                   end
                   2'd1: begin
-                     sda_di      <= 1'b0;
+                     sda_do      <= 1'b0;
                      process_cnt <= 2'd2;
                   end
                   2'd2: begin
@@ -132,10 +135,10 @@ module i2c_ctrl (
                      process_cnt <= 2'd3;
                   end
                   2'd3: begin
-                     scl_di      <= 1'b0;
+                     scl_do      <= 1'b0;
                      process_cnt <= 2'd0;
                      state       <= post_state;
-                     sda_di      <= slave_address_plus_rw[3'd7];
+                     sda_do      <= slave_address_plus_rw[3'd7];
                   end
                endcase
             end
@@ -144,17 +147,17 @@ module i2c_ctrl (
             WRITE_SLAVE_ADDR: if (strobe_400kHz == 1'b1) begin
                unique case (process_cnt)
                   2'd0: begin
-                     scl_di      <= 1'b1;
+                     scl_do      <= 1'b1;
                      process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
-                     if (scl_do == 1'b1) begin
+                     if (scl_di == 1'b1) begin
                         process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     scl_di      <= 1'b0;
+                     scl_do      <= 1'b0;
                      bit_cnt     <= bit_cnt_dec;
                      process_cnt <= 2'd3;
                   end
@@ -169,7 +172,7 @@ module i2c_ctrl (
                         bit_cnt    <= 4'd8;
                      end
                      else begin
-                        sda_di   <= slave_address_plus_rw[bit_cnt_dec[2:0]];
+                        sda_do   <= slave_address_plus_rw[bit_cnt_dec[2:0]];
                      end
                   end
                endcase
@@ -179,19 +182,19 @@ module i2c_ctrl (
             CHECK_ACK: if (strobe_400kHz == 1'b1) begin
                unique case (process_cnt)
                   2'd0: begin
-                     scl_di      <= 1'b1;
+                     scl_do      <= 1'b1;
                      process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
-                     if (scl_do == 1'b1) begin
+                     if (scl_di == 1'b1) begin
                         process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     scl_di <= 1'b0;
+                     scl_do <= 1'b0;
 
-                     if (sda_do == 1'b0) begin
+                     if (sda_di == 1'b0) begin
                         acknowledge_bit <= 1'b1;
                      end
                      process_cnt <= 2'd3;
@@ -199,7 +202,7 @@ module i2c_ctrl (
                   2'd3: begin
                      if (acknowledge_bit == 1'b1) begin
                         acknowledge_bit <= 1'b0;
-                        sda_di          <= post_serial_data;
+                        sda_do          <= post_serial_data;
                         state           <= post_state;
                      end
                      else begin
@@ -214,30 +217,30 @@ module i2c_ctrl (
             WRITE_REG_ADDR_MSB: if (strobe_400kHz == 1'b1) begin
                unique case (process_cnt)
                   2'd0: begin
-                     scl_di      <= 1'b1;
+                     scl_do      <= 1'b1;
                      process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
-                     if (scl_do == 1'b1) begin
+                     if (scl_di == 1'b1) begin
                         process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     scl_di      <= 1'b0;
+                     scl_do      <= 1'b0;
                      bit_cnt     <= bit_cnt_dec;
                      process_cnt <= 2'd3;
                   end
                   2'd3: begin
                      if (bit_cnt == 4'd0) begin
                         post_serial_data <= register_address[4'd7];
-                        //sda_di       <= 1'b0; //redundant, not needed
+                        //sda_do       <= 1'b0; //redundant, not needed
                         state        <= CHECK_ACK;
                         post_state   <= WRITE_REG_ADDR;
                         bit_cnt      <= 4'd8;
                      end
                      else begin
-                        sda_di <= register_address[bit_cnt + 4'd7];
+                        sda_do <= register_address[bit_cnt + 4'd7];
                      end
                      process_cnt <= 2'd0;
                   end
@@ -248,17 +251,17 @@ module i2c_ctrl (
             WRITE_REG_ADDR: if (strobe_400kHz == 1'b1) begin
                unique case (process_cnt)
                   2'd0: begin
-                     scl_di      <= 1'b1;
+                     scl_do      <= 1'b1;
                      process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
-                     if (scl_do == 1'b1) begin
+                     if (scl_di == 1'b1) begin
                         process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     scl_di      <= 1'b0;
+                     scl_do      <= 1'b0;
                      bit_cnt     <= bit_cnt_dec;
                      process_cnt <= 2'd3;
                   end
@@ -270,7 +273,7 @@ module i2c_ctrl (
                         bit_cnt <= 4'd8;
                      end
                      else begin
-                        sda_di <= register_address[bit_cnt_dec];
+                        sda_do <= register_address[bit_cnt_dec];
                      end
                      process_cnt <= 2'd0;
                   end
@@ -281,17 +284,17 @@ module i2c_ctrl (
             WRITE_REG_DATA: if (strobe_400kHz == 1'b1) begin
                unique case (process_cnt)
                   2'd0: begin
-                     scl_di      <= 1'b1;
+                     scl_do      <= 1'b1;
                      process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
-                     if (scl_do == 1'b1) begin
+                     if (scl_di == 1'b1) begin
                         process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     scl_di      <= 1'b0;
+                     scl_do      <= 1'b0;
                      bit_cnt     <= bit_cnt_dec;
                      process_cnt <= 2'd3;
                   end
@@ -304,7 +307,7 @@ module i2c_ctrl (
                         //register_done    <= 1'b1;
                      end
                      else begin
-                        sda_di <= data_in[bit_cnt_dec[2:0]];
+                        sda_do <= data_in[bit_cnt_dec[2:0]];
                      end
                      process_cnt <= 2'd0;
                   end
@@ -315,17 +318,17 @@ module i2c_ctrl (
             STOP: if (strobe_400kHz == 1'b1) begin
                unique case (process_cnt)
                   2'd0: begin
-                     scl_di      <= 1'b1;
+                     scl_do      <= 1'b1;
                      process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
-                     if (scl_do == 1'b1) begin
+                     if (scl_di == 1'b1) begin
                         process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     sda_di        <= 1'b1;
+                     sda_do        <= 1'b1;
                      process_cnt   <= 2'd3;
                      register_done <= 1'b1;
                   end
@@ -339,17 +342,17 @@ module i2c_ctrl (
             RESTART: if (strobe_400kHz == 1'b1) begin
                unique case (process_cnt)
                   2'd0: begin
-                     scl_di      <= 1'b1;
+                     scl_do      <= 1'b1;
                      process_cnt <= 2'd1;
                   end
                   2'd1: begin
                      //check for clock stretching
-                     if (scl_do == 1'b1) begin
+                     if (scl_di == 1'b1) begin
                         process_cnt <= 2'd2;
                      end
                   end
                   2'd2: begin
-                     sda_di      <= 1'b1;
+                     sda_do      <= 1'b1;
                      process_cnt <= 2'd3;
                   end
                   2'd3: begin

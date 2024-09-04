@@ -71,9 +71,11 @@ module i2c_top #(
 
    logic        i2c_scl_do;
    logic        i2c_scl_di;
+   logic        i2c_scl_oe;
 
    logic        i2c_sda_do; 
    logic        i2c_sda_di;
+   logic        i2c_sda_oe;
 
    i2c_ctrl u_ctrl (
       .clk              (clk),            //i 
@@ -86,11 +88,12 @@ module i2c_top #(
       .data_in          (i2c_data_in),    //i[7:0] 
       .register_done    (i2c_reg_done),   //o 
 
-      .scl_do           (i2c_scl_do),     //i 
-      .scl_di           (i2c_scl_di),     //o 
-
-      .sda_do           (i2c_sda_do),     //i 
-      .sda_di           (i2c_sda_di)      //o 
+      .scl_oe           (i2c_scl_oe),     //o
+      .scl_di           (i2c_scl_di),     //i
+      
+      .sda_oe           (i2c_sda_oe),     //o
+      .sda_di           (i2c_sda_di)      //i
+      
    );
 
 
@@ -134,10 +137,10 @@ module i2c_top #(
       .SLEW         ("SLOW") 
    ) 
    u_i2c_iobuf[1:0] (
-      .IO ({ i2c_sda,    i2c_scl    }), //io pad
-      .O  ({ i2c_sda_do, i2c_scl_do }), //o
-      .I  ({ 1'b0,       1'b0       }), //i
-      .T  ({ i2c_sda_di, i2c_scl_di })  //i: 3-state enable: 1=input, 0=output
+      .IO ({ i2c_sda,     i2c_scl    }), //io pad
+      .O  ({ i2c_sda_di,  i2c_scl_di }), //o
+      .I  ({ 1'b0,        1'b0       }), //i
+      .T  ({ ~i2c_sda_oe, ~i2c_scl_oe })  //i: 3-state enable: 1=input, 0=output
    );
    
 endmodule: i2c_top
