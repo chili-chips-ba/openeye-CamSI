@@ -1,0 +1,105 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Thu Sep 12 14:33:50 2024
+[*]
+[dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/dump.fst"
+[dumpfile_mtime] "Thu Sep 12 13:48:33 2024"
+[dumpfile_size] 6755336
+[savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/csi-rx-12bit-unpack-raw2rgb_12.gtkw"
+[timestart] 0
+[size] 1588 827
+[pos] -308 -64
+*-26.189394 187298512 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] .
+[treeopen] .top.
+[treeopen] .top.u_csi_rx_top.
+[treeopen] .top.u_isp.
+[sst_width] 262
+[signals_width] 318
+[sst_expanded] 1
+[sst_vpaned_height] 488
+@28
+top.u_csi_rx_top.u_12bit_unpack.clock
+top.u_csi_rx_top.u_12bit_unpack.reset
+@200
+-
+@28
+top.u_csi_rx_top.u_12bit_unpack.din_valid
+@22
+top.u_csi_rx_top.u_12bit_unpack.data_in[31:0]
+top.u_csi_rx_top.u_12bit_unpack.bytes_int[31:0]
+@24
+top.u_csi_rx_top.u_12bit_unpack.byte_count_int[1:0]
+@200
+-
+@22
+top.u_csi_rx_top.u_12bit_unpack.dout_int[47:0]
+@28
+top.u_csi_rx_top.u_12bit_unpack.dout_valid_int
+@200
+-
+@22
+top.u_csi_rx_top.u_12bit_unpack.dout_unpacked[47:0]
+@28
+top.u_csi_rx_top.u_12bit_unpack.dout_valid_up
+@200
+-
+@22
+top.u_csi_rx_top.u_12bit_unpack.data_out[47:0]
+@28
+top.u_csi_rx_top.u_12bit_unpack.dout_valid
+@200
+-
+@420
+top.u_isp.u_raw2rgb.CNT_WIDTH
+top.u_isp.u_raw2rgb.LINE_LENGTH
+top.u_isp.u_raw2rgb.RGB_WIDTH
+@24
+top.u_isp.u_raw2rgb.write_count[8:0]
+@28
+top.u_isp.u_raw2rgb.writing
+top.u_isp.u_raw2rgb.clk
+top.u_isp.u_raw2rgb.data_valid
+@23
+top.u_isp.u_raw2rgb.line0_blue0[11:0]
+top.u_isp.u_raw2rgb.line0_blue1[11:0]
+top.u_isp.u_raw2rgb.line0_green0[11:0]
+top.u_isp.u_raw2rgb.line0_green1[11:0]
+top.u_isp.u_raw2rgb.line1_green0[11:0]
+top.u_isp.u_raw2rgb.line1_green1[11:0]
+top.u_isp.u_raw2rgb.line1_red0[11:0]
+top.u_isp.u_raw2rgb.line1_red1[11:0]
+top.u_isp.u_raw2rgb.line2_blue0[11:0]
+top.u_isp.u_raw2rgb.line2_blue1[11:0]
+top.u_isp.u_raw2rgb.line2_green0[11:0]
+top.u_isp.u_raw2rgb.line2_green1[11:0]
+top.u_isp.u_raw2rgb.line3_green0[11:0]
+top.u_isp.u_raw2rgb.line3_green1[11:0]
+top.u_isp.u_raw2rgb.line3_red0[11:0]
+top.u_isp.u_raw2rgb.line3_red1[11:0]
+@28
+top.u_isp.u_raw2rgb.line_end
+top.u_isp.u_raw2rgb.line_not_read[1:0]
+top.u_isp.u_raw2rgb.odd_pixel
+@22
+top.u_isp.u_raw2rgb.read_count[8:0]
+top.u_isp.u_raw2rgb.read_count_nxt[8:0]
+@28
+top.u_isp.u_raw2rgb.reading
+@22
+top.u_isp.u_raw2rgb.rgb_out1[23:0]
+top.u_isp.u_raw2rgb.rgb_out[23:0]
+@28
+top.u_isp.u_raw2rgb.rgb_valid
+top.u_isp.u_raw2rgb.rst
+top.u_isp.u_raw2rgb.temp_4lane
+@22
+top.u_isp.u_raw2rgb.wen[3:0]
+@28
+top.u_isp.u_raw2rgb.wr_line_sel[1:0]
+@22
+top.u_isp.u_raw2rgb.write_count[8:0]
+@28
+top.u_isp.u_raw2rgb.writing
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,0 +1,51 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Thu Sep 12 13:03:20 2024
+[*]
+[dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/dump.fst"
+[dumpfile_mtime] "Thu Sep 12 09:17:31 2024"
+[dumpfile_size] 7013447
+[savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/csi-rx-12bit-unpack.gtkw"
+[timestart] 0
+[size] 1588 827
+[pos] -258 -71
+*-26.118717 73674000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] .
+[treeopen] .top.
+[treeopen] .top.u_csi_rx_top.
+[sst_width] 214
+[signals_width] 318
+[sst_expanded] 1
+[sst_vpaned_height] 488
+@28
+top.u_csi_rx_top.u_12bit_unpack.clock
+top.u_csi_rx_top.u_12bit_unpack.reset
+@200
+-
+@28
+top.u_csi_rx_top.u_12bit_unpack.din_valid
+@22
+top.u_csi_rx_top.u_12bit_unpack.data_in[31:0]
+top.u_csi_rx_top.u_12bit_unpack.bytes_int[31:0]
+@24
+top.u_csi_rx_top.u_12bit_unpack.byte_count_int[1:0]
+@200
+-
+@23
+top.u_csi_rx_top.u_12bit_unpack.dout_int[47:0]
+@28
+top.u_csi_rx_top.u_12bit_unpack.dout_valid_int
+@200
+-
+@22
+top.u_csi_rx_top.u_12bit_unpack.dout_unpacked[47:0]
+@28
+top.u_csi_rx_top.u_12bit_unpack.dout_valid_up
+@200
+-
+@22
+top.u_csi_rx_top.u_12bit_unpack.data_out[47:0]
+@28
+top.u_csi_rx_top.u_12bit_unpack.dout_valid
+[pattern_trace] 1
+[pattern_trace] 0
