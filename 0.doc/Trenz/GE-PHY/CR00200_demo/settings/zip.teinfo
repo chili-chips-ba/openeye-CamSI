@@ -1,0 +1,13 @@
+#-----------------------------------------------#
+#--Automatically generated file. Do not modify--#
+#-----------------------------------------------#
+ZIPINFO_CSV=        1.0
+ExporterInitials=   ma
+ZIPName=            TE0821-CR00200_demo_noprebuilt-vivado_2021.2-build_20_20221206113615
+Destination=        PublicDoc
+Typ=                NA
+BoardTyp=           NA
+ProjectName=        CR00200_demo
+ProjectToolName=    Vivado-2021.2
+ReleaseDate=        2022.12.06 11:36:15
+Revision=           NA

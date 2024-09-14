@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Trenz Module Monitoring and Configuration - work in process</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+  * {
+    box-sizing: border-box;
+    }
+
+  .header {
+    text-align: center;
+    font-size: 30px;
+  }
+  
+  .header2 {
+    text-align: center;
+    font-size: 18px;
+  }
+
+  .body {
+    height: 100%;
+    min-height: 100%;
+  }
+
+  .column {
+    float: left;
+    padding: 10px;
+    <!-- height: 640px;  /* Should be removed. Only for demonstration */ -->
+  }
+
+  .left {
+    width: 40%;
+  }
+  .right {
+    width: 10%;
+  }
+
+  .middle {
+    width: 50%;
+  }
+    
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+
+  .box {
+  border: 1px solid #000;
+  margin-bottom: 5px;
+  text-align: center;
+  }
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+.tab img {
+  background-color: #F1F1F1;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  <!-- padding: 6px 12px; -->
+  <!-- border: 1px solid #ccc; -->
+  border-top: none;
+}
+</style>
+
+
+
+<script>
+function openTab(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+  }
+
+function action_home() {
+  document.getElementById("iframe_log").src="wwwlogo.png";
+}
+function action_trenz() {
+  document.getElementById("iframe_log").src="https://wiki.trenz-electronic.de/";
+}
+
+<!-- function action_restartsc() { -->
+  <!-- document.getElementById("iframe_log").src="/cgi-bin/reboot.cgi"; -->
+  <!-- <!-- document.getElementById("iframe_mdt0").src="test.html"; --> -->
+<!-- } -->
+<!-- function action_erase_flash() { -->
+  <!-- document.getElementById("iframe_log").src="/cgi-bin/erase_flash_all.cgi"; -->
+<!-- } -->
+
+<!-- function action_mdt0() { -->
+  <!-- document.getElementById("iframe_log").src="/cgi-bin/mtd0.cgi"; -->
+<!-- } -->
+
+<!-- function action_mdt1() { -->
+  <!-- document.getElementById("iframe_log").src="/cgi-bin/mtd1.cgi"; -->
+<!-- } -->
+
+<!-- function action_mdt2() { -->
+  <!-- document.getElementById("iframe_log").src="/cgi-bin/mtd2.cgi"; -->
+<!-- } -->
+
+<!-- function action_mdt3() { -->
+  <!-- document.getElementById("iframe_log").src="/cgi-bin/mtd3.cgi"; -->
+<!-- } -->
+
+<!-- function action_mdt4() { -->
+  <!-- document.getElementById("iframe_log").src="/cgi-bin/mtd4.cgi"; -->
+<!-- } -->
+
+</script>
+</head>
+
+<!-- <body class="body" onload="openTab(event, 'home');action_home();"> -->
+<body class="body" onload="openTab(event, 'CTRL_SD');">
+<!-- Tab links -->
+
+<div class="top">
+
+  <div class="header" >
+    Trenz Module Monitoring and Configuration - work in process
+  </div>
+  <div class="tab">
+     <a href="https://www.trenz-electronic.de/" target="_blank"> <img src="wwwlogo.png"></img></a>
+    <!-- <button class="tablinks" onclick="openTab(event, 'home')">Home</button> -->
+    <button class="tablinks" onclick="openTab(event, 'CTRL_SD')">SD card</button>
+    <button class="tablinks" onclick="openTab(event, 'CTRL_QSPI')">QSPI flash</button>
+  </div>
+</div>
+
+<div class="body row">
+
+  <div class="row">
+    
+    <div class="column left">
+      
+      <div id="CTRL_SD" class="tabcontent">
+      
+        <div class="header" >
+          Reboot system
+        </div> <br></br>
+        <!-- Table content -->
+        <table border="0">
+          <colgroup>
+            <col style="width: 100px">
+            <col style="width: 100px">
+            <col style="width: 100px">
+            <col style="width: 100px">
+            <col style="width: 100px">
+            <col style="width: 100px">
+          </colgroup>           
+          <!-- line 1 in table -->
+          <tr> 
+            <td></td>
+            <td></td>
+            <td></td>
+            <form action="/cgi-bin/reboot.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+              <td><input type="submit" name="submit" value="Reboot device" title="Restarts whole system"></td>
+            </form>
+            <td></td>
+            <td></td>
+          </tr>
+          <!-- line 2 in table -->
+          <tr>
+            <td>
+            <br></br>
+            </td>
+          </tr>          
+        </table >
+        
+        <div class="header" >
+          Read operation
+        </div>
+        <br></br> 
+        <!-- Table content -->
+        <table border="0">
+          <colgroup>
+            <col style="width: 100px">
+            <col style="width: 100px">
+            <col style="width: 100px">
+            <col style="width: 100px">
+            <col style="width: 100px">
+            <col style="width: 100px">
+          </colgroup>           
+          <!-- line 1 in table -->
+          <tr> 
+            <td></td>
+            <td></td>
+            <td></td>
+            <form action="/cgi-bin/read_sd0.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+              <td><input type="submit" name="submit" value="Read SD0" title="Reads the content of the SD card (mmcblk0p1)"></td>
+            </form>
+            <td></td>
+            <td></td>
+          </tr>
+          <!-- line 2 in table -->
+          <tr>
+            <td>
+              <br></br>
+            </td>
+            <td></td>
+            <td></td>
+            <form action="/cgi-bin/read_sd1.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+              <td><input type="submit" name="submit" value="Read SD1" title="Reads the content of the SD card (mmcblk1p1)"></td>
+            </form>
+          </tr>            
+        </table >
+        <br></br> 
+        
+        <div class="header" >
+          Write operation
+        </div>
+        
+        <br>
+          <tr>
+            <form action="/cgi-bin/mmcblk0p1.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+              <label for="file">SD0:</label>
+              <td><input type="file" name="file" id="file"></td>
+              <td><input type="submit" name="submit" value="Write mmcblk0p1" title="use for Boot.bin and image.ub"></td>
+            </form>
+          </tr>
+        </br>
+ 
+        <tr>
+          <form action="/cgi-bin/mmcblk1p1.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+            <label for="file">SD1:</label>
+            <td><input type="file" name="file" id="file"></td>
+            <td><input type="submit" name="submit" value="Write mmcblk1p1" title="use for Boot.bin and image.ub"></td>
+          </form>
+        </tr>
+
+        <br></br>
+        <div class="tab header2">
+          <!-- Table content -->
+          <table border="0">
+            <!-- line 1 in table -->
+            <tr>
+              <td>Web interface is for general usage, check which mmcblk*p1 is available on your device</td>
+            </tr>
+          </table >
+        </div>
+        
+      </div>
+
+      
+      <div id="CTRL_QSPI" class="tabcontent">
+
+        <div class="header" >
+          Reboot system
+        </div> <br></br>
+        <!-- Table content -->
+        <table border="0">
+          <colgroup>
+          <col style="width: 100px">
+          <col style="width: 100px">
+          <col style="width: 100px">
+          <col style="width: 100px">
+          <col style="width: 100px">
+          <col style="width: 100px">
+          </colgroup>
+          <!-- line 1 in table -->
+          <tr> 
+            <td></td>
+            <td></td>
+            <td></td>
+            <form action="/cgi-bin/reboot.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+              <td><input type="submit" name="submit" value="Reboot device" title="Restarts whole system"></td>
+            </form>
+            <td></td>
+            <td></td>
+          <!-- line 2 in table -->
+          </tr>
+          <tr>
+            <td>
+            <br></br>
+            </td>
+          </tr>
+          
+        </table >
+        <div class="header" >
+          Erase operation
+        </div> <br></br>
+        <!-- Table content -->
+        <table border="0">
+          <colgroup>
+          <col style="width: 100px">
+          <col style="width: 100px">
+          <col style="width: 100px">
+          <col style="width: 100px">
+          <col style="width: 100px">
+          <col style="width: 100px">
+          </colgroup>
+          <!-- line 1 in table -->
+          <tr> 
+            <td></td>
+            <td></td>
+            <td></td>
+            <form action="/cgi-bin/erase_flash_all.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+               <td><input type="submit" name="submit" value="Erase Flash" title="Erase all flash partitions (mtd*)"></td>
+            </form>
+            <td></td>
+            <td></td>
+          </tr>
+          <!-- line 2 in table -->
+          <tr>
+            <td>
+            <br></br>
+            </td>
+          </tr>
+          <!-- line 3 in table -->
+          <tr>
+            <td></td>
+            <form action="/cgi-bin/erase_mtd0.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+               <td><input class="tablinks" type="submit" name="submit" value="Erase mtd0" title="Erase flash partition mtd0"></td>
+            </form>
+            
+            <form action="/cgi-bin/erase_mtd1.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+               <td><input class="tablinks" type="submit" name="submit" value="Erase mtd1" title="Erase flash partition mtd1"></td>
+            </form>
+            
+            <form action="/cgi-bin/erase_mtd2.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+               <td><input class="tablinks" type="submit" name="submit" value="Erase mtd2" title="Erase flash partition mtd2"></td>
+            </form>
+            
+            <form action="/cgi-bin/erase_mtd3.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+               <td><input class="tablinks" type="submit" name="submit" value="Erase mtd3" title="Erase flash partition mtd3"></td>
+            </form>
+
+            <form action="/cgi-bin/erase_mtd4.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+               <td><input class="tablinks" type="submit" name="submit" value="Erase mtd4" title="Erase flash partition mtd4"></td>
+            </form>
+
+          </tr>
+          
+        </table >
+        
+        <br></br>
+        <div class="header" >
+          Write operation
+        </div>
+        <br>
+          <!-- line 1 in table -->
+          <tr>              
+            <form action="/cgi-bin/mtd0.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+              <label for="file">mtd0:</label>
+              <td><input type="file" name="file" id="file"></td>
+              <td><input type="submit" name="submit" value="Write mtd0"  title="Default Boot (use for Boot.bin without image.ub)"></td>
+              <td>Default Boot (use for Boot.bin without image.ub)</td>
+            </form>
+          </tr> 
+        </br>
+        
+        <!-- line 2 in table -->
+        <tr>
+          <form action="/cgi-bin/mtd1.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+            <label for="file">mtd1:</label>
+            <td><input type="file" name="file" id="file"></td>
+            <td><input type="submit" name="submit" value="Write mtd1" title="Default Bootenv"></td>
+            <td>Default Bootenv</td>
+          </form>
+        </tr>
+ 
+        <br>
+          <!-- line 3 in table -->
+          <tr>
+            <form action="/cgi-bin/mtd2.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+              <label for="file">mtd2:</label>
+              <td><input type="file" name="file" id="file"></td>
+              <td><input type="submit" name="submit" value="Write mtd2" title="Default kernel (use for image.ub)"></td>
+              <td>Default Kernel (use for image.ub)</td>
+            </form>
+          </tr>
+        </br>
+        
+        <!-- line 4 in table -->
+        <tr>
+          <form action="/cgi-bin/mtd3.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+            <label for="file">mtd3:</label>
+            <td><input type="file" name="file" id="file"></td>
+            <td><input type="submit" name="submit" value="Write mtd3" title="Default Bootscript (use for boot.scr)"></td>
+            <td>Default Bootscript (use for boot.scr)</td>
+          </form>
+        </tr>
+
+        <br>
+          <!-- line 5 in table -->
+          <tr>
+            <form action="/cgi-bin/mtd4.cgi" method="post" enctype="multipart/form-data" target="iframe_log">
+              <label for="file">mtd4:</label>
+              <td><input type="file" name="file" id="file"></td>
+              <td><input type="submit" name="submit" value="Write mtd4" title="Default Spare (not defined)"></td>
+              <td>Default Spare</td>
+            </form>
+          </tr>
+        </br>
+
+        <br>
+          <div class="tab header2">
+            <!-- Table content -->
+            <table border="0">
+              <tr>
+                <td>Web interface is for general usage, check which mtd* is available on your device</td>
+              </tr>
+            </table >
+          </div>
+        </br>
+      </div>
+      
+    </div>
+    
+    <div class="column middle">
+      <iframe id="iframe_log" name="iframe_log" width="100%" height="768px" ></iframe>
+    </div>
+    <!--<div class="column right">
+       <iframe id="iframe_mon" name="iframe_mon" src=""  width="100%" height="768px" ></iframe>
+    </div> -->
+    
+  </div>
+  
+</div>
+
+
+
+</body>
+</html>
+

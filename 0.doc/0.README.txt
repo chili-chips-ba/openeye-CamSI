@@ -20,6 +20,8 @@ Our Cards:
 
   CRUVI 1000/100/100 Ethernet PHY
     https://shop.trenz-electronic.de/en/CR00200-01-CRUVI-HS-Ethernet-PHY-Adapter
+    Design example, CR00200 on TEB0707 Carrier, with TE0821 Ultrascale+ SOM:
+      https://wiki.trenz-electronic.de/display/PD/TE0821+CR00200+Demo
 
   CRUVI Loopback Board
     https://shop.trenz-electronic.de/en/CR00091-01-CRUVI-Loopback-adapter

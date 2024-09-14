@@ -1,0 +1,82 @@
+/include/ "system-conf.dtsi"
+#include <dt-bindings/gpio/gpio.h>
+/ {
+  chosen {
+    xlnx,eeprom = &eeprom;
+  };
+};
+
+/*------------------------- QSPI ------------------------- */
+&qspi {
+    #address-cells = <1>;
+    #size-cells = <0>;
+    status = "okay";
+    flash0: flash@0 {
+        //compatible = "flash name, "micron,m25p80";
+        compatible = "jedec,spi-nor";
+        reg = <0x0>;
+        #address-cells = <1>;
+        #size-cells = <1>;
+    };
+};
+
+
+/*----------------------- SD1 sd2.0 -----------------------*/
+&sdhci1 {
+    disable-wp;
+    no-1-8-v;
+};
+
+/*------------------------- ETH PHY -----------------------*/
+/delete-node/ &psu_ethernet_2_mdio;
+&gem2 { 
+    phy-handle = <&phy1_gem2>;
+    phy-mode = "rgmii-id";
+    status = "okay";
+    
+    reset-names = "ETH_RST"; 
+    reset-gpios = <&gpio 78 GPIO_ACTIVE_LOW>;
+    
+    phy1_gem2: ethernet-phy@1 {
+        device_type = "ethernet-phy";
+        reg = <1>;
+    };
+
+    rgmii_0: rgmii_0@4 {
+        phy-handle = <&phy1_gem2>;
+        compatible = "xlnx,gmii-to-rgmii-1.0";
+        reg = <4>;
+    };
+};
+
+
+
+/*----------------------- USB 2.0 only --------------------*/
+&dwc3_0 {
+    status = "okay";
+    dr_mode = "host";
+    maximum-speed = "high-speed";
+    /delete-property/phy-names;
+    /delete-property/phys;
+    /delete-property/snps,usb3_lpm_capable;
+    snps,dis_u2_susphy_quirk;
+    snps,dis_u3_susphy_quirk;
+};
+    
+&usb0 {
+    status = "okay";
+    /delete-property/ clocks;
+    /delete-property/ clock-names;
+    clocks = <0x3 0x20>;
+    clock-names = "bus_clk";
+};
+
+/*---------------------------- I2C ------------------------*/
+&i2c0 {
+  eeprom: eeprom@50 {
+     compatible = "microchip,24aa025", "atmel,24c02";
+     reg = <0x50>;
+  };
+};
+
+
