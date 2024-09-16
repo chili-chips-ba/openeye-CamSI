@@ -3,3 +3,9 @@ https://shop.trenz-electronic.de/en/CR00200-01-CRUVI-HS-Ethernet-PHY-Adapter
 Demo:
   https://wiki.trenz-electronic.de/display/PD/TE0821+CR00200+Demo
   https://shop.trenz-electronic.de/Download/?path=Trenz_Electronic/Modules_and_Module_Carriers/4x5/TE0821/Reference_Design/2021.2/CR00200_demo
+
+
+For PHY progamming, Trenz is using Linux drivers.
+Here are the relevant links:
+  https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841740/Macb+Driver
+  https://github.com/Xilinx/linux-xlnx/blob/master/drivers/net/phy/marvell.c
