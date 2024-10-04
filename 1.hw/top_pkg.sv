@@ -46,13 +46,13 @@
 //`define HDMI_1080p30
 //`define HDMI_1080p60 /*Artix-7 cannot do this option*/ 
 
-//`define MIPI_4_LANE
-`define MIPI_2_LANE
+`define MIPI_4_LANE
+//`define MIPI_2_LANE
 //`define MIPI_1_LANE
 
-`define RAW8
+//`define RAW8
 //`define RAW10
-//`define RAW12
+`define RAW12
 //`define RAW14
 
 

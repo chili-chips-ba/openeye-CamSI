@@ -77,8 +77,24 @@ module isp_top
       .reading    (reading),      //o
       .rgb_out    (rgb_out)       //o[RGB_WIDTH-1:0]
    );
-`else // RAW10
+`elsif RAW10
    raw2rgb_10 #(
+      .LINE_LENGTH (HSCREEN/NUM_LANE), // number of data entries per line
+      .RGB_WIDTH   (24)                // width of RGB data (24-bit)
+   )
+   u_raw2rgb (
+      .clk        (clk),          //i           
+      .rst        (rst),          //i
+
+      .data_in    (data_in),      //i'lane_raw_data_t
+      .data_valid (data_valid),   //i  
+      .rgb_valid  (rgb_valid),    //i
+
+      .reading    (reading),      //o
+      .rgb_out    (rgb_out)       //o[RGB_WIDTH-1:0]
+   );
+`else // RAW12
+   raw2rgb_12 #(
       .LINE_LENGTH (HSCREEN/NUM_LANE), // number of data entries per line
       .RGB_WIDTH   (24)                // width of RGB data (24-bit)
    )

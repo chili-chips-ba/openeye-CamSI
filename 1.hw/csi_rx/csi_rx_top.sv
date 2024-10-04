@@ -189,8 +189,18 @@ module csi_rx_top
 `ifdef RAW8
    assign csi_unpack_raw_dat     = csi_unpack_dat;
    assign csi_unpack_raw_dat_vld = csi_unpack_dat_vld;
-`else // RAW10
+`elsif RAW10
    csi_rx_10bit_unpack u_10bit_unpack (
+      .clock           (csi_byte_clk),          //i
+      .reset           (csi_reset),             //i
+      .enable          (cam_en),                //i
+      .data_in         (csi_unpack_dat),        //i'lane_data_t
+      .din_valid       (csi_unpack_dat_vld),    //i
+      .data_out        (csi_unpack_raw_dat),    //o'lane_raw_data_t
+      .dout_valid      (csi_unpack_raw_dat_vld) //o
+   );
+`else // RAW12
+   csi_rx_12bit_unpack u_12bit_unpack (
       .clock           (csi_byte_clk),          //i
       .reset           (csi_reset),             //i
       .enable          (cam_en),                //i

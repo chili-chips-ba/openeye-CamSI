@@ -7,7 +7,12 @@ class CSI:
       self.signal       = signal
       self.period_ns    = period_ns
       self.fps_Hz       = fps_Hz
-      self.line_length  = line_length if raw == 8 else int(line_length * (5 / 4))
+      self.line_length  = (
+                          line_length if raw == 8 else
+                          int(line_length * (5 / 4)) if raw == 10 else
+                          int(line_length * (3 / 2)) if raw == 12 else
+                          line_length
+                          )
       self.frame_length = frame_length
       self.frame_blank  = frame_blank
       self.num_lane     = num_lane
@@ -16,7 +21,7 @@ class CSI:
       self.uniform_data = uniform_data
       self.start_value  = start_value
       self.temp_var     = (1_000_000_000 / fps_Hz) / (8 * period_ns)
-      self.line_blank   = int(self.temp_var / (frame_length + frame_blank)) - int(line_length / num_lane)
+      self.line_blank   = int(self.temp_var / (frame_length + frame_blank)) - int(self.line_length / num_lane)
 
    def invert_byte(self, byte, lane):
       """
@@ -81,8 +86,10 @@ class CSI:
    async def send_incrementing_data(self, start_value, repeat_count=1):
       value0, value1, value2, value3 = (start_value,) * 4
       for i in range(repeat_count):
-         byte3 = self.invert_byte(value0 & 0xFF, 3)
-         byte2 = self.invert_byte((value1 + 0) & 0xFF, 2)
+         if self.num_lane == 4:
+            byte3 = self.invert_byte(value0 & 0xFF, 3)
+            byte2 = self.invert_byte((value1 + 0) & 0xFF, 2)
+         
          byte1 = self.invert_byte((value2 + 0) & 0xFF, 1)
          byte0 = self.invert_byte((value3 + 0) & 0xFF, 0)
 
@@ -103,6 +110,13 @@ class CSI:
             elif (i % 5 == 3):
                value0, value1, value2 = map(lambda v: v + 1, (value0, value1, value2))
             elif (i % 5 == 4):
+               value0, value1, value2, value3 = map(lambda v: v + 1, (value0, value1, value2, value3))
+         elif (self.raw == 12):
+            if (i % 3 == 0):
+               value2, value3 = map(lambda v: v + 1, (value2, value3))
+            elif (i % 3 == 1):
+               value0, value1 = map(lambda v: v + 1, (value0, value1))
+            elif (i % 5 == 2):
                value0, value1, value2, value3 = map(lambda v: v + 1, (value0, value1, value2, value3))
 
 
