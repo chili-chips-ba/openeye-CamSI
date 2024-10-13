@@ -1,6 +1,8 @@
-# openEye-CamSI (Phase1)
-<img src="https://github.com/chili-chips-ba/openeye/assets/67533663/07cb0f47-c9c7-483e-a028-0066342f5023" width="250">
+<p align="center">
+   <img width="140" src="https://github.com/chili-chips-ba/openeye/assets/67533663/07cb0f47-c9c7-483e-a028-0066342f5023">
+</p>
 
+# openEye-CamSI (Phase1)
 # Objective I
 ## Upgrade openCam Performance and Functionality
 The goals of this development are to deliver complete video pipeline for three popular hi-rez imaging/camera sensors:
@@ -89,7 +91,10 @@ For this first play, the hardware was used in the following config:
 - Trenz 4x5 SoM with Artix-7 FPGA (TE0711-01)
 - VHDPlus HDMI + 2-lane CSI Camera adapter
 - Raspberry Pi V2.1 camera (Sony IMX219)
-![system_no_background](https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/105a7569-75c5-4f2c-8f15-a408bb72cdc6)
+  
+<p align="center">
+  <img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/105a7569-75c5-4f2c-8f15-a408bb72cdc6">
+</p>
 
 ### *Standalone HDMI image generation*
 Our HDMI [image generator](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/1.hw/lib/ip/hdmi) is limited by the toggle rate that's realistically possible with Artix7 clock and I/O primitives. The max we can get from it is:
@@ -97,13 +102,19 @@ Our HDMI [image generator](https://github.com/chili-chips-ba/openeye-CamSI/tree/
 - 1080P@30Hz
   
 More about this and silicon limitations in [HDMI issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/1#issue-2278453405). Here is the test image that our HDMI RTL outputs on its own, w/o camera connected to it:
-<br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/c405a0d6-2086-452a-aa2a-435240055c48" width="500"><br />
+
+<p align="center">
+  <img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/c405a0d6-2086-452a-aa2a-435240055c48" width="500">
+</p>
 
 ### *I2C for Camera Configuration*
 There are many configurable registers in the IMX219 imaging sensor. Having fully familiarized with them, both by sniffing RPi I2C transactions and running own experiments, we've settled on the 720P@60Hz. I2C Controller was developped from the scratch, and used to load camera registers. More on it in [I2C issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/3). 
 
 Here is an illustration of I2C waveforms, i.e. our Control Plane protocol.
-<img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/2b54bf12-1366-4819-8080-df7d5cf8fa20" width="700"><br />
+
+<p align="center">
+  <img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/2b54bf12-1366-4819-8080-df7d5cf8fa20" width="700">
+</p>
 
 ### *Camera Connection*
 Sony [IMX219](0.doc/Sensor.2-lane.RPi2.1/IMX219PQ.Datasheet.pdf) camera sensor is used for image acquisition. It is connected to FPGA with a 15-pin flex cable (FFC), using [VHDPlus](https://vhdplus.com/docs/components/camera) CRUVI module. We recommend checking our [blog](https://www.chili-chips.xyz/blog/untwisting-rpi5-camera-connectivity) for additional detail on this topic.
@@ -112,8 +123,11 @@ It turned out that the 4-lane CRUVI connector had a serious design flaw, essenti
 
 ### *High-speed Signaling and Signal Integrity*
 The VHDPlus CRUVI carries three 100 Ohm termination resistors, one for clock, plus two for data, as shown below: 
-<br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/31957cba-ea2c-4b42-942e-e01f8f4e62a8" width="300"><br />
 
+<p align="center">
+  <img src="https://github.com/chili-chips-ba/openeye-CamSI/assets/113214949/31957cba-ea2c-4b42-942e-e01f8f4e62a8" width="300">
+</p>
+  
 Location of these resistors close to data source is a major SI problem. Termination must be placed at the end of *Transmission Line* (TL), next to sink. Yet, on this system, the termination is not only misplaced, but there are also three connectors in the path of high speed signals:
 - Camera to CRUVI -> `that's where the stock termination is placed`
 - CRUVI to Carrier Card
@@ -143,7 +157,9 @@ They mark the beginning of each new scan line in incoming video from Camera, as 
 
 Furthermore, Async FIFO is kept in reset when either Camera or HDMI are Out-Of-Frame. It is through this **fifo_areset_n** and **hdmi_reset_n** that we are forcing HDMI to track the Camera. **rgb2hdmi** is the bridge between Camera and HDMI+GE worlds. Timing diagram below contains additional detail.
 
-<img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Timing-Diagram.png">
+<p align="center">
+  <img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/Timing-Diagram.png">
+</p>
 
 In all honesty, it took us a bit of trial-and-error to get it right. That was to some extent due to CDC bug we found in the fullness count of AsyncFIFO, which is the IP block we pulled from one of the opensource libraries. 
 
@@ -155,8 +171,10 @@ In the end, when everything was tuned, and AsyncFIFO CDC problem factored out of
 
 The following diagram illustrates design clocking scheme and block structure:
 
-<br /><img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/FPGA-Block-Diagram.png"><br />
-
+<p align="center">
+  <img src="https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/FPGA-Block-Diagram.png">
+</p>
+ 
 Design operates off of a single **external 100MHz** clock, from which we generate **200MHz refclk** for IDELAY and detection of camera activity. The camera clock comes in two forms:
 - **CSI Bit** clock, for sampling and capturing incoming DDR data
 - **CSI Byte** clock (= Bit clock / 4) for the rest of CSI video pipeline
@@ -190,21 +208,24 @@ It is only at this point, where video is *unpacked*, that we may engage in ISP. 
 # Execution Play 4
 ## Porting to openXC7
 - [ ] Port final design from Vivado to openXC7
-- [ ] Simulate it with Verilator and cocoTB, in CI/CD system
+- [x] Simulate it with Verilator and cocoTB, in CI/CD system
 - [ ] Document scripts and flows used in this process
 
 # Execution Play 5
 ## Prepping for Webcam
+- [ ] Port to OV2740 camera chip
 - [ ] Add 3 new ISP functions
 > [ ] White Balance [ ] Color Correction [ ] Gamma Correction
 - [ ] and JPEG video compression
       
 ## *Acknowledgements*
 We are grateful to:
- - NLnet Foundation's sponsorship for giving us an opportunity to work on this fresh new take at FPGA video processing
- - StereoNinja, whose project has set the stage for this major upgrade of opensource camera performance and functionality, as well as its expansion from LatticeSemi to Xilinx ecosystem
+ - NLnet Foundation's sponsorship for giving us an opportunity to work on this fresh new take at FPGA video processing.
+ - StereoNinja, whose project has set the stage for this major upgrade of opensource camera performance and functionality, as well as its expansion from LatticeSemi to Xilinx ecosystem.
 
-> ![logo_nlnet](https://github.com/chili-chips-ba/openeye/assets/67533663/18e7db5c-8c52-406b-a58e-8860caa327c2)
-> <img width="115" alt="NGI-Entrust-Logo" src="https://github.com/chili-chips-ba/openeye-CamSI/assets/67533663/013684f5-d530-42ab-807d-b4afd34c1522">
+<p align="center">
+    <img src="https://github.com/chili-chips-ba/openeye/assets/67533663/18e7db5c-8c52-406b-a58e-8860caa327c2">
+    <img width="115" alt="NGI-Entrust-Logo" src="https://github.com/chili-chips-ba/openeye-CamSI/assets/67533663/013684f5-d530-42ab-807d-b4afd34c1522">
+</p>
 
-**<h3>  End of Document </h3>** 
+#### End of Document
