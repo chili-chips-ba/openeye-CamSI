@@ -208,7 +208,7 @@ It is only at this point, where video is *unpacked*, that we may engage in ISP. 
 - [ ] Document scripts and flows used in this process
 
 ## Execution Play 5
-### Prepping for the Webcam
+### Prepping for Webcam
 - [ ] Enable OV2740 camera chip
 - [ ] Add 3 new ISP functions
 > - [ ] White Balance [ ] Color Correction [ ] Gamma Correction
