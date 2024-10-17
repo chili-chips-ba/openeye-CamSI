@@ -208,7 +208,7 @@ It is only at this point, where video is *unpacked*, that we may engage in ISP. 
 - [ ] Document scripts and flows used in this process
 
 ## Execution Play 5
-### Prepping for the Webcam
+### Prepping for Webcam
 - [ ] Enable OV2740 camera chip
 - [ ] Add 3 new ISP functions
 > - [ ] White Balance [ ] Color Correction [ ] Gamma Correction
@@ -222,7 +222,7 @@ We ended up having to debug board and connectivity issues on PCBAs that no one u
 
 On top of that comes scarce availability of Trenz board, with lead times in excess of three months for a simple passive CRUVI Debug Card. All that has cost us dearly in time and effort. Yes, CRUVI is open-source. Yes, Trenz is European. But, we cannot afford to keep investing and loosing so much in order to support that cause.
 
-Going forward, we are parting away with Trenz with CRUVI system, and switching to Puzhitech [PA-StarLite](https://www.aliexpress.us/item/3256806434967523.html?gps-id=pcStoreJustForYou&scm=1007.23125.137358.0&scm_id=1007.23125.137358.0&scm-url=1007.23125.137358.0&pvid=c1d02f3c-8f66-4b76-a24a-a72144960d79&_t=gps-id%3ApcStoreJustForYou%2Cscm-url%3A1007.23125.137358.0%2Cpvid%3Ac1d02f3c-8f66-4b76-a24a-a72144960d79%2Ctpp_buckets%3A668%232846%238107%231934&pdp_npi=4%40dis%21USD%21128.44%21102.75%21%21%21901.32%21721.06%21%402101c67a17281960440137763ec377%2112000037845115402%21rec%21US%212013047485%21XZ&spm=a2g0o.store_pc_home.smartJustForYou_2010082555490.1005006621282275&gatewayAdapt=glo2usa). This compact card brings everything we need for video projects off-the-bat, within basic package, including 2-lane MIPI CSI connector, HDMI output and 1Gbps Ethernet. No need for multiple add-on cards and connectors to put together a useable system that's 3x more expensive and more fragile. 
+Going forward, we are parting away with Trenz CRUVI system, and switching to Puzhitech [PA-StarLite](https://www.aliexpress.us/item/3256806434967523.html?gps-id=pcStoreJustForYou&scm=1007.23125.137358.0&scm_id=1007.23125.137358.0&scm-url=1007.23125.137358.0&pvid=c1d02f3c-8f66-4b76-a24a-a72144960d79&_t=gps-id%3ApcStoreJustForYou%2Cscm-url%3A1007.23125.137358.0%2Cpvid%3Ac1d02f3c-8f66-4b76-a24a-a72144960d79%2Ctpp_buckets%3A668%232846%238107%231934&pdp_npi=4%40dis%21USD%21128.44%21102.75%21%21%21901.32%21721.06%21%402101c67a17281960440137763ec377%2112000037845115402%21rec%21US%212013047485%21XZ&spm=a2g0o.store_pc_home.smartJustForYou_2010082555490.1005006621282275&gatewayAdapt=glo2usa). This compact card brings everything we need for video projects off-the-bat, within basic package, including 2-lane MIPI CSI connector, HDMI output and 1Gbps Ethernet. No need for multiple add-on cards and connectors to put together a useable system that's 3x more expensive, more fragile, and not in stock.
 
 This card also comes with solid expension potential via two 40-pin standard 100mil headers. They are mechanically robust, physically accessible for debugging, and still can carry relatively high-speed signals thanks to short, balanced wiring on the mainboard.
 
