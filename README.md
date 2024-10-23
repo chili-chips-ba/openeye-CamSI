@@ -1,6 +1,6 @@
 # Phase1 - openEye/CamSI
 <p align="center">
-   <img width="140" src="https://github.com/chili-chips-ba/openeye/assets/67533663/07cb0f47-c9c7-483e-a028-0066342f5023">
+   <img width="140" src="0.doc/open-eye-logo.png">
 </p>
 
 ## Objective I
