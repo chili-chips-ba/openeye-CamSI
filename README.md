@@ -239,7 +239,7 @@ While the board already comes with 15-pin 0.5mm FPC for 2-lane MIPI CSI, these h
 <img width="300" src="0.doc/Puzhitech/Images/PA.7.png">
 
 <img width="900" src="0.doc/Puzhitech/Images/Puzhi-vs-Trenz.jpg">
-<img width="900" src="0.doc/Puzhitech/Images/FPC-0.5mm--to--DIP-100mil.png">
+<img width="400" src="0.doc/Puzhitech/Images/FPC-0.5mm--to--DIP-100mil.png">
 </p>
 
 # Phase2 - USB Webcam
