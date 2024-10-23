@@ -138,7 +138,7 @@ When Artix7 internal termination is used in connecton to LVDS_25 IOSTANDARD, it 
 That's on Trenz hardware done in the following way:
 - switch DIP 2 to ON state, to set the IOV to 2.5V
 - use Jumpers J14, J16, and J17 to connect VCCIO to IOV.
- 
+Â 
 #### *Detection of Camera Clock Activity Intervals*
 Once all these hardware and board problems were put behind, we turned focus back to RTL design. 
 
@@ -226,6 +226,8 @@ Going forward, we are parting away with Trenz CRUVI system, and switching to Puz
 
 This card also comes with solid expension potential via two 40-pin standard 100mil headers. They are mechanically robust, physically accessible for debugging, and still can carry relatively high-speed signals thanks to short, balanced wiring on the mainboard.
 
+While the board already comes with 15-pin 0.5mm FPC for 2-lane MIPI CSI, these headers can be used to hook up additional cameras, as well as 22-pin connector for the 4-lane interface. Below is a picture of the [adapter](https://www.ebay.com/itm/175795228114?mkcid=16&mkevt=1&mkrid=711-127632-2357-0&ssspo=1cGlwdPqS5y&sssrc=4429486&ssuid=QKddZKcUTzu&var=475196039437&widget_ver=artemis&media=MORE) we used. We recommend fitting it with connector that has longer pins, so that they protrude on the bottom side, and serve as attachment points for the oscilloscope, alleviating the need for 36 € Trenz Debug Connector, whose lead time is also in excess of 3 months.
+
 <p align="center">
 <img width="300" src="0.doc/Puzhitech/Images/PA.1.png">
 <img width="300" src="0.doc/Puzhitech/Images/PA.2.png">
@@ -237,6 +239,7 @@ This card also comes with solid expension potential via two 40-pin standard 100m
 <img width="300" src="0.doc/Puzhitech/Images/PA.7.png">
 
 <img width="900" src="0.doc/Puzhitech/Images/Puzhi-vs-Trenz.jpg">
+<img width="900" src="0.doc/Puzhitech/Images/FPC-0.5mm--to--DIP-100mil.png">
 </p>
 
 # Phase2 - USB Webcam
