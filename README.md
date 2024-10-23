@@ -236,7 +236,7 @@ This card also comes with solid expension potential via two 40-pin standard 100m
    
 <img width="300" src="0.doc/Puzhitech/Images/PA.7.png">
 
-<img width="300" src="0.doc/Puzhitech/Images/Puzhi-vs-Trenz.jpg">
+<img width="600" src="0.doc/Puzhitech/Images/Puzhi-vs-Trenz.jpg">
 </p>
 
 # Phase2 - USB Webcam
