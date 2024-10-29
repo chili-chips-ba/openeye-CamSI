@@ -105,7 +105,7 @@ module i2c_top #(
 
 
 `ifndef SIM_ONLY
-   initial $readmemh("i2c_init.mem", i2c_data_init);
+   initial $readmemh("i2c_init_IMX283.mem", i2c_data_init);
 
 `else
    string i2c_init_mem_file;
@@ -115,7 +115,7 @@ module i2c_top #(
          $readmemh(i2c_init_mem_file, i2c_data_init);
       end
       else begin
-         $readmemh("../../../1.hw/lib/ip/i2c_master/i2c_init.mem", i2c_data_init);
+         $readmemh("../../../1.hw/lib/ip/i2c_master/i2c_init_IMX283.mem", i2c_data_init);
       end
    end
 `endif
