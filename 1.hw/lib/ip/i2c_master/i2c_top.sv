@@ -42,8 +42,9 @@
 //   - for most part operates in sync with external 400kHz strobe
 //========================================================================
 
+import top_pkg::*;
 module i2c_top #(
-   parameter I2C_SLAVE_ADDR = 7'd16 
+   parameter I2C_SLAVE_ADDR = 7'd26
 )(
 
  //clocks and resets
@@ -53,9 +54,13 @@ module i2c_top #(
 
  //I/O pads
    inout  wire   i2c_scl,
-   inout  wire   i2c_sda
+   inout  wire   i2c_sda,
+
+ //Misc/Debug
+   output bus8_t debug_pins
 );
-   
+
+   parameter NUM_REGISTERS = 56;
 
 //--------------------------------
 // I2C Master
@@ -63,10 +68,10 @@ module i2c_top #(
    logic        i2c_enable;
 
    logic [15:0] i2c_reg_addr;
-   logic [6:0]  i2c_reg_cnt;
+   logic [5:0]  i2c_reg_cnt;
    logic        i2c_reg_done;
 
-   logic [23:0] i2c_data_init[65];
+   logic [31:0] i2c_data_init[NUM_REGISTERS];
    logic [7:0]  i2c_data_in;
 
    logic        i2c_scl_do;
@@ -76,6 +81,8 @@ module i2c_top #(
    logic        i2c_sda_do; 
    logic        i2c_sda_di;
    logic        i2c_sda_oe;
+   
+   logic [7:0]  i2c_pause;
 
    i2c_ctrl u_ctrl (
       .clk              (clk),            //i 
@@ -92,8 +99,8 @@ module i2c_top #(
       .scl_di           (i2c_scl_di),     //i
       
       .sda_oe           (i2c_sda_oe),     //o
-      .sda_di           (i2c_sda_di)      //i
-      
+      .sda_di           (i2c_sda_di),     //i
+      .pause_duration   (i2c_pause)       //i[7:0]
    );
 
 
@@ -113,9 +120,10 @@ module i2c_top #(
    end
 `endif
 
-   assign i2c_enable   = (i2c_reg_cnt < 7'd65);
-   assign i2c_reg_addr = i2c_data_init[i2c_reg_cnt][23:8];
-   assign i2c_data_in  = i2c_data_init[i2c_reg_cnt][7:0];
+   assign i2c_enable   = (i2c_reg_cnt < NUM_REGISTERS);
+   assign i2c_reg_addr = i2c_data_init[i2c_reg_cnt][31:16];
+   assign i2c_data_in  = i2c_data_init[i2c_reg_cnt][15:8];
+   assign i2c_pause    = i2c_data_init[i2c_reg_cnt][7:0];
 
    always_ff @(negedge areset_n or posedge clk) begin
       if (areset_n == 1'b0) begin
@@ -123,8 +131,8 @@ module i2c_top #(
       end 
       else if ({strobe_400kHz, i2c_enable} == 2'b11) begin
          if (i2c_reg_done == 1'd1) begin
-            if (i2c_reg_cnt < 7'd65) begin
-               i2c_reg_cnt <= 7'(i2c_reg_cnt + 7'd1);
+            if (i2c_reg_cnt < NUM_REGISTERS) begin
+               i2c_reg_cnt <= 6'(i2c_reg_cnt + 6'd1);
             end
          end
       end 
@@ -142,6 +150,17 @@ module i2c_top #(
       .I  ({ 1'b0,        1'b0       }), //i
       .T  ({ ~i2c_sda_oe, ~i2c_scl_oe })  //i: 3-state enable: 1=input, 0=output
    );
+
+   assign debug_pins = {
+      i2c_sda_di, 
+      i2c_scl_di, 
+      i2c_sda_oe, 
+      i2c_scl_oe, 
+      i2c_enable, 
+      areset_n,
+      i2c_reg_done,
+      strobe_400kHz
+   };
    
 endmodule: i2c_top
 
