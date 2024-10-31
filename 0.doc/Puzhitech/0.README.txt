@@ -1,0 +1,3 @@
+'PA-StarLite-sch.pdf' file is the schematics file for Puzhi StarLite
+board. It writes xc7a75t in the schematics, but it's the same for the
+35t as well.
