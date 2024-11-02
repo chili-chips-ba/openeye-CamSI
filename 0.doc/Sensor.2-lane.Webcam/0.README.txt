@@ -1,7 +1,8 @@
 for questions concerning the camera please ask
    thomas.ludemann@open-visions.com
 
-Lukas Henkel:
+---
+Lukas Henkel (July 4, 2024):
    Our image sensor is packaged in a BGA package with
    a total height close to 1mm, not a bare die. On a bare
    die assembly the image plane sits about 150um above the
@@ -12,3 +13,11 @@ Lukas Henkel:
    to the custom low profile lense holder once everything
    works, or see if I can find bare die sensors in the meantime
 
+---
+Lukas Henkel (Nov.1, 2024)
+   I´m testing the mechanical integration of this lense
+     https://www.alibaba.com/product-detail/1-6-3mp-2-5mm-M5_62306174599.html?spm=a2700.galleryofferlist.normal_offer.d_title.431413a0rhClmi
+
+   The alignment pins do not quite fit the holes on the board, but a scalpel and a drop of UV or super glue will do the trick for testing.
+
+---
