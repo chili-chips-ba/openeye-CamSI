@@ -1,0 +1,11 @@
+===================================
+Configuration Memory information
+===================================
+File Format        MCS
+Interface          SPIX4
+Size               32M
+Start Address      0x00000000
+End Address        0x01FFFFFF
+
+Addr1         Addr2         Date                    File(s)
+0x00000000    0x000EAE73    Jul 29 13:09:45 2022    E:/Dev_Board_Prj/PZ_A7/PZ_A75T/1_FPGA/3_23_PZ_UDP_RGMII/PZ_UDP_RGMII.runs/impl_1/udp_top.bit

@@ -1,0 +1,8 @@
+// WinHex license file
+
+Name: "WinHex 19.6-SR2"
+Addr1: "Specialist License"
+Addr2: "Only valid for this version"
+Data: "B884E8CE836E7A3EC70F2DA7F0D7B9F8"
+Key: "B6E03D26307E5A7700F3F04C8429A25B"
+Cksm: "FD37FCFB"

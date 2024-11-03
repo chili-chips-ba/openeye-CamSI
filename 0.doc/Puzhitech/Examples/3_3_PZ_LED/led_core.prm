@@ -1,0 +1,11 @@
+===================================
+Configuration Memory information
+===================================
+File Format        MCS
+Interface          SPIX4
+Size               32M
+Start Address      0x00000000
+End Address        0x01FFFFFF
+
+Addr1         Addr2         Date                    File(s)
+0x00000000    0x000FA137    Jan 26 17:56:52 2022    E:/Zynq_2019_1/PZ_K7325T/PZ_K7325_demo/1_FPGA/3_3_PZ_LED/Test_LED.runs/impl_1/LED.bit

@@ -1,0 +1,6 @@
+TMDSEncoder.vhd,vhdl,xil_defaultlib,../../../ipstatic/src/TMDSEncoder.vhd,
+SerializerN_1.vhd,vhdl,xil_defaultlib,../../../ipstatic/src/SerializerN_1.vhd,
+DVITransmitter.vhd,vhdl,xil_defaultlib,../../../ipstatic/src/DVITransmitter.vhd,
+hdmi_tx.vhd,vhdl,xil_defaultlib,../../../ipstatic/src/hdmi_tx.vhd,
+HDMI_IP.vhd,vhdl,xil_defaultlib,../../../ip/HDMI_IP/sim/HDMI_IP.vhd,
+glbl.v,Verilog,xil_defaultlib,glbl.v

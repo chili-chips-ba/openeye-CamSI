@@ -1,0 +1,356 @@
+Description	Extensions	Header	Offset	Footer	Default size	Flags
+*** Pictures
+JPEG	JPG;jpeg;jpe;thm;mpo	\xFF\xD8\xFF[\xC0\xC4\xDB\xDD\xE0-\xE5\xE7\xE8\xEA-\xEE\xFE]	0	~1	2097152/33554432	e
+PNG	png	\x89PNG\x0D\x0A\x1A\x0A	0	~6		e
+GIF	gif	GIF8[79]a	0	~3	2097152/33554432
+Thumbcache fragment	cmmm	CMMM..\x00\x00.[^\x00]	0	~84	2097152/511705088	GUb
+TIFF/NEF/CR2/DNG	tif;tiff;nef;cr2;dng;pef;nrw;arw	(\x49\x49\x2A\x00)|(\x4D\x4D\x00\x2A)	0	~5	4194304/268435456
+Bitmap	bmp;dib	BM.....\x00.\x00....[\x0C\x28\x38\x40\x6C\x7C]\x00\x00\x00	0	~4
+Paint Shop Pro	psp;PsPImage;pfr	(Paint Shop Pro Im)|(~BK\x00)	0	~8	2097152	b
+Canon Raw	crw	HEAPCCDR	6		8200000	c
+Adobe Photoshop	PSD;pdd;p3m;p3r;p3l	8BPS\x00\x01\x00\x00\x00\x00\x00\x00	0	~9	10485760	b
+Icon	ico	\x00\x00\x01\x00[\x01-\x15]\x00(\x10\x10|\x20\x20|\x30\x30|\x40\x40|\x80\x80).\x00[\x00\x01]	0	~7	1024/1782600	c
+Enhanced Metafile	emf	 EMF\x00\x00\x01\x00	40	~18		e
+Artwork cache	ITC2;itc	\x00\x00\x01\x1Citch	0		802400	c
+Corel Photo-Paint	cpt	CPT[789]FILE[\x01-\x0F]\x00\x00\x00	0	~97	3145728/37748736	b
+Corel Draw	cdr;cdt	RIFF....CDR[ 3-G]vrsn\x02\x00\x00\x00	0	~33		bx
+Corel Binary Metafile	cmx	CMX1	8	~33
+Freehand drawing (v3)	fh3	FH31	0			c
+Freehand drawing	fh9;fh8;fh7;fh5	AGD[1-4]	0		600000	c
+Google SketchUp 	SKP;skb	\xFF\xFE\xFF\x0ES\x00k\x00e\x00t\x00c\x00h\x00U\x00p\x00\x20\x00M\x00o\x00d\x00e\x00l\x00\xFF\xFE\xFF.\x7B\x00[567]	0		4194304	b
+SketchUp (v8 up)	SKP;skb	\xFF\xFE\xFF\x0ES\x00k\x00e\x00t\x00c\x00h\x00U\x00p\x00\x20\x00M\x00o\x00d\x00e\x00l\x00\xFF\xFE\xFF.\x7B\x00[0-489]	0	\x9A\x99\x99\x99\x99\x99\xE9\x3F.{12}	4194304	b
+AutoCAD Drawing	DWG;123d	AC10[01][0-5]\x00	0		5242880	c
+AutoCAD Drawing	dwg;dwt	AC10(18|24|27)\x00	0	~98	5242880
+Drawing Exchange Format	dxf	\x20{0,3}\x30(\x0D\x0A|\x0A|\x0D)SECTION	0	~99
+Encapsulated PostScript	eps;ai	\xC5\xD0\xD3\xC6	0	~70
+JPEG (Base64)	B64	/9j/4[\x0A\x0Da-zA-Z0-9\+/]{256}	0	~101		b
+PNG (Base64)	B64	iVBORw0[\x0A\x0Da-zA-Z0-9\+/]{256}	0	~101		b
+Sony RAW	arw	\x05\x00\x00\x00AW1\x2E	0		16882074	b
+Fuji Raw	raf	FUJIFILMCCD-RAW	0		9600000
+Minolta Dimage RAW image	mrw	\x00MRM	0		6900000	c
+WordPerfect graphics	WPG1;wpg	\xFFWPC...\x00\x01\x16	0		600000	c
+The GIMP image	xcf	gimp\x20xcf\x20(file|v001|v002|v003)	0	~95	1048576/125829120	b
+LuraWave JPEG-2000 bitmap	JP2;jpx;jpf;j2k	\x00\x00\x00\x0C\x6A\x50\x20\x20\x0D\x0A......ftypjp2 	0		5442880
+Xara X drawing	XARA;xar;web	XARA\xA3\xA3\x0D	0		1200000
+High Dynamic Range	hdr	\#\?RADIANCE\x0A	0		8400000	c
+Kodak Cineon	cin	\x80\x2A\x5F\xD7\x00\x00\x08\x00\x00\x00\x04\x00\x00\x00\x04\x00\x00\x00\x00\x00	0
+Digital Picture Exchange	dpx	(SDPX|XPDS)\x00...V#\x2E	0		7635174	c
+Micrographix Graphic	DRW1;drw	\x01\xFF\x02\x04\x03\x02	0		1200000	c
+Freehand (MX) Project	fh10;fh11	\x1C\x01\x00\x00\x02\x00\x04\x1C\x01\x14\x00\x02\x00\x14\x1C\x01\x16\x00\x02\x00	0		2097152
+Photoshop Large Document	psb	8BPS\x00\x02\x00\x00\x00\x00\x00\x00\x00	0		8194304
+WebP Image	webp	RIFF....WEBP	0	~33	24576/1048576
+ZbThumbnail	info	zbex\x04\x00\x00\x4C	0		1500000	b
+Adobe Bridge Cache	bct	\x6C\x6E\x62\x74\x02\x00\x00\x00	0		10485760
+Account Picture	accountpicture-ms	1SPS\x18\xB0\x8B\x0B\x25\x27\x44\x4B\x92\xBA\x79\x33	8	~106
+MSO Document Image	mdi	EP\*\x00	0		2097152	c
+PaperPort scanned	MAX1;max	ViG..\x1A	0	~96
+Kies thumb	TEC1;tec	\xFF\xD9...[\x00-\x03]\xFF\xD8\xFF	0	\xFF\xD9		c
+PC Paintbrush	pcx	\x0A\x05\x01\x08	0		524288	c
+BBThumbs.dat	bbthumbs	\x24\x05\x20\x03[\x07\x08]\x01\x00	0		2097152
+SymbianOS Multi BitMap	mbm	\x37\x00\x00\x10........9d9G	0		72474	x
+Graphics Metafile	WMF;bkg	\xD7\xCD\xC6\x9A\x00\x00	0	~40		c
+Windows 3 Metafile	wmf	\x01\x00\x09\x00\x00\x03	0	~40		c
+Calamus Vector Graphic	cvg	CALAMUSCVG	0			c
+*** Documents
+Adobe Acrobat	pdf;ai;ait	%PDF\x2D1\x2E	0	~17	1048576/134217728
+Unicode UTF-16LE	txt	\xFF\xFE[\x09\x0A\x0D\x20-\x3C\x40-\x7E\xC0-\xDC]\x00[^\x00]\x00	0	~48		G
+Text UTF-8	txt	\xEF\xBB\xBF[\x09\x0A\x0D\x20-\x3C\x40-\x7E\xC0-\xDC]	0	~57		G
+OLE2/MS Office	ole2;doc;xls;dot;ppt;xla;ppa;pps;pot;msi;sdw;db;vsd;msg	\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1	0	~16		b
+MS Office 2007+	docx;xlsx;pptx	_Types\]\.xml	38	~14		g
+OpenOffice	odt;ods;odf;odg;odp;odb	Zip Archive				L
+Rich Text Format	RTF;doc	\{\\rtf	0	~20		G
+MS Access	mdb;mda;mde;mdt;fdb;psa	\x00\x01\x00\x00Standard Jet	0	~71
+MS Access 2007	accdb;accde;accda;accdu	\x00\x01\x00\x00Standard ACE DB	0		8388608
+WordPerfect document	WPD;wp;wp5;wp6;wpp;bk!;wcm	\xFFWPC...[\x00-\x02]\x01\x0A	0		300000
+MS OneNote	one	\xE4\x52\x5C\x7B\x8C\xD8\xA7\x4D\xAE\xB1\x53\x78\xD0\x29\x96\xD3	0	~108	3145728
+PostScript/Adobe	ps;eps;ai;pfa	%!PS-Adobe	0	~56
+Quicken	qdf	\xAC\x9E\xBD\x8F	0		8388608
+Quicken	qsd	QW Ver\. 	0		370000	c
+QuickBooks Backup	qbb	\x45\x86\x00\x00\x06\x00\x02\x00	0		8388608	c
+PDF (Base64)	B64	AJVBERi[\x0A\x0Da-zA-Z0-9\+/]{256}	0	~101		b
+OLE2 (Base64)	B64	0M8R4KGx[\x0A\x0Da-zA-Z0-9\+/]{256}	0	~101		b
+Quattro Pro Notebook 6.0	wb2	\x00\x00\x02\x00[\x01\x02]\x10\xC9\x00\x02\x00\x00\x06	0		2097152
+FileMaker Pro 7	fp7;fp12;fmp12	\x00\x01\x00\x00\x00\x02\x00\x01\x00\x05\x00\x02\x00\x02\xC0HBAM7	0		4194304
+FileMaker Pro database	fp5;fp3	\x00\x01\x00\x00\x00\x02\x00\x01\x00\x05\x00\x02\x00\x02\xC0	0		4194304	cx
+RagTime Document	rtd	\x43\x23\x2B\x44\xA4\x43\x4D\xA5\x48\x64\x72	0		524288
+MS Money	MNY;m12;m14;m15;mnp;mne	\x00\x01\x00\x00MSISAM	0		8388608
+MS Word 6.0	DOC2;doc	\x12\x34\x56\x78\x90\xFF	0		60000	c
+MS Word (MacBinary)	DOC3;doc	BNMSWD...\x00	67			c
+MS Write	wri	[\x31\x32]\xBE\x00\x00\x00\xAB\x00\x00\x00\x00\x00\x00	0		200000	c
+Lotus WordPro v9	lwp	WordPro[\x00\x0D]	0	\xA4\x43\x4D\xA5\x48\x64\x72\xD7\x01\x01\x01\x00\x02\x00\x00\x00.{8}	1500000/12582912	c
+Lotus 123 v9	123	\x00\x00\x1A\x00[\x03\x05]\x10\x04	0	\xA4\x43\x4D\xA5\x48\x64\x72\xD7\x01\x01\x01\x00\x02\x00\x00\x00.{8}	2097152/5242880	c
+Lotus 123 v3-5	wk3;wk4;wk5	\x00\x00\x1A\x00[\x00\x02]\x10\x04\x00	0		800000	c
+Lotus 123 v1	WK1;wk5	\x00\x00\x02\x00\x06\x04\x06\x00\x08\x00\x00\x00\x00\x00	0		524288	c
+Microsoft Project	mpx	MPX[, ]	0		262144	c
+Claris Works document	cwk	[\x00\x03\x04]BOBO	3		600000	c
+Claris Works word processor (MacBinary)	cwk	WORDBOBO	65		1048576	c
+Claris Works text (MacBinary)	cwk	CWWPBOBO	65		1048576	c
+DJVU	djvu	AT&TFORM	0		5242880	c
+Pocket Word	pwi;psw	\x7B\x5Cpwi\x15\x00\x00\x01	0		500000
+TextMaker Document	tmd;tmv	MV\x00\xFF\x0C\x00[\x01\x0E]\x00	0			c
+MS Works	WKS1;wks	\xFF\x00\x02\x00\x04\x04\x05\x54\x02\x00..\x26\x54\x02\x00\x00\x00\x06\x00\x08	0		262144
+KWord	kwd	KOffice application/x-kword	10	~14		g
+*** E-mail
+E-mail	eml;wdseml;mht	(MIME-Version: 1\.0|Return-[Pp]ath: |Received: (from|by) |Delivery-date: [FMSTW]|From: [\x22<=A-Za-z]|Date: (Mon|Tue|Wed|Thu|Fri|Sat|Sun), [01]?# |References: <|Message-(ID|Id|id): <)	0	~102		bGA
+Outlook	pst;ost;fdb;pab	!BDN	0	~24	4194304/536870912
+Outlook AutoComplete	nk2	\x0D\xF0\xAD\xBA[\x0A-\x0C]\x00\x00\x00	0		2200000
+Exchange DB	EDB;MSMessageStore	\xEF\xCD\xAB\x89[\x20\x23]\x06\x00\x00[\x00\x01]\x00\x00\x00	4	~54	5000000/1342177280
+Outlook Express	dbx	\xCF\xAD\x12\xFE[\x30\xC5-\xC7].{6}\x11	0	~25
+vCard	vcf	BEGIN:VCARD\x0D?\x0A	0	END:VCARD\x0D?\x0A?	256000/35651584	b
+Virtual Calendar	vcs;ics	BEGIN:[vV]C[aA][lL][eE][nN][dD][aA][rR]	0	END:VCALENDAR	256000/10485760
+Mailbox	mbox;mbs	From\x20[^\x3F]	0	~43	2097152/536870912	EB
+OS X Tiger E-mail	emlx	#{3,9}\x20{0,6}\x0D?\x0A(Delivered-To|Status|Return-[Pp]ath|From|Subject|In-Reply-To|Message-Id|Mime-Version|Received):\x20	0	~103	524288/102760448	FG
+Outlook 2011 Mac	olk14MsgSource	MSrc	0	~77
+Outlook 2011 Mac	olk14MsgAttach	Attc[\x00-\x08]	0	~77
+Outlook 2011 Mac	olk14message	MLRC\x00	0	~77
+Outlook 2014 Mac	olk15message	\xD0\x0D\x00\x00.{28}CRLM	0	~77
+Outlook 2014 Mac	olk15MsgAttachment	\xD0\x0D\x00\x00.{28}cttA	0		1048576
+Outlook 2014 Mac	olk15MsgSource	\xD0\x0D\x00\x00.{28}crSM	0		262144
+OE addr. book	WAB;wab~	\x9C\xCB\xCB\x8D\x13\x75\xD2\x11\x91\x58\x00\xC0\x4F\x79\x56\xA4..\x00\x00..\x00\x00	0		2097152	b
+OE addr. book (Win95)	wab	\x81\x32\x84\xC1\x85\x05\xD0\x11\xB2\x90\x00\xAA\x00\x3C\xF6\x76	0
+Eudora	mbx	From\x20\x3F\x3F\x3F\x40\x3F\x3F\x3F\x20	0		8388608
+AOL PFC	pfc;org	AOLVM100	0	~22
+Video E-Mail	vem	High JPEG Data in Memory	0			c
+Offline Address Book	oab	\x20\x00\x00\x00.{10}\x00\x00	0	~86		cxA
+MIME	mime;dm;eml;mht	Content-Type:\x20	0	~56	2097152		xA
+LDAP Data Interchange Format	LDIF;ldf	dn: [a-zA-Z]{1,14}=	0	~56	262144/4194304
+OECustomProperty	FOL;%%%OECustomProperty	1SPS(\x30\xF1\x25\xB7|\xE0\x85\x9F\xF2)	8	~106	8196
+*** Internet
+#INTERNAL1
+XML/Markup	xml	[\x09\x0A\x0D\x20]{0,60}<[!\?A-Za-z][-:_A-Za-z]{2,24}[ >\x09\x0A\x0D]	0	~15		GEA
+SQLite 2.x database	SQLITE2;sqlite;;	\*\* This file contains an SQLite 2\.#	0			t
+SQLite 3.x database	sqlitedb;sqlite3;sqlite;lrcat;exb;itdb;localstorage	SQLite format 3\x00	0	~59		tx
+Mime Html	mht;eml	MIME-Version:\x201\.0\x0D\x0A	0	\x00		fE
+Nokia text	vmg	BEGIN:VMSG	0	END:VMSG	1048576/14680064	b
+Nokia SMS	vmg	B\x00E\x00G\x00I\x00N\x00\x3A\x00V\x00M\x00S\x00G\x00\x0A\x00	0	E\x00N\x00D\x00\x3A\x00V\x00M\x00S\x00G\x00\x0A\x00	2048/100000
+Dialup	dun	\[Phone\]\x0D\x0A	0	~56	860/3000	c
+Google cookie	COOKIE;txt	(__utma|PREF)\x0A	0	\x0A\x2A\x0A\x00	1024/3600
+Chrome cache	chrome	\xC3\xCA\x04\xC1[\x00\x03]\x00[\x01\x02]\x00	0	~63
+Chrome session	snss	SNSS\x01\x00\x00\x00	0	~74		b
+Facebook	json	for \(;;\);\{\x22	0	~56
+Google	json	\{e:"[-_0-9a-zA-Z]{22}",	0	~56
+Opera Hotlist (v2.0) / bookmark	adr	(\xEF\xBB\xBF)?Opera Hotlist version #\.0	0		128000
+Firefox(1)	SESSIONSTORE;js	\(?\{\x22?windows\x22?:\[\{	0	~56	96000	c
+Flash Cookie	sol	\x00\xBF....TCSO	0	~52
+Safari Cookies	binarycookies	cook\x00	0	~68
+Chrome Offline Cache	service_worker	\x30\x5C\x72\xA7\x1B\x6D\xFB\xFC\x05\x00\x00\x00	0	\xD8\x41\x0D\x97\x45\x6F\xFA\xF4\x01\x00\x00\x00.{12}	524288/2097152
+Cryptnet	urlcache	[\x18\x70]\x00\x00\x00\x01\x01\x02\x20\x01\x00\x00\x00..\x00\x00	0		512
+SkyDrive	ms-properties	1SPS\x53\xF1\xEF\xFC\x39\xE8\xF3\x4C\xA9\xE7\xEA\x22	8	~106	4096
+Google Analytics URL+ei TS	eiurl	https?://	0	~92	1400	GbA
+*** Archives
+Zip Archive	zip;jar;xps;apk;pages	PK\x03\x04|PK00|PK\x05\x06	0	~14	4194304/536870912	gGE
+Zip (Base64)	B64	UEsDBB[\x0A\x0Da-zA-Z0-9\+/]{256}	0	~101		b
+Jar Archive	JAR1;jar	\x5F\x27\xA8\x89	0
+RAR Archive	rar;cbr	Rar!\x1a\x07\x00	0	~29	4194304/2147483648
+GZip Archive	gz;tgz;emz	\x1F\x8B\x08[\x00\x02\x08\x10]....[\x00\x02\x04][\x00-\x12\xFF]	0	~32	1048576/134217728
+7-Zip Archive	7z	7z\xBC\xAF\x27	0	~39	2097152/268435456
+Tar/PAX Archive	tar;ova	ustar	257	~31	1048576/205520896	G
+BZip Archive	BZ2;tbz	BZ[0h]#\x31\x41\x59\x26	0
+MS Compressed	cab	MSCF\x00\x00\x00\x00	0	~82
+ARJ Archive	arj	\x60\xEA......[\x00\x10\x14]\x00\x02	0
+XZ Archive	xz	\xFD7zXZ\x00\x00	0
+Stuffit SFX Archive	sea	APPLaust!	65			c
+Stuffit Archive	sitx	StuffIt!	0			c
+Stuffit v5 Archive	sit	StuffIt	0			c
+ACE Archive	ace	\*\*ACE\*\*	7			c
+BinHex 4.0	hqx	must be converted with BinHex	11			c
+ALZip	alz	ALZ\x01\x0A\x00\x00\x00	0	CLZ\x02		c
+lzop compressed	lzop;lzo	\x89LZO\x00\x0D\x0A\x1A	0
+SQX compressed archive	sqx	R....-sqx-	2
+ALZip EGG compressed	egg	EGGA\x00	0			c
+Free Backup Fix	fbf	SymBakUp  1\.0\x0A\x1A\x01	0	FHT1.\x00{19}	2621440/104857600	c
+KGB Archive	kgb	KGB_arch -	0
+*** Music/Video
+MP3 ID3 v2/3/4	mp3	ID3[\x02-\x04]\x00[\x00\x20\x40\x80][\x00\x01]	0		6000000	E
+MP3 general	mp3	\xFF[\xE2\xE3\xF2\xF3\xFA\xFB][\x10-\x1B\x20-\x2B\x30-\x3B\x40-\x4B\x50-\x5B\x60-\x6B\x70-\x7B\x80-\x8B\x90-\x9B\xA0-\xAB\xB0-\xBB\xC0-\xCB\xD0-\xDB\xE0-\xEB]	0	~21		cCGE
+Wave	wav	RIFF....WAVE(fmt |JUNK|LIST|bext|fact)	0	~33
+Audio Video Interleave	AVI;gvi;divx RIFF....(LIST|JUNK|AVI )	0	~33	10000000/1610612736
+MPEG	mpg;mpe;mpeg;vob	\x00\x00\x01\xBA	0	~41	8388608/1342177280	GE
+Blu-ray	m2ts;ts	\x47\x40\x00\x10.{188}\x47	4	~109	8388608/1342177280	GE
+QuickTime Movie	mov	(moov|skip|mdat)	4	~27	10000000/134217728	E
+QuickTime MOV(1)	mov	\x00\x00\x00(\x14pnot......PICT|\x08wide)	0	~27	10000000/943718400	E
+QuickTime MOV	MOV;mp4	ftypqt  	4	~27	10000000/943718400	E
+QuickTime 3GP	3gp;mp4	ftypisom	4	~27	10000000/314572800
+QuickTime 3GP	3GP;3ga;3g2;3gpp	ftyp3gp	4	~27	10000000/314572800
+QuickTime 3GP	3gp	ftypmmp4	4	~27	10000000/314572800
+QuickTime 3G2	3g2	ftyp3g2a	4	~27	10000000/314572800
+QuickTime M4A	m4a;m4p	ftypM4A\x20	4	~27	10000000/104857600
+QuickTime M4V	M4V;mp4	ftypM4V[P\x20]	4	~27	10000000/471859200
+QuickTime MP4	mp4	ftyp(mp41|avc1|MSNV|FACE|mobi)	4	~27	10000000/2147483648
+QuickTime MP4	mp4;m4b	ftyp(mp|MP)42	4	~27	10000000/2147483648
+QuickTime MP4	mp4;m4b	ftypdash	4	~27	10000000/2147483648
+High Efficiency Image	heic	ftypheic	4	~27	1000000/31457280
+Matroska	mkv;mka	(matroska|\x01\x42\xF7\x81\x01\x42\xF2\x81)	8		10485760
+Windows Media	asf;wmv;wma;dvr-ms	\x30\x26\xB2\x75\x8E\x66\xCF\x11\xA6\xD9\x00\xAA\x00\x62\xCE\x6C	0	~26	10000000/1073741824
+Ogg Vorbis Audio	ogg	OggS\x00\x02.{22}\x01vorbis	0	~45	8388608/335544320	cG
+Ogg Video	ogv;ogm;opus;ogx	OggS\x00\x02.{22}(\x01video|\x80theora|fishead)	0	~45	8388608/335544320	cG
+Audacity	au	dns\..{20}AudacityBlockFile	0		2097152
+Adaptive Multi Rate audio	amr	\x23!AMR\x0A	0	~90
+MediaPlayer Playlist	wpl	<\?wpl version=	0	</smil>\x0D\x0A	100000/1048576
+M3U playlist	m3u	\#EXTM3U	0	~56
+Flash Video	flv	FLV\x01[\x00\x01\x04\x05\x0D]	0	~36	10000000/104857600
+Flash MP4 video	f4v	ftyp(f4v|F4V)\x20	4	~27	10000000/104857600
+Director - Shockwave movie	dcr	XFIR...\x00MDGF	0		3670016
+Windows Television	wtv	\xB7\xD8\x00\x20\x37\x49\xDA\x11\xA6\x4E\x00\x07\xE9\x5E\xAD\x8D	0		10485760
+Real Media	rm;rmvb;rv;ra;rmj;ram;rmx	\.RMF	0		100000000
+MIDI	mid;kar;midi	MThd	0		300000
+WebM Video	webm	\x1A\x45\xDF\xA3\x01\x00\x00\x00	0		33554432	b
+Compact Disc Digital Audio (CD-DA) file	cda	RIFF....CDDAfmt	0	~33
+AMR-WB Audio	AWB;amr	\x23!AMR-WB\x0A	0
+Audacity Block	auf	AudacityBlockFile	0		16000
+Sony Compressed Voice	dvf;msv	MS_VOICE.{8}SONY CORPORATION	0		12582912
+AU Format Sound	snd	\x53\x54\x45\x56\x45\x02\x48\x80	0
+NeXT_Sun uLaw-AUdio-format	ulaw;au;snd	\.snd\x00\x00[\x00\x01]	0			c
+Audio Interchange	aif;aiff;caf	FORM....AIFF	0	~33		c
+Audio Interchange (compressed)	aifc;aif;aiff	FORM....AIFC	0	~33		c
+4X Movie	4xm	4XMVLIST	8
+PixelMetrics	cwm	elmetrics\.com\x2E\x2E\x2E	80	~105	209715200/838860800
+*** Programs
+Windows exec.	exe;dll;drv;vxd;sys;ocx;vbx;com;fon;scr	MZ.[\x00-\x02].[\x00-\x02]	0	~30
+Compiled HTML	chm;chw;chi	ITSF\x03\x00\x00\x00	0	~47		x
+Windows Help	hlp;gid;lhp	(\x3F\x5F\x03\x00)|(\x4C\x4E\x02\x00)	0		2097152		x
+MS Help 2.0	its;lit;h1d;h1h;h1q;h1w;ebo	ITOLITLS	0			cx
+ELF Object	o;ko	\x7FELF[\x01\x02]\x01\x01[\x00\x09]\x00\x00\x00\x00\x00\x00\x00\x00\x01	0
+ELF executable	elf;nexe	\x7FELF\x01\x01\x01\x00.......\x00\x02	0	~73
+ELF 64-bit exec.	elf64;nexe	\x7FELF\x02\x01\x01........\x00\x02	0	~73
+ELF shared object	so	\x7FELF[\x01\x02]\x01\x01.\x00\x00\x00\x00\x00\x00\x00\x00\x03	0	~73
+MacOS exec.	MACHO;dylib	\xCA\xFE\xBA\xBE\x00\x00\x00[\x01\x02\x03]	0	~67
+MacOS 64-bit exec.	MACHO64;dylib	\xCF\xFA\xED\xFE	0
+*** OS Artifacts
+WinNT Registry Hive	REGISTRY	regf	0	~28	1572864/96468992	Gt
+Registry fragment	hbin	hbin\x00	0	~80	262144/50331648	GUE
+Registry Script	rgs	HKCR\x0D\x0A\{	0	~56	524288/16777216
+Windows Password	pwl	\xE3\x82\x85\x96	0		4096	c
+Windows Event Log	evt	\x30\x00\x00\x00LfLe	0	~44	2097152/33554432
+Windows Event Log	evtx	ElfFile	0	~42
+setup info	SETUPINFO;;	DRBKLBSM	24
+EFS Private Key file	EFS;;	\x02\x00\x00\x00\x00\x00\x00\x00[^\x00]\x00\x00\x00.\x00\x00\x00..\x00\x00..\x00\x00..\x00\x00\x14\x00	0		1000	c
+EFS Master Key file	EFS;;	\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00[0-9a-f]\x00[0-9a-f]\x00	0		1000	c
+Printer Spool 9x	shd	\x4B\x49\x00\x00..\x00\x00..\x00\x00..\x00\x00	0		1000	cE
+Printer Spool NT	shd	\x66\x49\x00\x00......\x00\x00.\x00\x00\x00	0		1000	cE
+Printer Spool W2K/XP	shd	\x67\x49\x00\x00.\x00\x00\x00......\x00\x00.\x00\x00\x00	0		4000	E
+Printer Spool 2003	shd	\x68\x49\x00\x00.\x00\x00\x00......\x00\x00.\x00\x00\x00	0		4000	E
+Printer Spool NT/2K/XP	spl	\x00\x00\x01\x00..\x00\x00\x10\x00\x00\x00..\x00\x00	0	~19		E
+Certificate 1	cer;cat;p7b;p7c;p7m;p7s;swz;rsa;crl;crt;der	\x30\x82..[\x06\x0A\x30]	0	~53		x
+Certificate 2	cat;swz;p7m	\x30\x83[^\x00]..\x06\x09	0	~53		x
+Certificate 3	pem;p7b;p7m;crt;csr;cer	-----BEGIN\x20	0	-----END\x20.{3,32}-----	4096	bx
+SSLHOSTINFO	sslinf	\x00[\x01-\x04]\x00\x00\x00...\x00\x30\x82	3		8196
+setupapi Vista	log	\[Device Install Log\]\x0D\x0A	0	~56
+setupapi XP	log	\[SetupAPI Log\]\x0D\x0A	0	~56
+Shadow copy	VSC;;	\x6B\x87\x08\x38\x76\xC1\x48\x4E\xB7\xAE\x04\x04\x6E\x6C\xC7\x52\x01\x00\x00\x00\x04	0	~46	33554432/335544320
+Windows Pagedump	dmp	PAGEDUMP	0	~51
+Windows Pagedump	dmp	PAGEDU64	0		2097152
+Heap dump file	HDMP;mdmp;dmp	MDMP\x93\xA7	0		4194304
+NTFS $LogFile	$LOGFILE;;	RSTR\x1E\x00\x09\x00	0	~60	67108864
+$UsnJrnl:$J record	usnjrnl	\x00\x00\x02\x00\x00\x00.{31}\x01.{17}[\x00\x01]\x3C\x00	2	~81		GUE
+Event Trace Log	etl;blg	\x00[\x00\x04\x0C\x10\x20\x40\x80][\x00\x01\x02]\x00\x06[\x00\x01]\x01[\x04\x05]..\x00\x00[\x01-\x04\x08]\x00\x00\x00.{7}[\x00\x01](aa|Zb)\x02\x00	104
+Snapshot Prop	SnapProp;;	\x1F\x44\xFA\xA0\x8E\xF6\xCC\x4D\x9D\x91\x2C\x2E\xBE\xC0\xBB\x63|\x8F\x11\xE1\x6A\x1A\x59\xE0\x47\xB2\xC3\x3C\xFA\x26\xEC\x2B\x80	0		32768
+Windows Prefetch	pf	[\x11\x17\x1A]\x00\x00\x00SCCA	0	~23
+Windows Prefetch (Win 10)	pf	MAM\x04...\x00	0	~104
+Task Scheduler	job	(\x01\x05|\x00\x06|\x01\x06|\x02\x06|\x03\x06)\x01\x00.{16}\x46\x00	0		1200
+$I Recycler	recycler	\x01\x00{7}.....\x00\x00\x00.{7}\x01[C-Z]\x00:\x00	0		1024	x
+$I Recycler (win 10)	recycler	\x02\x00{7}.....\x00\x00\x00.{7}\x01[\x04-\xFF][\x00\x01]\x00\x00[C-Z]\x00:\x00	0		1024	x
+Windows Shortcut	lnk	\x4C\x00\x00\x00\x01\x14\x02\x00\x00\x00\x00\x00\xC0\x00\x00\x00\x00\x00\x00\x46	0	~49	3000/32768	bGe
+Internet Shortcut	url;ulk	\[InternetShortcut\]	0	\x00	6000	f
+Internet Shortcut	url;website	(\[DEFAULT\]\x0D\x0ABASEURL|\[\{000214A0-0000-0000-C000-000000000046)	0	~56	4096/1048576
+Apple download cache	waf	\.WAF	0			c
+Change Log	clog;log	\x00\x00\x00\x00\x12\xEF\xCD\xAB	4		65536
+Ubuntu Trash	trashinfo	\[Trash Info\]\x0A	0	\x00	1024	f
+KDE cache	kdecache	7\x0Ahttp://	0
+PList (XML)	plist	<!DOCTYPE plist	39	</plist>\x0A
+PList (binary)	BPLIST;plist;ipmeta;abcdp;mdbackup;mdinfo;strings;nib;ichat;qtz;webbookmark;webhistory	bplist00	0	~58	524288/16777216
+Finder bookmark	flnk	book..\x00\x00\x00	0	~75
+Launch Service	csstore	\xD0\xFA\xD0\xDA\x00	0	~76
+MacOS X Keychain	keychain	kych\x00\x01	0	~64
+Virtual HD	vhd	conectix	0		8388608
+VMware 4 Virtual Disk	vmdk	KDMV.\x00\x00\x00	0		8388608
+Macintosh Disk Image	dmf;dmg	\x78\x01\x73\x0D\x62\x62\x60\x60	0		2097152
+Windows Imaging	wim;swm	MSWIM\x00\x00\x00	0	~66		c
+iPhone backup index	mbdx	mbdx\x02\x00	0		520000
+iPhone backup db	mbdb	mbdb\x05\x00	0		2097152
+iPhone crash report	CRASH;log	(Incident Identifier: [0-9A-F]{8}-|Date:####-##-##)	0	~56
+AppleDouble	_ad	\x00\x05\x16\x07\x00[\x01\x02]\x00\x00	0		742	cx
+Apple System Log	asl	ASL DB\x00{6}	0	~79
+IIE Log	log	\#Software: Microsoft Internet Information Services #\.#\x0D\x0A	0	~56
+Desktop Services Store	DS_STORE;;	\x00\x00\x00\x01Bud1	0	~91
+EDB log (V1)	EDBLOG;log	\x00\x00\x02\x08\x00\x00[\x01-\x28]\x00[\x00\x10\x20\x80].{4}[\x00-\x0C].[\x00\x01]\x00.{4}[\x00-\x0C].[\x00\x01]\x00\x07\x00\x00\x00	7	~94
+EDB log (V2)	EDBLOG;log	\x00\x00\x10\x01\x00[\x00\x10\x40\x80][\x00-\x08]\x00[\x00\x10\x20\x80]...[\x00-\x1F][\x00-\x0C].{6}[\x00-\x1F][\x00-\x0C]...[\x07\x08]\x00\x00\x00	7	~94
+SQL Server Trace	TRC1;trc	\xFF\xFE\x90\x02\x01\x00\x4D\x00\x69\x00\x63\x00\x72\x00\x6F\x00	0		8388608
+Win9x Registry Hive	registry	CREG	0
+*** Application Data
+Acronis True Image file	tib	\xB4\x6E\x68\x44	0		20971520	c
+Nero CD Compilation	nri;nrb	\x0E\x4E\x65\x72\x6F\x49\x53\x4F\x30	0	\x00LFDU[^\x00]*	800000/5452596
+Alcohol 120% CD Image	mdf	\x00\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x00\x00\x02\x00\x01	0		20971520	c
+Ghost Image	gho;ghs	\xFE\xEF\x01[\x00-\x03]....[\x00\x01][\x00\x01]	0		20971520	c
+eMule Collection	emulecollection	ed2k://\|file\|	0
+PGP pubring	pkr;gpg	\x99\x01[\x0D\xA2]\x04	0		11264	c
+PGP secring	skr	\x95(\x01\xCF|\x03\xC6)\x04	0		7000	c
+AxCrypt Encrypted	axx	\xC0\xB9\x07\x2E\x4F\x93\xF1\x46\xA0\x15\x79\x2C\xA1\xD9\xE8\x21\x15\x00\x00\x00\x02	0			y
+PGP Safe	pgd	PGPdMAIN\x60\x01\x00	0
+Skype chat	CHATSYNC	sCdB	0	~78
+Skype localization data	mls	MLSW...skypePM \x00	0		40000	c
+Skype user data	dbb	l33l......\x00\x00	0	~50		G
+iChat	ichat	AIM IM with 	0	~56		G
+MS/MSN MARC archive	mar	MARC\x03	0		8388608
+Auto completion	jsonp	window\.google\.ac\.h\(\[	0	\]\]\)	1024/524288
+Auto completion (2)	jsonp	window\.google\.td&&	0	\}\);	1024/524288
+MapSource GPS Waypoint Database	gdb	MsRcf	0		3145728
+SeeYou Waypoint	ndb	! ILEC 	0
+Flash	swf;swc;swt	[CF]WS[\x02-\x1B]	0	~37
+Open financial exchange	ofx;qfx;qbo	\x0D?\x0A{0,12}OFXHEADER:\x20?100	0	</OFX>	500000
+Point of Interest	gpi	GRMREC0[01]	8
+Point of Interest	gpi	GRMREC01	12
+BlackBerry Backup	ipd	Inter@ctive Pager Backup/Restore File[\x0A\x20]	0		20971520
+Blu-ray Clip Information	CLPI;cpi;clp	HDMV0[12]00\x00	0		20000
+Nokia backup	nbu	\xCC\x52\x33\xFC\xE9\x2C\x18\x48\xAF\xE3\x36\x30\x1A\x39\x40\x06	0		41943040
+Adobe InDesign	indd;indb;indl;indt	\x06\x06\xED\xF5\xD8\x1D\x46\xE5\xBD\x31\xEF\xE7\xFE\x74\xB7\x1D	0	~87
+AVCHD Playlist	MPL;mpls	MPLS0[12]00\x00	0		100000
+Rhino 3D	3dm	3D Geometry File Format\x20\x20\x20\x20	0		4194304
+Business Card Designer	bcf	Business\x0A\x00\x04\x00Card	0
+Mobile Phone vNote	vnt	BEGIN:VNOTE	0	END:VNOTE	6000
+MS Money	mny	pfmf\#1\x00	0
+QuickBooks	QBW;adr;tlg	[\x00\x03]\x00\x00\x00\x5E\xBA\x7A\xDA	16	~93
+Quickbooks (alt)	qbw	MAUI.\x00\x00\x00	96	~93
+Inspiration Flowchart	isf	application/x-inspiration 	0		524288
+Microsoft Money Backup	mbf	\x20\x00\x6D\x62\x66	58		20971520
+Cisco VPN	pcf	\[main\]\x0D?\x0A(!?Description|UserPassword)=	0	~56
+Palm Datebook	dba	\xBE\xBA\xFE\xCA\x0FPalmSG Database......BD	0		1468006
+Palm address book	aba	\xBE\xBA\xFE\xCA\x0FPalmSG Database......BA	0		500000
+Palm To-Do	tda	\xBE\xBA\xFE\xCA\x0FPalmSG Database......DT	0		20000
+Palm Memo	mpa	\xBE\xBA\xFE\xCA\x0FPalmSG Database......PM	0		24000
+TomTom POI	tlv	\x80\x01\x01\x01\x81\x01\x31http://	3		1500
+Pcap-NG Packet Capture	PCAPNG;pcap	\x4D\x3C\x2B\x1A\x01\x00\x00\x00	8		4194304
+Adobe Bridge Cache	bc	hcac[\x0E-\x17]\x00\x00\x00	0	~88
+Picasa3 Index	thumbindex	ffF@...\x00	0	~89
+Intuit Interchange Format	iif	!(HDR\x09PROD|TIMERHDR\x09VER)\x09VER\x09REL\x09	0	~56
+Tax Exchange Format	txf	V0##\x0D\x0AA	0	~56
+Cryptocurrency wallet	wallet	\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x62\x31\x05\x00	0		262144/2097152
+*** Special Interest
+Vaulty	vdata	obscured[^a-z]	0 
+Zip record	zip	PK\x03\x04|PK00|PK\x05\x06|PK\x07\x08	0	~62		bU
+Firefox(2)	SESSIONSTORE;js	[0-9a-z@A-Z\x20-\x2F\x3A-\x3F\x5B-\x60\x7B-\x7E]{199}	0	~100	12288	GS
+Firefox cache	firefox	\x00\x01\x00[\x08-\x13].\x00..\x00\x00\x00.[\x49-\x56]	0	~55		gU
+Base64	B64	[\x0A\x0Da-zA-Z0-9\+/]{256}	0	~101		GS
+Information Summary	summary	\xFE\xFF\x00\x00.{21}\x00\x00\x00\xE0\x85\x9F\xF2\xF9\x4F	0		1024	U
+TCP Packet	tcp	\x08\x00\x45\x00.....\x00[\x01-\x80]\x06	12	~61	1500/1500	b
+UDP Packet	udp	\x08\x00\x45\x00[\x00-\x05].....[\x01-\x80]\x11	12	~61	1500/1500	b
+VISA/Mastercard	ccn	[^0-9\-A-Za-z_\.][45]###[- ]####[- ]####[- ]####[^0-9\-A-Za-z_\[&]	0	~65	25/25	b
+Gigatribe 2.x state file	state	\x40\x02\x00\x00\x5C\x5C[a-zA-Z]	0		1000
+Gigatribe 3.x state file	state	\x00\x00\x00\x01\x00\x00[\x00\x01].\x00[\\a-zA-Z]\x00[\\:a-zA-Z]\x00	0	\x12\x34\x56\x78	1024/1048510
+Gigatribe 2.x chat	GIGA	\x30\x41\x48\x43...\x00	0
+Gigatribe 3.x chat	GIGA	\x63\x68\x00\x00\x00\x0A	0
+Unix kern.log	log	[ADFJNOS][a-z][a-z] [ #]# [ 012]#:##:## [a-zA-Z]	0	~56		G
+misc log files	log	20[01]#-##-##[ T]##:##:##[ \.\,]	0	~56		Gx
+Gatherer fragm	gthr2	\x4D\x44\x4D\x44....\x00\x00\x00\x00	0	~85		GUb
+CD Volume Descriptor	vdscr	\x01CD001\x01\x00	0		4096	c
+Gateway php	PHP1;php	\x00\x00\x00\x01\x00\x12AppendToGatewayUrl	0		378880
+Palmpilot	PRC1;prc	ovly(DTGR|WP2P)	60
+Photoshop thmb	lnbt	lnbt\x01\x00\x00\x00	0	\x08gS\x09
+Samsung trailer	SEFT	\x0E\x00\x00\x00Image_UTC_Data#{12}	4	\x00SEFT	512/10485760	b
+Spotify Playlist	bnk	SPCO.\x00\x00\x00	0		800000
+SQL	sql	-- (Generate|MySQL|phpMyAdmin|Copyright)	0	~56
+XML fragment	xml	<\?xml version=[\x22\x27]1\.0	0	~15	8196/32000	b
+Comma separated	csv	\x22[\x22A-Z]|Name|First	0	~107	1024/1048576	GS
+Windows.edb fragment	1sps	1SPS\xA6\x6A\x63\x28\x3D\x95\xD2\x11\xB5\xD6\x00\xC0\x4F\xD9\x18\xD0	8	~106	4096	b
+Bitlocker rec key	bitlocker	\xFF\xFE\x42\x00\x69\x00\x74\x00\x4C\x00\x6F\x00\x63\x00\x6B\x00\x65\x00\x72\x00\x20\x00	0	~48	1500
+BitTorrent Link	torrent	d(8:announce##|4:infod[456]):	0	ee	32768/655360

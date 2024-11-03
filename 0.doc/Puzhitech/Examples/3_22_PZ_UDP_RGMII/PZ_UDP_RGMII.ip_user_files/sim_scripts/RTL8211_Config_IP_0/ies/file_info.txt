@@ -1,0 +1,8 @@
+xpm_cdc.sv,systemverilog,xil_defaultlib,D:/Xilinx/Vivado/2019.1/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv,
+xpm_memory.sv,systemverilog,xil_defaultlib,D:/Xilinx/Vivado/2019.1/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv,
+xpm_VCOMP.vhd,vhdl,xpm,D:/Xilinx/Vivado/2019.1/data/ip/xpm/xpm_VCOMP.vhd,
+mdio_ctrl.v,verilog,xil_defaultlib,../../../ip/RTL8211_Config_IP_0/src/mdio_ctrl.v,
+mdio_dri.v,verilog,xil_defaultlib,../../../ip/RTL8211_Config_IP_0/src/mdio_dri.v,
+mdio_rw_test.v,verilog,xil_defaultlib,../../../ip/RTL8211_Config_IP_0/src/mdio_rw_test.v,
+RTL8211_Config_IP_0.v,verilog,xil_defaultlib,../../../ip/RTL8211_Config_IP_0/sim/RTL8211_Config_IP_0.v,
+glbl.v,Verilog,xil_defaultlib,glbl.v

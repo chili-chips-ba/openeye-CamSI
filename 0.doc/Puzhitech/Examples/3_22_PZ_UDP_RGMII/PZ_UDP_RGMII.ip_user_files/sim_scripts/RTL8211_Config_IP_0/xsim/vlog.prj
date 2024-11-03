@@ -1,0 +1,9 @@
+verilog xil_defaultlib  \
+"../../../ip/RTL8211_Config_IP_0/src/mdio_ctrl.v" \
+"../../../ip/RTL8211_Config_IP_0/src/mdio_dri.v" \
+"../../../ip/RTL8211_Config_IP_0/src/mdio_rw_test.v" \
+"../../../ip/RTL8211_Config_IP_0/sim/RTL8211_Config_IP_0.v" \
+
+verilog xil_defaultlib "glbl.v"
+
+nosort

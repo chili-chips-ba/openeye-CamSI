@@ -1,0 +1,8 @@
+vhdl xil_defaultlib  \
+"../../../ipstatic/src/TMDSEncoder.vhd" \
+"../../../ipstatic/src/SerializerN_1.vhd" \
+"../../../ipstatic/src/DVITransmitter.vhd" \
+"../../../ipstatic/src/hdmi_tx.vhd" \
+"../../../ip/HDMI_IP/sim/HDMI_IP.vhd" \
+
+nosort
