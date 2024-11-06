@@ -106,8 +106,7 @@ module hdmi_backend (
 		tdms_pix[17-:8] = pix[15-:8];
 		tdms_pix[7-:8] = pix[7-:8];
 	end
-	wire unused_dummy_oq[3];
-	wire unused_dummy_ofb[3];
+
 
 	genvar _gv_i_2;
 
@@ -126,9 +125,7 @@ module hdmi_backend (
 				.clk_par(clk_pix),
 				.clk_ser(clk_pix5),
 				.d(tdms_enc[i * 10+:10]),
-				.q(tdms_sdat[i]),
-				.unused_ofb(unused_dummy_oq[i]),
-				.unused_oq(unused_dummy_ofb[i])
+				.q(tdms_sdat[i])
 			);
 			fpga_olvds u_obuf_dat(
 				.i(tdms_sdat[i]),

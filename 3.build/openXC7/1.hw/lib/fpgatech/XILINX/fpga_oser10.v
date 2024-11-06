@@ -3,19 +3,14 @@ module fpga_oser10 (
 	clk_par,
 	clk_ser,
 	d,
-	q,
-	unused_ofb,
-	unused_oq
+	q
 );
 	input wire arst;
 	input wire clk_par;
 	input wire clk_ser;
 	input wire [9:0] d;
 	output wire q;
-	output wire unused_ofb;  // Dummy signal za OFB
-	output wire unused_oq;   // Dummy signal za OQ
-	assign unused_ofb=d[0];
-	assign unused_oq=d[1];
+
 	wire shift1;
 	wire shift2;
 	OSERDESE2 #(
@@ -72,8 +67,8 @@ module fpga_oser10 (
 		.TBYTE_SRC("FALSE"),
 		.TRISTATE_WIDTH(1)
 	) slave_oserdese(
-		.OFB(unused_ofb),
-		.OQ(unused_oq),
+		.OFB(),
+		.OQ(),
 		.SHIFTOUT1(shift1),
 		.SHIFTOUT2(shift2),
 		.TBYTEOUT(),
