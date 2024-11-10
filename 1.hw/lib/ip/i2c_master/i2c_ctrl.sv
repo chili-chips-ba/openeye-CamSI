@@ -55,7 +55,9 @@ module i2c_ctrl (
    input  logic        scl_di,
    
    output logic        sda_oe,
-   input  logic        sda_di
+   input  logic        sda_di,
+
+   input  logic [7:0] pause_duration
 );
 
    typedef enum logic [3:0] {
@@ -67,7 +69,8 @@ module i2c_ctrl (
       WRITE_REG_ADDR     = 4'd5,
       WRITE_REG_DATA     = 4'd6,
       STOP               = 4'd7,
-      RESTART            = 4'd8
+      RESTART            = 4'd8,
+      WAIT               = 4'd9
    } state_t;
    
    state_t state;
@@ -79,6 +82,8 @@ module i2c_ctrl (
    logic [3:0] bit_cnt, bit_cnt_dec;
    logic       post_serial_data;
    logic       acknowledge_bit;
+   logic [7:0] outer_counter;
+   logic [8:0] inner_counter;
    
    assign bit_cnt_dec = 4'(bit_cnt - 4'd1);
    
@@ -97,6 +102,8 @@ module i2c_ctrl (
          acknowledge_bit       <= 1'b0;
          scl_do                <= 1'b1;
          sda_do                <= 1'b1;
+         outer_counter         <= '0;
+         inner_counter         <= '0;
       end 
       else begin
 `ifndef ICARUS
@@ -112,9 +119,9 @@ module i2c_ctrl (
                slave_address_plus_rw <= {slave_address, 1'b0};
                scl_do                <= 1'b1;
                sda_do                <= 1'b1;
+               register_done         <= 1'b0;
 
                if (enable == 1'b1) begin
-                  register_done   <= 1'b0;
                   state           <= START;
                   post_state      <= WRITE_SLAVE_ADDR;
                end
@@ -333,9 +340,29 @@ module i2c_ctrl (
                      register_done <= 1'b1;
                   end
                   2'd3: begin
-                     state <= IDLE;
+                     outer_counter <= pause_duration;
+                     inner_counter <= 9'd400;
+                     process_cnt   <= 2'd0;
+                     register_done <= 1'b0;
+                     state         <= WAIT;
                   end
                endcase
+            end
+
+         //----------------------
+            WAIT: if (strobe_400kHz == 1'b1) begin
+               scl_do <= 1'b1;
+               sda_do <= 1'b1;
+               if (outer_counter > 8'd0) begin
+                  if (inner_counter > 9'd0) begin
+                     inner_counter <= 9'(inner_counter - 9'(1));
+                  end else begin
+                     inner_counter <= 9'd400;
+                     outer_counter <= 8'(outer_counter - 8'(1));
+                  end
+               end else begin
+                  state         <= IDLE;
+               end
             end
 
          //----------------------
