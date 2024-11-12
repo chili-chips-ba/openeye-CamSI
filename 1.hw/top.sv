@@ -78,7 +78,7 @@ module top
    
   //Misc/Debug
    output bus3_t led,
-   output bus8_t debug_pins
+   output bus16_t debug_pins
 );
 
 `ifdef COCOTB_SIM
@@ -88,6 +88,7 @@ glbl glbl();
 // Clock and reset gen
 //--------------------------------
    logic reset, i2c_areset_n;
+   bus8_t debug_i2c;
    logic clk_100, clk_200, clk_1hz, strobe_400kHz;
 
    clkrst_gen u_clkrst_gen (
@@ -108,7 +109,8 @@ glbl glbl();
 // I2C Master
 //--------------------------------
    i2c_top  #(
-      .I2C_SLAVE_ADDR (7'd16)
+      .I2C_SLAVE_ADDR (top_pkg::I2C_SLAVE_ADDR),
+      .NUM_REGISTERS  (top_pkg::NUM_REGISTERS)
    ) u_i2c  (
      //clocks and resets
       .clk           (clk_100),       //i
@@ -117,7 +119,10 @@ glbl glbl();
 
      //I2C_Master to Camera
       .i2c_scl       (i2c_scl),       //io 
-      .i2c_sda       (i2c_sda)        //io 
+      .i2c_sda       (i2c_sda),       //io
+
+     //Misc/Debug
+      .debug_pins    (debug_i2c)      //o[7:0]
    );
 
 //--------------------------------
@@ -128,7 +133,7 @@ glbl glbl();
    logic           csi_word_valid;
    logic           csi_in_line, csi_in_frame;   
 
-   bus8_t      debug_csi;
+   bus16_t         debug_csi;
     
    csi_rx_top u_csi_rx_top (
       .ref_clock              (clk_200),        //i 
@@ -137,7 +142,7 @@ glbl glbl();
      //MIPI DPHY from/to Camera
       .cam_dphy_clk           (cam_dphy_clk),   //i'diff_t
       .cam_dphy_dat           (cam_dphy_dat),   //i'lane_diff_t
-      .cam_en                 (cam_en),         //o 
+      .cam_en                 (cam_en),         //i 
 
      //CSI to internal video pipeline     
       .csi_byte_clk           (csi_byte_clk),   //o
@@ -148,7 +153,7 @@ glbl glbl();
       .csi_in_frame           (csi_in_frame),   //o
 
      //Misc/Debug
-      .debug_pins             (debug_csi)       //o[7:0]
+      .debug_pins             (debug_csi)       //o[15:0]
    );
       
 //--------------------------------
@@ -235,17 +240,20 @@ glbl glbl();
 //--------------------------------
 // Misc and Debug
 //--------------------------------
-    assign led[0] = cam_en;
-    assign led[1] = 1'b0;
-    assign led[2] = clk_1hz; 
+   assign led[0] = cam_en;
+   assign led[1] = clk_1hz;
+   assign led[2] = csi_in_frame; 
 
    assign debug_pins = {
-      ~hdmi_hsync, 
-      ~hdmi_vsync, 
-       hdmi_blank, 
-       rgb_reading, 
-       hdmi_reset_n, 
-       debug_csi[2:0]
+      hdmi_clk,
+      hdmi_blank,
+      hdmi_frame,
+      hdmi_vsync,
+      hdmi_hsync,
+      hdmi_reset_n,
+      rgb_valid,
+      1'b0,
+      debug_i2c[7:0]
    };
    
 endmodule: top
