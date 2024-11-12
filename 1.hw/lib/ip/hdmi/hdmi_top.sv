@@ -77,7 +77,8 @@ module hdmi_top
    output bus3_t hdmi_dat_n
 );
 
-   bus11_t x, y;
+   bus12_t x;
+   bus11_t y;
 
 //-----------------------------------------------------------
 // Color generation algorithm: Based on the X,Y screen coordinates,

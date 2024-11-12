@@ -128,11 +128,60 @@ end
        .CLKFBIN(clkfb)            // 1-bit input: Feedback clock
     );
 
+`elsif HDMI_1080p30
+//-----------------------------
+// 1920x1080Px30Hz
+//-----------------------------
+    MMCME2_BASE #(
+       .BANDWIDTH("OPTIMIZED"), // Jitter programming (OPTIMIZED, HIGH, LOW)
+       .DIVCLK_DIVIDE(1),       // Master division value (1-106)
+       .CLKFBOUT_MULT_F(11.0),  // Multiply value for all CLKOUT (2.000-64.000)
+       .CLKFBOUT_PHASE(0.0),    // Phase offset in degrees of CLKFB (-360.000-360.000)
+       .CLKIN1_PERIOD(10.000),  // Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz)
+
+      //CLKOUT0_DIVIDE - CLKOUT6_DIVIDE: Divide amount for each CLKOUT (1-128)
+       .CLKOUT0_DIVIDE_F(2.0),  // Divide amount for CLKOUT0 (1.000-128.000)
+       .CLKOUT1_DIVIDE(1),
+       .CLKOUT2_DIVIDE(10),
+       .CLKOUT3_DIVIDE(1),
+       .CLKOUT4_DIVIDE(1),
+       .CLKOUT5_DIVIDE(1),
+       .CLKOUT6_DIVIDE(1),
+
+      //CLKOUT0_DUTY_CYCLE - CLKOUT6_DUTY_CYCLE: Duty cycle for each CLKOUT (0.01-0.99)
+       .CLKOUT0_DUTY_CYCLE(0.5),
+       .CLKOUT1_DUTY_CYCLE(0.5),
+       .CLKOUT2_DUTY_CYCLE(0.5),
+       .CLKOUT3_DUTY_CYCLE(0.5),
+       .CLKOUT4_DUTY_CYCLE(0.5),
+       .CLKOUT5_DUTY_CYCLE(0.5),
+       .CLKOUT6_DUTY_CYCLE(0.5),
+
+      //CLKOUT0_PHASE - CLKOUT6_PHASE: Phase offset for each CLKOUT (-360.000-360.000)
+       .CLKOUT0_PHASE(0.0),
+       .CLKOUT1_PHASE(0.0),
+       .CLKOUT2_PHASE(0.0),
+       .CLKOUT3_PHASE(0.0),
+       .CLKOUT4_PHASE(0.0),
+       .CLKOUT5_PHASE(0.0),
+       .CLKOUT6_PHASE(0.0),
+               
+       .CLKOUT4_CASCADE("FALSE"), // Cascade CLKOUT4 counter with CLKOUT6 (FALSE, TRUE)
+       .REF_JITTER1(0.0),         // Reference input jitter in UI (0.000-0.999)
+       .STARTUP_WAIT("FALSE")     // Delays DONE until MMCM is locked (FALSE, TRUE)
+    ) 
+    u_MMCME2_BASE (
+       .CLKOUT0(uclk_pix5),       // 1-bit output: CLKOUT0
+       .CLKOUT2(uclk_pix),        // 1-bit output: CLKOUT2
+       .CLKFBOUT(clkfb),          // 1-bit output: Feedback clock
+       .LOCKED(pll_lock),         // 1-bit output: LOCK
+       .CLKIN1(clk_ext),          // 1-bit input: Clock
+       .CLKFBIN(clkfb)            // 1-bit input: Feedback clock
+    );
 
 `else
 //-----------------------------
-// 1280x720Px60Hz or
-// 1920x1080Px30Hz
+// 1280x720Px60Hz
 //-----------------------------
     MMCME2_BASE #(
        .BANDWIDTH("OPTIMIZED"),  // Jitter programming (OPTIMIZED, HIGH, LOW)

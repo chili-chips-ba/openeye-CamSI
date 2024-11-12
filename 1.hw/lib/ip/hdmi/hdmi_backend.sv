@@ -53,7 +53,7 @@ module hdmi_backend
    output logic   srst_n,      // synch reset for pixel clock
 
  //current X and Y position of the pixel
-   output bus11_t hcount,
+   output bus12_t hcount,
    output bus11_t vcount,
    input  pix_t   pix,         // pixel color data
 
@@ -106,7 +106,7 @@ module hdmi_backend
        end
        else begin
           // Count lines and rows      
-          if (hcount == 11'(HFRAME-1)) begin
+          if (hcount == 12'(HFRAME-1)) begin
              hcount    <= '0;
 
              if (vcount == 11'(VFRAME-1)) begin
@@ -117,13 +117,13 @@ module hdmi_backend
              end
           end
           else begin
-             hcount    <= 11'(hcount + 11'(1)); 
+             hcount    <= 12'(hcount + 11'(1)); 
           end
 
           // Horizontal Sync
-          //if (hcount == 11'd0) begin 
-          if (   (hcount >= 11'(HSYNC_START)) 
-              && (hcount <  11'(HSYNC_END))
+          //if (hcount == 12'd0) begin 
+          if (   (hcount >= 12'(HSYNC_START)) 
+              && (hcount <  12'(HSYNC_END))
           ) begin
              hsync <=  HSYNC_POLARITY;
           end
@@ -143,8 +143,8 @@ module hdmi_backend
 
           // Blank when outside the visible screen
           //blank <= (hcount >= HSCREEN) | (vcount >= VSCREEN);
-          blank      <= (hcount == 11'd0)
-                      | (hcount >= 11'(HSCREEN+1))
+          blank      <= (hcount == 12'd0)
+                      | (hcount >= 12'(HSCREEN+1))
                       | (vcount <  11'd3)
                       | (vcount >= 11'(VSCREEN+3));
 
