@@ -67,7 +67,7 @@ module csi_rx_top
    output logic           csi_in_frame,   
 
  //Misc/Debug
-   output bus8_t          debug_pins
+   output bus8_t         debug_pins
 );
    
 //--------------------------------
@@ -114,7 +114,7 @@ module csi_rx_top
       );
    end: lane
 
-   
+
 //--------------------------------
 // Byte and Word Aligners
 //--------------------------------
@@ -264,14 +264,16 @@ module csi_rx_top
    end
 
  */   
-    
-   assign debug_pins = {
-      debug_pkt, 
-      byte_valid[1:0], 
-      csi_sync_seq, 
-      1'b0, 
-      csi_in_line, 
-      csi_in_frame
+
+   assign debug_pins = { 
+      csi_in_frame,
+      csi_in_line,
+      csi_unpack_dat_vld, 
+      packet_done,
+      word_valid,
+      wait_for_sync,
+      byte_valid[0],
+      csi_reset
    };
     
 endmodule: csi_rx_top

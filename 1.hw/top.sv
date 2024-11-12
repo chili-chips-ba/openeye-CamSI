@@ -87,8 +87,7 @@ glbl glbl();
 //--------------------------------
 // Clock and reset gen
 //--------------------------------
-   logic reset, i2c_areset_n;
-   bus8_t debug_i2c;
+   logic reset, i2c_areset_n;   
    logic clk_100, clk_200, clk_1hz, strobe_400kHz;
 
    clkrst_gen u_clkrst_gen (
@@ -108,6 +107,8 @@ glbl glbl();
 //--------------------------------
 // I2C Master
 //--------------------------------
+   bus8_t debug_i2c;
+
    i2c_top  #(
       .I2C_SLAVE_ADDR (top_pkg::I2C_SLAVE_ADDR),
       .NUM_REGISTERS  (top_pkg::NUM_REGISTERS)
@@ -133,7 +134,7 @@ glbl glbl();
    logic           csi_word_valid;
    logic           csi_in_line, csi_in_frame;   
 
-   bus16_t         debug_csi;
+   bus8_t         debug_csi;
     
    csi_rx_top u_csi_rx_top (
       .ref_clock              (clk_200),        //i 
@@ -153,7 +154,7 @@ glbl glbl();
       .csi_in_frame           (csi_in_frame),   //o
 
      //Misc/Debug
-      .debug_pins             (debug_csi)       //o[15:0]
+      .debug_pins             (debug_csi)       //o[7:0]
    );
       
 //--------------------------------
@@ -244,15 +245,20 @@ glbl glbl();
    assign led[1] = clk_1hz;
    assign led[2] = csi_in_frame; 
 
-   assign debug_pins = {
-      hdmi_clk,
-      hdmi_blank,
+   bus8_t debug_hdmi;
+   assign debug_hdmi = { 
+      rgb_valid, 
       hdmi_frame,
-      hdmi_vsync,
       hdmi_hsync,
+      hdmi_vsync,
+      hdmi_blank,
       hdmi_reset_n,
-      rgb_valid,
-      1'b0,
+      hdmi_clk,
+      1'b0
+   };
+
+   assign debug_pins = {
+      debug_hdmi[7:0],
       debug_i2c[7:0]
    };
    
@@ -262,6 +268,7 @@ endmodule: top
 ------------------------------------------------------------------------------
 Version History:
 ------------------------------------------------------------------------------
- 2024/2/30 AnelH: Initial creation
- 2024/3/14 Armin Zunic: updated based on sim results
+ 2024/2/30  AnelH: Initial creation
+ 2024/3/14  Armin Zunic: updated based on sim results
+ 2024/11/12 Armin Zunic: updated for code readability
 */
