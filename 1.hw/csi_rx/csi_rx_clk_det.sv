@@ -61,7 +61,7 @@ module csi_rx_clk_det (
 //  Reset in-between frames, by detecting the loss of byte_clock
 //--------------------------------------------------
    logic [1:0] byte_clk_demet; // 2-stage demet
-   logic [2:0] byte_clk_cnt;
+   logic [3:0] byte_clk_cnt;
    logic       byte_clk_fail;
 
    // this is also a mini-CDC, as 'reset_in' comes from another clock
@@ -74,7 +74,7 @@ module csi_rx_clk_det (
          byte_clk_fail <= 1'b1;
       end
       else begin
-         byte_clk_fail <= (byte_clk_cnt >= 3'd5);
+         byte_clk_fail <= (byte_clk_cnt >= 4'd10);
       end
    end
 
@@ -87,7 +87,7 @@ module csi_rx_clk_det (
          byte_clk_cnt <= '0;
       end 
       else if (byte_clk_fail == 1'b0) begin
-         byte_clk_cnt <= 3'(byte_clk_cnt + 3'd1);
+         byte_clk_cnt <= 4'(byte_clk_cnt + 4'd1);
       end
    end
 
