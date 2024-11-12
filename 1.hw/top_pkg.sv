@@ -42,8 +42,12 @@
 `ifndef __TOP_PKG__
 `define __TOP_PKG__
 
-`define HDMI_720p60
-//`define HDMI_1080p30
+`define IMX283
+//`define IMX219
+//`define OV2740
+
+//`define HDMI_720p60
+`define HDMI_1080p30
 //`define HDMI_1080p60 /*Artix-7 cannot do this option*/ 
 
 `define MIPI_4_LANE
@@ -92,7 +96,7 @@ package top_pkg;
    localparam NUM_CLK_FOR_400kHZ = 20;
    localparam NUM_CLK_FOR_1HZ    = 100; 
 `else
-   localparam NUM_CLK_FOR_400kHZ = 125;
+   localparam NUM_CLK_FOR_400kHZ = 250;
    localparam NUM_CLK_FOR_1HZ    = 200_000;
    // (400kHz / 1 Hz) * 50% duty cycle ==> (400_000 / 1) * 0.5 = 200_000
 `endif
@@ -101,12 +105,26 @@ package top_pkg;
    typedef logic[$clog2(NUM_CLK_FOR_1HZ)    -1:0] cnt_1hz_t;
 
 
+// slave address of sensor
+`ifdef IMX283
+   localparam bus7_t I2C_SLAVE_ADDR = 7'd26;
+   localparam int    NUM_REGISTERS  = 58;
+   localparam string I2C_INIT_MEM_FILE = "i2c_init_IMX283.mem";
+`elsif IMX219
+   localparam bus7_t I2C_SLAVE_ADDR = 7'd16;
+   localparam int    NUM_REGISTERS  = 65;
+   localparam string I2C_INIT_MEM_FILE = "i2c_init_IMX219.mem";
+`else //OV2740
+   localparam bus7_t I2C_SLAVE_ADDR = 7'd0;
+   localparam int    NUM_REGISTERS  = 0;
+   localparam string I2C_INIT_MEM_FILE = "i2c_init_OV2740.mem";
+`endif
    
 // number of CSI lanes
 `ifdef MIPI_4_LANE
    localparam                       NUM_LANE = 4; 
-   localparam bit    [NUM_LANE-1:0] DINVERT  = 4'b1010; // based on Trenz board, adjust as needed
-   localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3, 5'd3, 5'd3};
+   localparam bit    [NUM_LANE-1:0] DINVERT  = 4'b0001; // based on Trenz board, adjust as needed
+   localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd1, 5'd1, 5'd1, 5'd1};
 
 `elsif MIPI_2_LANE
    localparam                       NUM_LANE = 2;

@@ -42,9 +42,11 @@
 //   - for most part operates in sync with external 400kHz strobe
 //========================================================================
 
-import top_pkg::*;
-module i2c_top #(
-   parameter I2C_SLAVE_ADDR = 7'd26
+module i2c_top 
+   import top_pkg::*;
+#(
+   parameter bus7_t I2C_SLAVE_ADDR = 7'd26,
+   parameter int    NUM_REGISTERS  = 58
 )(
 
  //clocks and resets
@@ -60,29 +62,30 @@ module i2c_top #(
    output bus8_t debug_pins
 );
 
-   parameter NUM_REGISTERS = 56;
+   localparam CNT_WIDTH = $clog2(NUM_REGISTERS);
+   typedef logic [CNT_WIDTH-1:0] cnt_t;
 
 //--------------------------------
 // I2C Master
 //--------------------------------
-   logic        i2c_enable;
+   logic   i2c_enable;
 
-   logic [15:0] i2c_reg_addr;
-   logic [5:0]  i2c_reg_cnt;
-   logic        i2c_reg_done;
+   bus16_t i2c_reg_addr;
+   cnt_t   i2c_reg_cnt;
+   logic   i2c_reg_done;
 
-   logic [31:0] i2c_data_init[NUM_REGISTERS];
-   logic [7:0]  i2c_data_in;
+   bus32_t i2c_data_init[NUM_REGISTERS];
+   bus8_t  i2c_data_in;
 
-   logic        i2c_scl_do;
-   logic        i2c_scl_di;
-   logic        i2c_scl_oe;
+   logic   i2c_scl_do;
+   logic   i2c_scl_di;
+   logic   i2c_scl_oe;
 
-   logic        i2c_sda_do; 
-   logic        i2c_sda_di;
-   logic        i2c_sda_oe;
+   logic   i2c_sda_do; 
+   logic   i2c_sda_di;
+   logic   i2c_sda_oe;
    
-   logic [7:0]  i2c_pause;
+   bus8_t  i2c_pause;
 
    i2c_ctrl u_ctrl (
       .clk              (clk),            //i 
@@ -103,39 +106,22 @@ module i2c_top #(
       .pause_duration   (i2c_pause)       //i[7:0]
    );
 
-
-`ifndef SIM_ONLY
-   initial $readmemh("i2c_init_IMX283.mem", i2c_data_init);
-
-`else
-   string i2c_init_mem_file;
-
    initial begin
-      if ($value$plusargs("i2c_init_mem_file=%s", i2c_init_mem_file)) begin
-         $readmemh(i2c_init_mem_file, i2c_data_init);
-      end
-      else begin
-         $readmemh("../../../1.hw/lib/ip/i2c_master/i2c_init_IMX283.mem", i2c_data_init);
-      end
+      $readmemh(I2C_INIT_MEM_FILE, i2c_data_init);
    end
-`endif
 
-   assign i2c_enable   = (i2c_reg_cnt < NUM_REGISTERS);
+   assign i2c_enable   = (i2c_reg_cnt < cnt_t'(NUM_REGISTERS));
    assign i2c_reg_addr = i2c_data_init[i2c_reg_cnt][31:16];
    assign i2c_data_in  = i2c_data_init[i2c_reg_cnt][15:8];
    assign i2c_pause    = i2c_data_init[i2c_reg_cnt][7:0];
 
    always_ff @(negedge areset_n or posedge clk) begin
       if (areset_n == 1'b0) begin
-         i2c_reg_cnt    <= '0;
+         i2c_reg_cnt <= '0;
       end 
-      else if ({strobe_400kHz, i2c_enable} == 2'b11) begin
-         if (i2c_reg_done == 1'd1) begin
-            if (i2c_reg_cnt < NUM_REGISTERS) begin
-               i2c_reg_cnt <= 6'(i2c_reg_cnt + 6'd1);
-            end
-         end
-      end 
+      else if ({strobe_400kHz, i2c_enable, i2c_reg_done} == 3'b111) begin
+         i2c_reg_cnt <= cnt_t'(i2c_reg_cnt + cnt_t'(1));
+      end
    end
 
    IOBUF #(
