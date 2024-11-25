@@ -194,7 +194,54 @@ It is only at this point, where video is *unpacked*, that we may engage in ISP. 
 - [ ] Repeat the same for the 4-lane IMX283 camera sensor
 - [ ] Step-by-step introduce the following 3 ISP elements:
 > - [x] Debayer [ ] Manual Exposure Control [ ] Dead Pixel Management
-- [ ] Implement another (lower) resolution of our choice
+- [x] Implement another (lower) resolution of our choice
+
+#### *IMX283 Register Configuration for Different Resolutions*
+
+Configuring the IMX283 sensor for different resolutions requires careful adjustment of its registers. For each data, the first four digits represent the register address, while the last two digits indicate the value to be written. Below, we describe the configuration process for achieving a 720p resolution with 60 FPS using **Mode 3**, which includes 3x3 horizontal/vertical binning. **Mode 3** uses 3x3 horizontal/vertical binning to combine pixel values within a 3x3 grid for each color raw channel. This process reduces the output resolution while maintaining high image quality.
+
+This sensor requires specific delays after setting some register. In the [.mem](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/1.hw/lib/ip/i2c_master) files, this is implemented as an additional byte appended to the three bytes representing the address and value of each register. These delays are crucial for ensuring proper operation and stability of the camera. More about this topic on our [issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/29).
+
+#### *Mode Settings*
+The following registers enable **Mode 3** operation for the IMX283 sensor:
+- `3004 1e`
+- `3005 18`
+- `3006 10`
+- `3007 00`
+
+#### *Frame Dimensions*
+To configure the frame's dimensions:
+- **Y_OUT_SIZE**: Set the vertical size to 722 (0x2d2) to account for skipping 2 rows for debayer processing:
+  - `302f d2`
+  - `3030 02`
+- **WRITE_VSIZE**: Set the vertical output size to 726 (0x2d6):
+  - `3031 d6`
+  - `3032 02`
+
+#### *Frame Cropping*
+To define the frame cropping region:
+- **H_TRIMMING_START**: Start the horizontal cropping at position 840 (0x348):
+  - `3058 48`
+  - `3059 03`
+- **H_TRIMMING_END**: End the horizontal cropping at position 4584 (0x11E8):
+  - `305a e8`
+  - `305b 11`
+
+These settings result in 1920 8-bit data points per line, equivalent to 1280 12-bit raw data points used for color processing. The trimming values are configured as though binning is not applied.
+
+#### *Timing Configuration for 60 FPS*
+The frame timing is determined by the following equation:
+
+For 60 FPS:
+- **VMAX**: Set to 2551 (0x9F7) to ensure frame blanking:
+  - `3038 f7`
+  - `3039 09`
+- **HMAX**: Set to 470 (0x1D6) to ensure line blanking:
+  - `3036 d6`
+  - `3037 01`
+
+These settings ensure a frame rate of 60 Hz.
+
 
 ## Execution Play 3
 ### Ethernet streaming
