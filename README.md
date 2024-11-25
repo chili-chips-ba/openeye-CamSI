@@ -242,6 +242,30 @@ For 60 FPS:
 
 These settings ensure a frame rate of 60 Hz.
 
+#### *Dead Pixel Management*
+
+One of the key challenges in working with high-resolution sensors, like the IMX283, is managing dead pixels. These are defective pixels on the sensor that can negatively impact image quality. On this system, several strategies were implemented to effectively eliminate the impact of dead pixels.
+
+#### *Resolution Constraints and the Use of Binning*
+
+Due to the limitations of the Artix-7 FPGA, it is not possible to support the full resolution output of the IMX283 sensor. To address this, the resolution was reduced while still preserving image quality by utilizing all available pixels on the sensor. This was achieved through **binning**, a preprocessing step offered by the sensor itself.
+
+- **For 720p Resolution**:  
+  A **3x3 binning** method is used. From an 8x8 matrix of pixels, a 2x2 matrix is generated. This means that each new pixel is a combination of several neighboring pixels.
+  
+- **For 1080p Resolution**:  
+  A **2x2 binning** method is used. From a 4x4 matrix of pixels, a 2x2 matrix is generated, combining adjacent pixels into one.
+
+This process is illustrated in the image below:
+
+![image](https://github.com/user-attachments/assets/81913f89-6972-4531-b9d6-6cc87d35f9c0)
+![image](https://github.com/user-attachments/assets/abea9982-522b-4e66-ae66-dacdce66180c)
+
+By combining neighboring pixels, binning effectively acts as a form of filtering. This directly mitigates the effect of dead pixels, as their contribution is averaged out with surrounding pixel data.
+
+#### *Debayering and Additional Averaging*
+
+In addition to binning, the **debayering algorithm** implemented on this system further reduces the impact of dead pixels. The algorithm performs additional averaging across pixels to reconstruct color information. This further minimizes the possibility of dead pixels appearing in the final image.
 
 ## Execution Play 3
 ### Ethernet streaming
