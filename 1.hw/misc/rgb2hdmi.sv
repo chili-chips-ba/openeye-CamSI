@@ -62,18 +62,21 @@ module rgb2hdmi
    input  logic hdmi_frame,
    input  logic hdmi_blank,
    output logic hdmi_reset_n,
-   output pix_t hdmi_pix
+   output pix_t hdmi_pix,
+
+   output bus4_t debug_fifo
 );
 
 //--------------------------------
 // Synchronization Logic
 //--------------------------------
-   logic   csi_in_line_dly;   
+   logic   csi_in_line_dly, csi_in_frame_dly;   
    bus11_t csi_line_count;
    
    always_ff @(posedge csi_clk) begin 
       if (reset == 1'b1) begin         
          csi_in_line_dly <= 1'b0;
+         csi_in_frame_dly <= 1'b0;
          csi_line_count  <= '0;
 
          rgb_valid       <= 1'b0;
@@ -81,6 +84,7 @@ module rgb2hdmi
       end 
       else begin          
          csi_in_line_dly <= csi_in_line;
+         csi_in_frame_dly <= csi_in_frame; 
 
          // skip first 3 CMOS lines to start calculate RGB values
          rgb_valid       <= (csi_line_count >= 11'd3);
@@ -89,9 +93,13 @@ module rgb2hdmi
          //  frame and rising edge on first CMOS line  
          hdmi_reset_n    <= (csi_line_count >= 11'd1);
 
-         if (csi_in_frame == 1'b0) begin 
+         if ({csi_in_frame_dly, csi_in_frame} == 2'b01) begin 
             csi_line_count <= 11'd0;
          end
+
+         /*if (csi_in_frame == 1'b0) begin 
+            csi_line_count <= 11'd0;
+         end*/
          // increment Line count with every 'csi_in_line' posedge
          //   unless outside of the visible screen
          else if ({csi_in_line_dly, csi_in_line} == 2'b01) begin
@@ -119,7 +127,9 @@ module rgb2hdmi
       .m_axis_aclk    (hdmi_clk),    //i
       .m_axis_tvalid  (),            //o
       .m_axis_tready  (~hdmi_blank), //i
-      .m_axis_tdata   ( hdmi_pix)    //o[23:0]
+      .m_axis_tdata   ( hdmi_pix),   //o[23:0]
+
+      .debug_fifo     (debug_fifo)   //o[3:0]
    );
 
 endmodule: rgb2hdmi
