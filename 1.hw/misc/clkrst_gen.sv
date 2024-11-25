@@ -51,6 +51,7 @@ module clkrst_gen
 
 // internal signals
    output logic  clk_100,
+   output logic  clk_180,
    output logic  clk_200,
    output logic  clk_1hz,
    output logic  strobe_400kHz, // 400kHz strobe synchronous to 'clk'
@@ -73,8 +74,8 @@ module clkrst_gen
       .clk_in   (clk_100),   //i 100MHz
 
       .srst     (srst0),     //o
-      .clk_out0 (),          //o: 228MHz 
-      .clk_out1 (clk_200)    //o: 200MHz
+      .clk_out0 (clk_200),   //o: 200MHz 
+      .clk_out1 (clk_180)    //o: 180MHz
    );
 
 

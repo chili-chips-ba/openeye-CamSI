@@ -67,7 +67,7 @@ module fpga_pll_top (
    MMCME2_BASE #(
       .BANDWIDTH   ("OPTIMIZED"), // Jitter programming (OPTIMIZED, HIGH, LOW)
       .DIVCLK_DIVIDE   (5),       // Master division value (1-106)
-      .CLKFBOUT_MULT_F (49.875),  // Multiply value for all CLKOUT (2.000-64.000)
+      .CLKFBOUT_MULT_F (45.0),  // Multiply value for all CLKOUT (2.000-64.000)
       .CLKFBOUT_PHASE  (0.0),     // Phase offset in degrees of CLKFB (-360.000-360.000)
       .CLKIN1_PERIOD   (10.000),  // Input clock period in ns to ps resolution 
                                   //   (i.e. 33.333 is 30 MHz)
@@ -75,7 +75,7 @@ module fpga_pll_top (
                                   //     CLKFBOUT_MULT_F/(CLKIN1_PERIOD*DIVCLK_DIVIDE)
 
      //CLKOUT0_DIVIDE - CLKOUT6_DIVIDE: Divide amount for each CLKOUT (1-128)
-      .CLKOUT0_DIVIDE_F(4.375),   // Divide amount for CLKOUT0 (1.000-128.000)
+      .CLKOUT0_DIVIDE_F(4.5),   // Divide amount for CLKOUT0 (1.000-128.000)
 
       .CLKOUT1_DIVIDE(1),
       .CLKOUT2_DIVIDE(5), //5=180, 8=112,5        
