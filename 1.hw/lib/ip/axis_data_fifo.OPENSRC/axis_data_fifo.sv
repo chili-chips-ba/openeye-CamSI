@@ -14,7 +14,9 @@ module axis_data_fifo #(
    input  logic            m_axis_aclk,
    output logic            m_axis_tvalid,
    input  logic            m_axis_tready,
-   output logic [DW-1 : 0] m_axis_tdata
+   output logic [DW-1 : 0] m_axis_tdata,
+
+   output logic [3:0]      debug_fifo
 );
 
    localparam AW = $clog2(DEPTH);
@@ -110,5 +112,12 @@ module axis_data_fifo #(
    always_ff @(posedge m_axis_aclk) begin
       m_axis_tvalid <= ~empty;
    end
+
+   assign debug_fifo = {
+      empty,
+      full,
+      rd,
+      wr
+   };
 
 endmodule: axis_data_fifo

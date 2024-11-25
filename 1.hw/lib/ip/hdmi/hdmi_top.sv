@@ -74,11 +74,14 @@ module hdmi_top
    output logic  hdmi_clk_p,
    output logic  hdmi_clk_n,
    output bus3_t hdmi_dat_p,
-   output bus3_t hdmi_dat_n
+   output bus3_t hdmi_dat_n,
+
+   output bus12_t x,
+   output bus11_t y
 );
 
-   bus12_t x;
-   bus11_t y;
+   //bus12_t x;
+   //bus11_t y;
 
 //-----------------------------------------------------------
 // Color generation algorithm: Based on the X,Y screen coordinates,

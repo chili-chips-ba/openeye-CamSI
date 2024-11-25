@@ -88,13 +88,14 @@ glbl glbl();
 // Clock and reset gen
 //--------------------------------
    logic reset, i2c_areset_n;   
-   logic clk_100, clk_200, clk_1hz, strobe_400kHz;
+   logic clk_100, clk_180, clk_200, clk_1hz, strobe_400kHz;
 
    clkrst_gen u_clkrst_gen (
       .reset_ext     (areset),        //i
       .clk_ext       (clk_ext),       //i
                                        
       .clk_100       (clk_100),       //o: 100MHz 
+      .clk_180       (clk_180),       //o: 180MHz
       .clk_200       (clk_200),       //o: 200MHz 
       .clk_1hz       (clk_1hz),       //o: 1Hz
       .strobe_400kHz (strobe_400kHz), //o: pulse1 at 400kHz
@@ -188,6 +189,7 @@ glbl glbl();
    logic hdmi_blank;
    logic hdmi_reset_n;
    pix_t hdmi_pix;
+   bus4_t debug_fifo;
 
    rgb2hdmi u_rgb2hdmi (
      //from/to CSI and RGB block
@@ -207,13 +209,17 @@ glbl glbl();
       .hdmi_frame   (hdmi_frame),     //i
       .hdmi_blank   (hdmi_blank),     //i
       .hdmi_reset_n (hdmi_reset_n),   //o
-      .hdmi_pix     (hdmi_pix)        //o'pix_t 
+      .hdmi_pix     (hdmi_pix),       //o'pix_t 
+
+      .debug_fifo   (debug_fifo)      //o'bus4_t
    );
 
 //--------------------------------
 // HDMI backend
 //--------------------------------
    logic hdmi_hsync, hdmi_vsync;
+   bus12_t x;
+   bus11_t y;
 
    hdmi_top u_hdmi_top(
       .clk_ext      (clk_100),      //i 
@@ -234,7 +240,10 @@ glbl glbl();
       .hdmi_clk_p   (hdmi_clk_p),   //o
       .hdmi_clk_n   (hdmi_clk_n),   //o
       .hdmi_dat_p   (hdmi_dat_p),   //o'bus3_t
-      .hdmi_dat_n   (hdmi_dat_n)    //o'bus3_t
+      .hdmi_dat_n   (hdmi_dat_n),   //o'bus3_t
+
+      .x            (x),            //o'bus12_t
+      .y            (y)             //o'bus11_t
    );
    
 
@@ -246,20 +255,25 @@ glbl glbl();
    assign led[2] = csi_in_frame; 
 
    bus8_t debug_hdmi;
-   assign debug_hdmi = { 
-      rgb_valid, 
+   assign debug_hdmi = {  
+      hdmi_reset_n,
       hdmi_frame,
       hdmi_hsync,
       hdmi_vsync,
       hdmi_blank,
-      hdmi_reset_n,
       hdmi_clk,
+      rgb_valid,
       1'b0
    };
 
    assign debug_pins = {
-      debug_hdmi[7:0],
-      debug_i2c[7:0]
+      //clk_180, 
+      debug_fifo,
+      debug_hdmi[7:3],
+      debug_csi[7:1] 
+      //y
+      //debug_csi[7:0],
+      //debug_i2c[7:0]
    };
    
 endmodule: top
