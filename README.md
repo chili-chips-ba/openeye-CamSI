@@ -193,7 +193,9 @@ It is only at this point, where video is *unpacked*, that we may engage in ISP. 
 ### Widening up the pathway
 - [ ] Repeat the same for the 4-lane IMX283 camera sensor
 - [ ] Step-by-step introduce the following 3 ISP elements:
-> - [x] Debayer [ ] Manual Exposure Control [ ] Dead Pixel Management
+  - [x] Debayer
+  - [ ] Manual Exposure Control
+  - [x] Dead Pixel Management
 - [x] Implement another (lower) resolution of our choice
 
 #### *IMX283 Register Configuration for Different Resolutions*
