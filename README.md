@@ -192,10 +192,10 @@ It is only at this point, where video is *unpacked*, that we may engage in ISP. 
 ## Execution Play 2
 ### Widening up the pathway
 - [ ] Repeat the same for the 4-lane IMX283 camera sensor
-- [ ] Step-by-step introduce the following 3 ISP elements:
+- [x] Step-by-step introduce the following 3 ISP elements:
   - [x] Debayer
-  - [ ] Manual Exposure Control
   - [x] Dead Pixel Management
+  - [x] Manual Exposure Control 
 - [x] Implement another (lower) resolution of our choice
 
 #### *IMX283 Register Configuration for Different Resolutions*
@@ -268,6 +268,16 @@ By combining neighboring pixels, binning effectively acts as a form of filtering
 #### *Debayering and Additional Averaging*
 
 In addition to binning, the **debayering algorithm** implemented on this system further reduces the impact of dead pixels. The algorithm performs additional averaging across pixels to reconstruct color information. This further minimizes the possibility of dead pixels appearing in the final image.
+
+#### *Manual Exposure Control*
+
+Manual exposure control in the IMX283 sensor is achieved through the configuration of the `SVR` (Start Vertical Readout) and `SHR` (Start Horizontal Readout) registers. These registers determine the timing of the sensor's integration period, which is critical for controlling exposure and image brightness.
+
+In our configuration we use:
+1. **SVR = 0**: This value sets the integration start vertical period to the minimum possible value, effectively aligning the start of integration with the beginning of the readout period.
+2. **SHR = 16**: This value specifies the integration start horizontal period. A higher `SHR` value reduces the integration time by shifting the horizontal readout window closer to the end of the frame.
+
+By selecting these values, the integration time is minimized, which is suitable for scenarios with bright lighting conditions or high frame rate requirements.
 
 ## Execution Play 3
 ### Ethernet streaming
