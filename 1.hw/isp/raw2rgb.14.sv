@@ -39,7 +39,7 @@
 // Description: This module provide de-Bayer filter for 14-bit MIPI CSI2 
 //  Raw format. For more, see: https://en.wikipedia.org/wiki/Bayer_filter
 //
-//   FIXME: Adapt logic to 4-lane datapath
+// FIXME: Adapt for 14-bit (currently replicates 8-bit logic)
 //========================================================================
 
 module raw2rgb 

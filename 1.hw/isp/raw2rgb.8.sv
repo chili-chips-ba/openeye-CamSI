@@ -39,7 +39,7 @@
 // Description: This module provide de-Bayer filter for 8-bit MIPI CSI2 
 //  Raw format. For more, see: https://en.wikipedia.org/wiki/Bayer_filter
 //
-//   FIXME: Adapt logic to 4-lane datapath
+// Note: This implementation uses the GBRG Bayer pattern convention.
 //========================================================================
 
 module raw2rgb_8 
