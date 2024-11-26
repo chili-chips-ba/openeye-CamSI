@@ -36,10 +36,10 @@
 //
 //              https://opensource.org/license/bsd-3-clause
 //------------------------------------------------------------------------
-// Description: This module provide de-Bayer filter for 10-bit MIPI CSI2 
+// Description: This module provide de-Bayer filter for 12-bit MIPI CSI2 
 //  Raw format. For more, see: https://en.wikipedia.org/wiki/Bayer_filter
 //
-//   FIXME: Adapt logic to 4-lane datapath
+// Note: This implementation uses the GBRG Bayer pattern convention.
 //========================================================================
 
 module raw2rgb_12 
@@ -165,198 +165,177 @@ module raw2rgb_12
       end
    end
 
-   logic [11:0] line0_red0,   line0_green0, line0_red1,   line0_green1;
-   logic [11:0] line1_green0, line1_blue0,  line1_green1, line1_blue1;
-   logic [11:0] line2_red0,   line2_green0, line2_red1,   line2_green1;
-   logic [11:0] line3_green0, line3_blue0,  line3_green1, line3_blue1;  
+   logic [11:0] line0_green0, line0_blue0,  line0_green1, line0_blue1;
+   logic [11:0] line1_red0,   line1_green0, line1_red1,   line1_green1;
+   logic [11:0] line2_green0, line2_blue0,  line2_green1, line2_blue1;
+   logic [11:0] line3_red0,   line3_green0, line3_red1,   line3_green1;    
 
    always_ff @(posedge clk) begin
+      `ifdef MIPI_4_LANE
       if (reading == 1'b1) begin
          //                           line                  lane
          if (temp_4lane == 1'b0) begin
-            line0_red0   <= line0_mem[read_count][47:36]; //1
-            line0_green0 <= line0_mem[read_count][35:24]; //0
-            line0_red1   <= line0_mem[read_count][23:12];
-            line0_green1 <= line0_mem[read_count][11:0];
+            line0_green0 <= line0_mem[read_count][47:36]; //1
+            line0_blue0  <= line0_mem[read_count][35:24]; //0
+            line0_green1 <= line0_mem[read_count][23:12];
+            line0_blue1  <= line0_mem[read_count][11:0];
             
-            line1_green0 <= line1_mem[read_count][47:36];
-            line1_blue0  <= line1_mem[read_count][35:24];
-            line1_green1 <= line1_mem[read_count][23:12];
-            line1_blue1  <= line1_mem[read_count][11:0];
+            line1_red0   <= line1_mem[read_count][47:36];
+            line1_green0 <= line1_mem[read_count][35:24];
+            line1_red1   <= line1_mem[read_count][23:12];
+            line1_green1 <= line1_mem[read_count][11:0];
             
-            line2_red0   <= line2_mem[read_count][47:36];
-            line2_green0 <= line2_mem[read_count][35:24];
-            line2_red1   <= line2_mem[read_count][23:12];
-            line2_green1 <= line2_mem[read_count][11:0];
+            line2_green0 <= line2_mem[read_count][47:36];
+            line2_blue0  <= line2_mem[read_count][35:24];
+            line2_green1 <= line2_mem[read_count][23:12];
+            line2_blue1  <= line2_mem[read_count][11:0];
             
-            line3_green0 <= line3_mem[read_count][47:36];
-            line3_blue0  <= line3_mem[read_count][35:24]; 
-            line3_green1 <= line3_mem[read_count][23:12];
-            line3_blue1  <= line3_mem[read_count][11:0];
+            line3_red0   <= line3_mem[read_count][47:36];
+            line3_green0 <= line3_mem[read_count][35:24]; 
+            line3_red1   <= line3_mem[read_count][23:12];
+            line3_green1 <= line3_mem[read_count][11:0];
          end
-         /*else begin
-            //                           line                  lane
-            line0_red0   <= line0_red1;                       //1
-            line0_green0 <= line0_green1;                     //0
-            line0_red1   <= line0_mem[read_count][47:36];
-            line0_green1 <= line0_mem[read_count][35:24];
+         else begin
+         //                           line                  lane
+            line0_green0 <= line0_mem[read_count]    [23:12]; //1
+            line0_blue0  <= line0_mem[read_count]    [11:0];  //0
+            line0_green1 <= line0_mem[read_count_nxt][47:36];
+            line0_blue1  <= line0_mem[read_count_nxt][35:24];
             
-            line1_green0 <= line1_green1;
-            line1_blue0  <= line1_blue1;
-            line1_green1 <= line1_mem[read_count][47:36];
-            line1_blue1  <= line1_mem[read_count][35:24];
+            line1_red0   <= line1_mem[read_count]    [23:12];
+            line1_green0 <= line1_mem[read_count]    [11:0];
+            line1_red1   <= line1_mem[read_count_nxt][47:36];
+            line1_green1 <= line1_mem[read_count_nxt][35:24];
             
-            line2_red0   <= line2_red1;
-            line2_green0 <= line2_green1;
-            line2_red1   <= line2_mem[read_count][47:36];
-            line2_green1 <= line2_mem[read_count][35:24];
+            line2_green0 <= line2_mem[read_count]    [23:12];
+            line2_blue0  <= line2_mem[read_count]    [11:0];
+            line2_green1 <= line2_mem[read_count_nxt][47:36];
+            line2_blue1  <= line2_mem[read_count_nxt][35:24];
             
-            line3_green0 <= line3_green1;
-            line3_blue0  <= line3_blue1;
-            line3_green1 <= line3_mem[read_count][47:36];
-            line3_blue1  <= line3_mem[read_count][35:24];
-         end*/
+            line3_red0   <= line3_mem[read_count]    [23:12];
+            line3_green0 <= line3_mem[read_count]    [11:0];  
+            line3_red1   <= line3_mem[read_count_nxt][47:36];
+            line3_green1 <= line3_mem[read_count_nxt][35:24];
+         end
       end
+      `else
+      if (reading == 1'b1) begin
+         //                           line                  lane
+         line0_green0 <= line0_mem[read_count]    [23:12]; //1
+         line0_blue0  <= line0_mem[read_count]    [11:0];  //0
+         line0_green1 <= line0_mem[read_count_nxt][23:12];
+         line0_blue1  <= line0_mem[read_count_nxt][11:0];
+         
+         line1_red0   <= line1_mem[read_count]    [23:12];
+         line1_green0 <= line1_mem[read_count]    [11:0];
+         line1_red1   <= line1_mem[read_count_nxt][23:12];
+         line1_green1 <= line1_mem[read_count_nxt][11:0];
+         
+         line2_green0 <= line2_mem[read_count]    [23:12];
+         line2_blue0  <= line2_mem[read_count]    [11:0];
+         line2_green1 <= line2_mem[read_count_nxt][23:12];
+         line2_blue1  <= line2_mem[read_count_nxt][11:0];
+         
+         line3_red0   <= line3_mem[read_count]    [23:12];
+         line3_green0 <= line3_mem[read_count]    [11:0];  
+         line3_red1   <= line3_mem[read_count_nxt][23:12];
+         line3_green1 <= line3_mem[read_count_nxt][11:0];
+      end
+     `endif
    end  
 
    logic [RGB_WIDTH-1:0] rgb_out1;         
 
    always_ff @(posedge clk) if (reading == 1'b1) begin 
 
-    unique case (line_not_read)
+    unique case (line_not_read) 
       2'd3: begin //-----line0/1/2 (first three lines)
          if (odd_pixel == 1'b0) begin
-            rgb_out1[23:16] <= (line0_red0   >> 6) + (line0_red1   >> 6)
-                             + (line2_red0   >> 6) + (line2_red1   >> 6);
+            rgb_out1[23:16] <= (line1_red0   >> 5) + (line1_red1   >> 5);
 
-            rgb_out1[15:8]  <= (line0_green0 >> 6) + (line1_green0 >> 6)
-                             + (line1_green1 >> 6) + (line2_green0 >> 6);
-
-            rgb_out1[7:0]   <= (line1_blue0  >> 4);
-         end 
-         else begin
-            rgb_out1[23:16] <= (line0_red1   >> 5) + (line2_red1   >> 5);
-
-            rgb_out1[15:8]  <= (line0_green0 >> 6) + (line0_green1 >> 6)
+            rgb_out1[15:8]  <= (line0_green0 >> 6) + (line0_green1 >> 6) 
                              + (line2_green0 >> 6) + (line2_green1 >> 6);
 
-            rgb_out1[7:0]   <= (line1_blue0  >> 5) + (line1_blue1  >> 5);
+            rgb_out1[7:0]   <= (line0_blue0  >> 5) + (line2_blue0  >> 5);
+         end 
+         else begin
+            rgb_out1[23:16] <=  line1_red1   >> 4;
+
+            rgb_out1[15:8]  <= (line0_green1 >> 6) + (line1_green0 >> 6) 
+                             + (line1_green1 >> 6) + (line2_green1 >> 6);
+
+            rgb_out1[7:0]   <= (line0_blue0  >> 6) + (line0_blue1  >> 6)
+                             + (line2_blue0  >> 6) + (line2_blue1  >> 6);
          end
       end 
 
       2'd0: begin //-----line1/2/3
          if (odd_pixel == 1'b0) begin
-            rgb_out1[23:16] <= (line2_red0   >> 5) + (line2_red1   >> 5);
+            rgb_out1[23:16] <= (line1_red0   >> 6) + (line1_red1   >> 6) 
+                             + (line3_red0   >> 6) + (line3_red1   >> 6);
 
-            rgb_out1[15:8]  <= (line1_green0 >> 6) + (line1_green1 >> 6)
-                             + (line3_green0 >> 6) + (line3_green1 >> 6);
+            rgb_out1[15:8]  <= (line1_green0 >> 6) + (line2_green0 >> 6)
+                             + (line2_green1 >> 6) + (line3_green0 >> 6);
 
-            rgb_out1[7:0]   <= (line1_blue0  >> 5) + (line3_blue0  >> 5);
+            rgb_out1[7:0]   <=  line2_blue0  >> 4;
          end 
          else begin
-            rgb_out1[23:16] <= (line2_red1   >> 4);
+            rgb_out1[23:16] <= (line1_red1   >> 5) + (line3_red1   >> 5);
 
-            rgb_out1[15:8]  <= (line1_green1 >> 6) + (line2_green0 >> 6) 
-                             + (line2_green1 >> 6) + (line3_green1 >> 6);
+            rgb_out1[15:8]  <= (line1_green0 >> 6) + (line1_green1 >> 6) 
+                             + (line3_green0 >> 6) + (line3_green1 >> 6);
 
-            rgb_out1[7:0]   <= (line1_blue0  >> 6) + (line1_blue1  >> 6)
-                             + (line3_blue0  >> 6) + (line3_blue1  >> 6);
+            rgb_out1[7:0]   <= (line2_blue0  >> 5) + (line2_blue1  >> 5);
          end
       end 
 
       2'd1: begin //-----line0/2/3
          if (odd_pixel == 1'b0) begin
-            rgb_out1[23:16] <= (line0_red0   >> 6) + (line0_red1   >> 6)
-                             + (line2_red0   >> 6) + (line2_red1   >> 6);
+            rgb_out1[23:16] <= (line3_red0   >> 5) + (line3_red1   >> 5);
 
-            rgb_out1[15:8]  <= (line0_green0 >> 6) + (line2_green0 >> 6)
-                             + (line3_green0 >> 6) + (line3_green1 >> 6);
+            rgb_out1[15:8]  <= (line2_green0 >> 6) + (line2_green1 >> 6) 
+                             + (line0_green0 >> 6) + (line0_green1 >> 6);
 
-            rgb_out1[7:0]   <= (line3_blue0  >> 4);
+            rgb_out1[7:0]   <= (line2_blue0  >> 5) + (line0_blue0  >> 5);
          end 
          else begin
-            rgb_out1[23:16] <= (line0_red1   >> 5) + (line2_red1   >> 5);
+            rgb_out1[23:16] <=  line3_red1   >> 4;
 
-            rgb_out1[15:8]  <= (line0_green0 >> 6) + (line0_green1 >> 6) 
-                             + (line2_green0 >> 6) + (line2_green1 >> 6);
+            rgb_out1[15:8]  <= (line2_green1 >> 6) + (line3_green0 >> 6) 
+                             + (line3_green1 >> 6) + (line0_green1 >> 6);
 
-            rgb_out1[7:0]   <= (line3_blue0  >> 5) + (line3_blue1  >> 5);
+            rgb_out1[7:0]   <= (line2_blue0  >> 6) + (line2_blue1  >> 6) 
+                             + (line0_blue0  >> 6) + (line0_blue1  >> 6);
          end
       end 
 
       default: begin // 2'd2 -----line0/1/3
          if (odd_pixel == 1'b0) begin
-            rgb_out1[23:16] <= (line0_red0   >> 5) + (line0_red1   >> 5);
+            rgb_out1[23:16] <= (line3_red0   >> 6) + (line3_red1   >> 6) 
+                             + (line1_red0   >> 6) + (line1_red1   >> 6);
 
-            rgb_out1[15:8]  <= (line1_green0 >> 6) + (line1_green1 >> 6) 
-                             + (line3_green0 >> 6) + (line3_green1 >> 6);
+            rgb_out1[15:8]  <= (line3_green0 >> 6) + (line0_green0 >> 6) 
+                             + (line0_green1 >> 6) + (line1_green0 >> 6);
 
-            rgb_out1[7:0]   <= (line1_blue0  >> 5) + (line3_blue0  >> 5);
+            rgb_out1[7:0]   <=  line0_blue0  >> 4;
          end 
          else begin
-            rgb_out1[23:16] <= (line0_red1   >> 4);
+            rgb_out1[23:16] <= (line3_red1   >> 5) + (line1_red1   >> 5);
 
-            rgb_out1[15:8]  <= (line0_green0 >> 6) + (line0_green1 >> 6) 
-                             + (line1_green1 >> 6) + (line3_green1 >> 6);
+            rgb_out1[15:8]  <= (line3_green0 >> 6) + (line3_green1 >> 6) 
+                             + (line1_green0 >> 6) + (line1_green1 >> 6);
 
-            rgb_out1[7:0]   <= (line1_blue0  >> 6) + (line1_blue1  >> 6)
-                             + (line3_blue0  >> 6) + (line3_blue1  >> 6);
+            rgb_out1[7:0]   <= (line0_blue0  >> 5) + (line0_blue1  >> 5);
          end
       end
     endcase // unique case (line_not_read)
    end // if (reading == 1'b1)
 
-/*
-  // Test pattern
-   always_ff @(posedge clk) begin
-      if(read_count < 10'd100) begin
-         rgb_out1[23:16] <= 8'hFF;  // R 1 Red
-         rgb_out1[15:8]  <= 8'h00;  // G 0
-         rgb_out1[7:0]   <= 8'h00;  // B 0
-      end
-      else if(read_count < 10'd200) begin 
-         rgb_out1[23:16] <= 8'hFF;  // R 1  Pink
-         rgb_out1[15:8]  <= 8'h00;  // G 0
-         rgb_out1[7:0]   <= 8'hFF;  // B 1
-      end     
-      else if(read_count < 10'd250) begin
-         rgb_out1[23:16] <= 8'h00;  // R 0 Green
-         rgb_out1[15:8]  <= 8'hFF;  // G 1
-         rgb_out1[7:0]   <= 8'h00;  // B 0
-      end          
-      else if(read_count < 10'd300) begin
-         rgb_out1[23:16] <= 8'hFF;  // R 1 Yellow
-         rgb_out1[15:8]  <= 8'hFF;  // G 1
-         rgb_out1[7:0]   <= 8'h00;  // B 0
-      end   
-      else if(read_count < 10'd400) begin
-         rgb_out1[23:16] <= 8'h00;  // R 0  Black
-         rgb_out1[15:8]  <= 8'h00;  // G 0
-         rgb_out1[7:0]   <= 8'h00;  // B 0
-      end         
-      else if(read_count < 10'd475) begin
-         rgb_out1[23:16] <= 8'hFF;  // R 0 White
-         rgb_out1[15:8]  <= 8'hFF;  // G 0
-         rgb_out1[7:0]   <= 8'hFF;  // B 0
-      end   
-      else if(read_count < 10'd575) begin
-         rgb_out1[23:16] <= 8'h00;  // R 0 Blue
-         rgb_out1[15:8]  <= 8'h00;  // G 0
-         rgb_out1[7:0]   <= 8'hFF;  // B 1
-      end               
-      else begin
-         rgb_out1[23:16] <= 8'h00;   // R 0 Cyan
-         rgb_out1[15:8]  <= 8'hFF;   // G 1
-         rgb_out1[7:0]   <= 8'hFF;   // B 1
-      end
-   end
-*/
-
 
  //this pattern of RGB inversions is for CRUVI A
-   assign rgb_out = {~rgb_out1[23:16], 
+   assign rgb_out = {~rgb_out1[7:0], 
                      rgb_out1[15:8], 
-                     ~rgb_out1[7:0]}; 
+                     ~rgb_out1[23:16]}; 
 
 endmodule: raw2rgb_12 
 
