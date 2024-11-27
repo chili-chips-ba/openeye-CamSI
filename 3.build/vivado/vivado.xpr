@@ -316,12 +316,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../../1.hw/lib/ip/i2c_master/i2c_init_IMX283.mem">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/../../1.hw/lib/ip/i2c_master/i2c_init_IMX219.mem">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -329,6 +323,18 @@
         </FileInfo>
       </File>
       <File Path="$PPRDIR/../../1.hw/lib/ip/i2c_master/i2c_init_OV2740.mem">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../1.hw/lib/ip/i2c_master/i2c_init_IMX283_1080p.mem">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../1.hw/lib/ip/i2c_master/i2c_init_IMX283_720p.mem">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -369,6 +375,7 @@
         </FileInfo>
       </File>
       <Config>
+        <Option Name="TargetConstrsFile" Val="$PPRDIR/top.TE0710-03.Artix7-100T.xdc"/>
         <Option Name="ConstrsType" Val="XDC"/>
       </Config>
     </FileSet>
