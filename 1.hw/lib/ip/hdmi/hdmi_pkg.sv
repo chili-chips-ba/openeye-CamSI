@@ -75,7 +75,7 @@ package hdmi_pkg;
 //-----------------------------
 // 1920x1080Px30Hz CVT-RBv2
 //-----------------------------
-`else
+`elsif HDMI_1080p30
    localparam int HFRAME         = 2065;  // complete frame X
    localparam int HSCREEN        = 1920;  // visible X
    localparam int HSYNC_START    = HSCREEN;
@@ -87,6 +87,24 @@ package hdmi_pkg;
    localparam int VSCREEN        = 1080;  // visible Y
    localparam int VSYNC_START    = VSCREEN;
    localparam int VSYNC_SIZE     = 685;
+   localparam int VSYNC_END      = VSYNC_START + VSYNC_SIZE;
+   localparam bit VSYNC_POLARITY = HI;     // '+'
+
+//-----------------------------
+// 1920x1080Px60Hz CVT-RBv2
+//-----------------------------
+`else
+   localparam int HFRAME         = 2000;  // complete frame X
+   localparam int HSCREEN        = 1920;  // visible X
+   localparam int HSYNC_START    = HSCREEN;
+   localparam int HSYNC_SIZE     = 80;
+   localparam int HSYNC_END      = HSYNC_START + HSYNC_SIZE;
+   localparam bit HSYNC_POLARITY = HI;     // '+'
+ 
+   localparam int VFRAME         = 1111;  // complete frame Y
+   localparam int VSCREEN        = 1080;  // visible Y
+   localparam int VSYNC_START    = VSCREEN;
+   localparam int VSYNC_SIZE     = 31;
    localparam int VSYNC_END      = VSYNC_START + VSYNC_SIZE;
    localparam bit VSYNC_POLARITY = HI;     // '+'
 `endif

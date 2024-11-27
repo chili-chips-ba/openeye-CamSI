@@ -59,8 +59,8 @@ module fpga_pll_hdmi (
     input  logic clk_ext,     // 100MHz
 
     output logic srst_n,
-    output logic clk_pix,     // 5x pixel clock: 371.25MHz (or 666.66MHz)
-    output logic clk_pix5     // pixel clock: 74.25MHz (or 133.32MHz)
+    output logic clk_pix,     // 5x pixel clock
+    output logic clk_pix5     // pixel clock
 );
 
     logic       pll_lock;

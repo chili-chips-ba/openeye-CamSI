@@ -47,8 +47,8 @@
 //`define OV2740
 
 //`define HDMI_720p60
-`define HDMI_1080p30
-//`define HDMI_1080p60 /*Artix-7 cannot do this option*/ 
+//`define HDMI_1080p30
+`define HDMI_1080p60 /*Artix-7 cannot do this option*/ 
 
 `define MIPI_4_LANE
 //`define MIPI_2_LANE
@@ -109,14 +109,18 @@ package top_pkg;
 `ifdef IMX283
    localparam bus7_t I2C_SLAVE_ADDR = 7'd26;
    localparam int    NUM_REGISTERS  = 58;
-   localparam string I2C_INIT_MEM_FILE = "i2c_init_IMX283.mem";
+   `ifdef HDMI_720p60
+      localparam string I2C_INIT_MEM_FILE = "i2c_init_IMX283_720p.mem";
+   `else //HDMI_1080p60
+      localparam string I2C_INIT_MEM_FILE = "i2c_init_IMX283_1080p.mem";
+   `endif
 `elsif IMX219
    localparam bus7_t I2C_SLAVE_ADDR = 7'd16;
    localparam int    NUM_REGISTERS  = 65;
    localparam string I2C_INIT_MEM_FILE = "i2c_init_IMX219.mem";
 `else //OV2740
-   localparam bus7_t I2C_SLAVE_ADDR = 7'd0;
-   localparam int    NUM_REGISTERS  = 0;
+   localparam bus7_t I2C_SLAVE_ADDR = 7'd32;
+   localparam int    NUM_REGISTERS  = 155;
    localparam string I2C_INIT_MEM_FILE = "i2c_init_OV2740.mem";
 `endif
    
@@ -128,7 +132,7 @@ package top_pkg;
 
 `elsif MIPI_2_LANE
    localparam                       NUM_LANE = 2;
-   localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b10; // based on Trenz board, adjust as needed
+   localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b01; // based on Trenz board, adjust as needed (CRUVI A -> 2'b01, CRUVI C -> 2'b10)
    localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3};
 
 `else // MIPI_1_LANE is default
