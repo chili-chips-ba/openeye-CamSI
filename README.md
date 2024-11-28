@@ -138,7 +138,7 @@ When Artix7 internal termination is used in connecton to LVDS_25 IOSTANDARD, it 
 That's on Trenz hardware done in the following way:
 - switch DIP 2 to ON state, to set the IOV to 2.5V
 - use Jumpers J14, J16, and J17 to connect VCCIO to IOV.
-Â 
+  
 #### *Detection of Camera Clock Activity Intervals*
 Once all these hardware and board problems were put behind, we turned focus back to RTL design. 
 
@@ -288,7 +288,10 @@ These settings ensure a frame rate of **60 FPS**.
 These configurations leverage the IMX283's advanced binning capabilities to optimize performance while maintaining high image quality.
 
 You can watch a demonstration of this setup in action at the following link:
+
 [![image](https://github.com/user-attachments/assets/b380c17d-a41c-45a4-82b4-cf1df28dce23)](https://www.youtube.com/watch?v=YFaDeECKaqY&ab_channel=Armin%C5%BDuni%C4%87)
+
+
 #### *Dead Pixel Management*
 
 One of the key challenges in working with high-resolution sensors, like the IMX283, is managing dead pixels. These are defective pixels on the sensor that can negatively impact image quality. On this system, several strategies were implemented to effectively eliminate the impact of dead pixels.
@@ -337,7 +340,10 @@ By selecting these values, the integration time is minimized, which is suitable 
 
 ## Execution Play 5
 ### Prepping for Webcam
+(Chili.CHIPS*ba team)
 - [ ] Enable OV2740 camera chip
+      
+(Webcam team)
 - [ ] Add 3 new ISP functions
 > - [ ] White Balance [ ] Color Correction [ ] Gamma Correction
 - [ ] and JPEG video compression
