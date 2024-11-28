@@ -191,37 +191,39 @@ It is only at this point, where video is *unpacked*, that we may engage in ISP. 
 
 ## Execution Play 2
 ### Widening up the pathway
-- [ ] Repeat the same for the 4-lane IMX283 camera sensor
+- [x] Repeat the same for the 4-lane IMX283 camera sensor
 - [x] Step-by-step introduce the following 3 ISP elements:
   - [x] Debayer
   - [x] Dead Pixel Management
   - [x] Manual Exposure Control 
 - [x] Implement another (lower) resolution of our choice
 
-#### *IMX283 Register Configuration for Different Resolutions*
+### *IMX283 Sensor Configuration for Different Resolutions*
 
-Configuring the IMX283 sensor for different resolutions requires careful adjustment of its registers. For each data, the first four digits represent the register address, while the last two digits indicate the value to be written. Below, we describe the configuration process for achieving a 720p resolution with 60 FPS using **Mode 3**, which includes 3x3 horizontal/vertical binning. **Mode 3** uses 3x3 horizontal/vertical binning to combine pixel values within a 3x3 grid for each color raw channel. This process reduces the output resolution while maintaining high image quality.
+Configuring the IMX283 sensor for different resolutions requires precise adjustment of its registers. For each data entry, the first four digits represent the register address, while the last two digits indicate the value to be written. Below, we describe the configuration process for achieving both **720p** and **1080p** resolutions at 60 FPS using **Mode 3** and **Mode 2**, respectively.
 
-This sensor requires specific delays after setting some register. In the [.mem](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/1.hw/lib/ip/i2c_master) files, this is implemented as an additional byte appended to the three bytes representing the address and value of each register. These delays are crucial for ensuring proper operation and stability of the camera. More about this topic on our [issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/29).
+This sensor requires specific delays after setting some registers. In the [.mem](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/1.hw/lib/ip/i2c_master) files, this is implemented as an additional byte appended to the three bytes representing the address and value of each register. These delays are crucial for ensuring proper operation and stability of the camera. More details can be found in our [issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/29).
+
+### **720p Resolution (60 FPS)**
+
+For 720p resolution, **Mode 3** is used, which applies **3x3 horizontal/vertical binning**. This method combines pixel values within a 3x3 grid for each raw color channel, reducing resolution while maintaining image quality.
 
 #### *Mode Settings*
-The following registers enable **Mode 3** operation for the IMX283 sensor:
+The following registers enable **Mode 3** operation:
 - `3004 1e`
 - `3005 18`
 - `3006 10`
 - `3007 00`
 
 #### *Frame Dimensions*
-To configure the frame's dimensions:
-- **Y_OUT_SIZE**: Set the vertical size to 722 (0x2d2) to account for skipping 2 rows for debayer processing:
+- **Y_OUT_SIZE**: Set the vertical size to 722 (0x2D2) to account for skipping 2 rows for debayer processing:
   - `302f d2`
   - `3030 02`
-- **WRITE_VSIZE**: Set the vertical output size to 726 (0x2d6):
+- **WRITE_VSIZE**: Set the vertical output size to 726 (0x2D6):
   - `3031 d6`
   - `3032 02`
 
 #### *Frame Cropping*
-To define the frame cropping region:
 - **H_TRIMMING_START**: Start the horizontal cropping at position 840 (0x348):
   - `3058 48`
   - `3059 03`
@@ -229,12 +231,9 @@ To define the frame cropping region:
   - `305a e8`
   - `305b 11`
 
-These settings result in 1920 8-bit data points per line, equivalent to 1280 12-bit raw data points used for color processing. The trimming values are configured as though binning is not applied.
+These settings result in **1920 8-bit data points per line**, equivalent to **1280 12-bit raw data points** used for color processing.
 
 #### *Timing Configuration for 60 FPS*
-The frame timing is determined by the following equation:
-
-For 60 FPS:
 - **VMAX**: Set to 2551 (0x9F7) to ensure frame blanking:
   - `3038 f7`
   - `3039 09`
@@ -242,8 +241,54 @@ For 60 FPS:
   - `3036 d6`
   - `3037 01`
 
-These settings ensure a frame rate of 60 Hz.
+These settings ensure a frame rate of **60 FPS**.
 
+### **1080p Resolution (60 FPS)**
+
+For 1080p resolution, **Mode 2** is used, which applies **2x2 horizontal/vertical binning**. This method combines pixel values within a 2x2 grid for each raw color channel, maintaining higher resolution while reducing the overall pixel count.
+
+#### *Mode Settings*
+The following registers enable **Mode 2** operation:
+- `3004 0d`
+- `3005 11`
+- `3006 50`
+- `3007 00`
+
+#### *Frame Dimensions*
+- **Y_OUT_SIZE**: Set the vertical size to 1082 (0x43A):
+  - `302f 3a`
+  - `3030 04`
+
+#### *Frame Cropping*
+- **H_TRIMMING_START**: Start the horizontal cropping at position 840 (0x348):
+  - `3058 48`
+  - `3059 03`
+- **H_TRIMMING_END**: End the horizontal cropping at position 4584 (0x11E8):
+  - `305a e8`
+  - `305b 11`
+
+These settings result in **2880 8-bit data points per line**, equivalent to **1920 12-bit raw data points** used for color processing.
+
+#### *Timing Configuration for 60 FPS*
+- **VMAX**: Set to 2234 (0x8BA) to ensure frame blanking:
+  - `3038 ba`
+  - `3039 08`
+- **HMAX**: Set to 540 (0x21C) to ensure line blanking:
+  - `3036 1c`
+  - `3037 02`
+
+These settings ensure a frame rate of **60 FPS**.
+
+### **Comparison of Configurations**
+| Resolution | Mode   | Binning | Y_OUT_SIZE | VMAX   | HMAX | Frame Rate |
+|------------|--------|---------|------------|--------|------|------------|
+| 720p       | Mode 3 | 3x3     | 722        | 2551   | 470  | 60 FPS     |
+| 1080p      | Mode 2 | 2x2     | 1082       | 2234   | 540  | 60 FPS     |
+
+These configurations leverage the IMX283's advanced binning capabilities to optimize performance while maintaining high image quality.
+
+You can watch a demonstration of this setup in action at the following link:
+[![image](https://github.com/user-attachments/assets/b380c17d-a41c-45a4-82b4-cf1df28dce23)](https://www.youtube.com/watch?v=YFaDeECKaqY&ab_channel=Armin%C5%BDuni%C4%87)
 #### *Dead Pixel Management*
 
 One of the key challenges in working with high-resolution sensors, like the IMX283, is managing dead pixels. These are defective pixels on the sensor that can negatively impact image quality. On this system, several strategies were implemented to effectively eliminate the impact of dead pixels.
