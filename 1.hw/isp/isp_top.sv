@@ -61,55 +61,32 @@ module isp_top
 //---------------------------------
 // Debayer ISP function
 //---------------------------------
+
 `ifdef RAW8
-   raw2rgb_8 #(
-      .LINE_LENGTH (HSCREEN/NUM_LANE), // number of data entries per line
-      .RGB_WIDTH   (RGB_WIDTH)    // width of RGB data (24-bit)
-   )
-   u_raw2rgb (
-      .clk        (clk),          //i           
-      .rst        (rst),          //i
-
-      .data_in    (data_in),      //i'lane_raw_data_t
-      .data_valid (data_valid),   //i  
-      .rgb_valid  (rgb_valid),    //i
-
-      .reading    (reading),      //o
-      .rgb_out    (rgb_out)       //o[RGB_WIDTH-1:0]
-   );
+   raw2rgb_8 
 `elsif RAW10
-   raw2rgb_10 #(
-      .LINE_LENGTH (HSCREEN/NUM_LANE), // number of data entries per line
-      .RGB_WIDTH   (RGB_WIDTH)         // width of RGB data (24-bit)
-   )
-   u_raw2rgb (
-      .clk        (clk),          //i           
-      .rst        (rst),          //i
-
-      .data_in    (data_in),      //i'lane_raw_data_t
-      .data_valid (data_valid),   //i  
-      .rgb_valid  (rgb_valid),    //i
-
-      .reading    (reading),      //o
-      .rgb_out    (rgb_out)       //o[RGB_WIDTH-1:0]
-   );
-`else // RAW12
-   raw2rgb_12 #(
-      .LINE_LENGTH (HSCREEN/NUM_LANE), // number of data entries per line
-      .RGB_WIDTH   (RGB_WIDTH)         // width of RGB data (24-bit)
-   )
-   u_raw2rgb (
-      .clk        (clk),          //i           
-      .rst        (rst),          //i
-
-      .data_in    (data_in),      //i'lane_raw_data_t
-      .data_valid (data_valid),   //i  
-      .rgb_valid  (rgb_valid),    //i
-
-      .reading    (reading),      //o
-      .rgb_out    (rgb_out)       //o[RGB_WIDTH-1:0]
-   );
+   raw2rgb_10
+`else
+   raw2rgb_12
 `endif
+     
+  #(
+      .LINE_LENGTH (HSCREEN/NUM_LANE), // number of data entries per line
+      .RGB_WIDTH   (RGB_WIDTH)         // width of RGB data (24-bit)
+   )
+   u_raw2rgb (
+      .clk        (clk),               //i           
+      .rst        (rst),               //i
+                                        
+      .data_in    (data_in),           //i'lane_raw_data_t
+      .data_valid (data_valid),        //i  
+      .rgb_valid  (rgb_valid),         //i
+                                        
+      .reading    (reading),           //o
+      .rgb_out    (rgb_out)            //o[RGB_WIDTH-1:0]
+   );
+
+
 //---------------------------------
 // More ISP functions to follow
 //---------------------------------
