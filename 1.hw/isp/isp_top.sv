@@ -80,7 +80,7 @@ module isp_top
 `elsif RAW10
    raw2rgb_10 #(
       .LINE_LENGTH (HSCREEN/NUM_LANE), // number of data entries per line
-      .RGB_WIDTH   (24)                // width of RGB data (24-bit)
+      .RGB_WIDTH   (RGB_WIDTH)         // width of RGB data (24-bit)
    )
    u_raw2rgb (
       .clk        (clk),          //i           
@@ -96,7 +96,7 @@ module isp_top
 `else // RAW12
    raw2rgb_12 #(
       .LINE_LENGTH (HSCREEN/NUM_LANE), // number of data entries per line
-      .RGB_WIDTH   (24)                // width of RGB data (24-bit)
+      .RGB_WIDTH   (RGB_WIDTH)         // width of RGB data (24-bit)
    )
    u_raw2rgb (
       .clk        (clk),          //i           
