@@ -289,7 +289,7 @@ These configurations leverage the IMX283's advanced binning capabilities to opti
 
 You can watch a demonstration of this setup in action at the following link:
 
-[![image](https://github.com/user-attachments/assets/b380c17d-a41c-45a4-82b4-cf1df28dce23)](https://www.youtube.com/watch?v=YFaDeECKaqY&ab_channel=Armin%C5%BDuni%C4%87)
+[![image](https://github.com/user-attachments/assets/a2ed28d3-c6f0-4a5d-b290-4a1bb19fae8f)](https://www.youtube.com/watch?v=YFaDeECKaqY&ab_channel=Armin%C5%BDuni%C4%87)
 
 
 #### *Dead Pixel Management*
