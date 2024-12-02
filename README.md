@@ -341,10 +341,10 @@ By selecting these values, the integration time is minimized, which is suitable 
 
 ## Execution Play 5
 ### Prepping for Webcam
-(Chili.CHIPS*ba team)
+(__Chili.CHIPS*ba team__)
 - [ ] Enable OV2740 camera chip
       
-(Webcam team)
+(__Webcam team__)
 - [ ] Add 3 new ISP functions
 > - [ ] White Balance [ ] Color Correction [ ] Gamma Correction
 - [ ] and JPEG video compression
@@ -401,6 +401,7 @@ The project goal is to form a solid base from which the makers can start develop
 There are many other possible applications of this technology. They span industrial, medical, automotive, IOT, VR, mobile, high-speed photography, aerospace, and beyond. New applications and use-cases are also constantly invented. We intend to exploit some of them in the subsequent project proposals.
 
 Just for background, here are a few references to what can be done with this technology:
+- https://inivation.com/solutions
 - https://www.prophesee.ai/event-based-vision-industrial
 - https://www.prophesee.ai/event-based-vision-automotive
 - https://www.prophesee.ai/event-based-vision-medical
