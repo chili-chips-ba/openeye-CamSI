@@ -383,7 +383,32 @@ While [Puzhitech](http://www.puzhitech.com/en) board already comes with 15-pin 0
 - See: https://nlnet.nl/project/FPGA-ISP-UVM-USB2
 
 # Phase3 - openCam/Event
-- The project proposal is under construction
+
+This project aims to advance the field of Event Cameras by developing three open-source outcomes:
+  1) an interface to integrate an entry-level Prophesee/Sony event camera sensor with PC systems
+  2) novel algorithms for processing event-based video data, and
+  3) an efficient hardware acceleration platform for these algorithms.
+
+The interface will enable physical connectivity, configuration, and live data transfer via Ethernet. The algorithm development track will decode and interpret event video frames, extracting key features such as rapid motion events. Finally, the hardware acceleration track will port these algorithms to an FPGA platform using a programmable soft processor, blending hardware and software for efficient processing.
+
+Together, these three outcomes will create the first fully open-source platform for exploring and utilizing Event Camera technology, paving the way for future applications.
+
+All these elements are new, not only for the open-source community, but also the wider industry.
+
+The project goal is to form a solid base from which the makers can start developing open-source apps with Event Camera. It is in that sense similar to uberDDR3. The scope of this initial project will include a couple of Getting Started examples, such as recording the mechanical vibrations of an industrial motor, or of a high-voltage switch, or counting the free-falling beans.
+
+There are many other possible applications of this technology. They span industrial, medical, automotive, IOT, VR, mobile, professional photography, aerospace, and beyond. New applications and use-cases are also constantly invented. We intend to exploit some of them in the subsequent project proposals.
+
+Just for background, here are a few references to what can be done with this technology:
+- https://www.prophesee.ai/event-based-vision-industrial
+- https://www.prophesee.ai/event-based-vision-automotive
+- https://www.prophesee.ai/event-based-vision-medical
+- https://www.prophesee.ai/event-based-vision-xr
+- https://www.prophesee.ai/event-based-vision-mobile
+- https://www.prophesee.ai/event-based-vision-iot
+- https://www.prophesee.ai/event-based-vision-more-applications
+  
+The main point of this project is to open the doors for the open-source developers to tap into this vast and mostly unexplored application space.
 
 ## *Acknowledgements*
 We are grateful to:
