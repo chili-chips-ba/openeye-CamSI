@@ -70,11 +70,13 @@ module csi_rx_phy_clk
    );
    
 //---------------------------------------------
+/*
 // BUFMR: Multi-Region Clock Buffer
    BUFMR u_bufmr (
       .I(dphy_clk_in), // Clock input  (Connect to IBUFG)
       .O(dphy_clk_buf) // Clock output (connect to BUFIOs/BUFRs)
-    );   
+    );
+*/
 
 /* 
  //BUFIO : Local Clock Buffer for I/O
@@ -83,6 +85,27 @@ module csi_rx_phy_clk
       .O(dphy_clk_buf) // Clock output (connect to I/O clock loads)
    );
 */
+
+/*
+ //BUFG : Global Clock Buffer for I/O
+   BUFG u_bufg (
+      .I(dphy_clk_in), // Clock input (connect to an IBUF or BUFMR)
+      .O(dphy_clk_buf) // Clock output (connect to I/O clock loads)
+   );
+*/
+
+ //BUFR : Regional Clock Buffer
+   BUFR #(
+      .BUFR_DIVIDE ("BYPASS"), // Values: "BYPASS", 1, 2, 3, 4, 5, 6, 7, 8
+      .SIM_DEVICE  (FPGA_DEV)  // Must be set to "7SERIES"
+   ) 
+   u_bypass (
+      .CE  (1'b1),         //i: Active high, clock enable (Divided modes only)
+      .CLR (reset),        //i: Active high, asynchronous clear (Divided modes only)
+      .I   (dphy_clk_in),  //i: Clock buffer input driven by an IBUF, MMCM or local interconnect
+
+      .O   (dphy_clk_buf)  //o: Clock output port
+    );
 
 //---------------------------------------------BYPASS
  //BUFR : Regional Clock Buffer
