@@ -280,6 +280,7 @@ These settings result in **2880 8-bit data points per line**, equivalent to **19
 These settings ensure a frame rate of **60 FPS**.
 
 ### **Comparison of Configurations**
+
 | Resolution | Mode   | Binning | Y_OUT_SIZE | VMAX   | HMAX | Frame Rate |
 |------------|--------|---------|------------|--------|------|------------|
 | 720p       | Mode 3 | 3x3     | 722        | 2551   | 470  | 60 FPS     |
@@ -384,20 +385,20 @@ While [Puzhitech](http://www.puzhitech.com/en) board already comes with 15-pin 0
 
 # Phase3 - openCam/Event
 
-This project aims to advance the field of Event Cameras by developing three open-source outcomes:
-  1) an interface to integrate an entry-level Prophesee/Sony event camera sensor with PC systems
-  2) novel algorithms for processing event-based video data, and
-  3) an efficient hardware acceleration platform for these algorithms.
+This project aims to introduce the field of Event Cameras to open-source domain. It does it by developing the following three outcomes:
+  1) interface to an entry-level Prophesee/Sony event imaging sensor, and its integration with PC systems
+  2) novel algorithms for processing event-based video data
+  3) efficient FPGA-based hardware acceleration platform for these algorithms.
 
-The interface will enable physical connectivity, configuration, and live data transfer via Ethernet. The algorithm development track will decode and interpret event video frames, extracting key features such as rapid motion events. Finally, the hardware acceleration track will port these algorithms to an FPGA platform using a programmable soft processor, blending hardware and software for efficient processing.
+The interface will enable physical connectivity, configuration, and live data transfer via Ethernet. The algorithm development will decode and interpret event video frames, extracting key features such as rapid motion events. The acceleration track will port these algorithms to an FPGA embedded system that implements a soft processor customized for video workloads, programmable in high-level languages, blending hardware and software methods for high throughput and efficiency.
 
 Together, these three outcomes will create the first fully open-source platform for exploring and utilizing Event Camera technology, paving the way for future applications.
 
-All these elements are new, not only for the open-source community, but also the wider industry.
+All these elements are new, not only for the open-source community, but also the professional industry.
 
-The project goal is to form a solid base from which the makers can start developing open-source apps with Event Camera. It is in that sense similar to uberDDR3. The scope of this initial project will include a couple of Getting Started examples, such as recording the mechanical vibrations of an industrial motor, or of a high-voltage switch, or counting the free-falling beans.
+The project goal is to form a solid base from which the makers can start developing open-source apps with Event Camera. It is in that sense similar to uberDDR3. The scope of this initial project will include a couple of Getting Started examples, such as recording the mechanical vibrations of an industrial motor, or inside a high-voltage switch, or counting the free-falling beans.
 
-There are many other possible applications of this technology. They span industrial, medical, automotive, IOT, VR, mobile, professional photography, aerospace, and beyond. New applications and use-cases are also constantly invented. We intend to exploit some of them in the subsequent project proposals.
+There are many other possible applications of this technology. They span industrial, medical, automotive, IOT, VR, mobile, high-speed photography, aerospace, and beyond. New applications and use-cases are also constantly invented. We intend to exploit some of them in the subsequent project proposals.
 
 Just for background, here are a few references to what can be done with this technology:
 - https://www.prophesee.ai/event-based-vision-industrial
@@ -408,7 +409,7 @@ Just for background, here are a few references to what can be done with this tec
 - https://www.prophesee.ai/event-based-vision-iot
 - https://www.prophesee.ai/event-based-vision-more-applications
   
-The main point of this project is to open the doors for the open-source developers to tap into this vast and mostly unexplored application space.
+The primary objective of this project is to open the door for open-source developers to enter this vast and mostly unexplored application space.
 
 ## *Acknowledgements*
 We are grateful to:
