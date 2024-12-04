@@ -42,21 +42,26 @@
 `ifndef __TOP_PKG__
 `define __TOP_PKG__
 
-`define IMX283
-//`define IMX219
+//`define IMX283
+`define IMX219
 //`define OV2740
 
-//`define HDMI_720p60
-//`define HDMI_1080p30
-`define HDMI_1080p60 /*Artix-7 cannot do this option*/ 
+`define ETHERNET
+//`undef ETHERNET
+`define PUZHI
+//`undef PUZHI
 
-`define MIPI_4_LANE
-//`define MIPI_2_LANE
+`define HDMI_720p60
+//`define HDMI_1080p30
+//`define HDMI_1080p60 /*Artix-7 cannot do this option*/ 
+
+//`define MIPI_4_LANE
+`define MIPI_2_LANE
 //`define MIPI_1_LANE
 
-//`define RAW8
+`define RAW8
 //`define RAW10
-`define RAW12
+//`define RAW12
 //`define RAW14
 
 
@@ -131,8 +136,12 @@ package top_pkg;
    localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd1, 5'd1, 5'd1, 5'd1};
 
 `elsif MIPI_2_LANE
-   localparam                       NUM_LANE = 2;
+   localparam                       NUM_LANE = 2;  
+`ifdef PUZHI
+   localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b00; // based on Puzhi board, adjust as needed
+`else
    localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b01; // based on Trenz board, adjust as needed (CRUVI A -> 2'b01, CRUVI C -> 2'b10)
+`endif
    localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3};
 
 `else // MIPI_1_LANE is default
