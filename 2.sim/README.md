@@ -121,22 +121,25 @@ make SIM=icarus [WAVES=1|0] [RUN_SIM_US=<time>] [TESTCASE=test_0|test_1]
   - Files start with `csi-2`, such as `csi-2-raw2rgb-fifo-hdmi.gtkw` and others, which are tailored for different aspects of the CSI simulation.
 - Waveform files:
   - Verilator: `dump.fst`
-  - Screenshots: Insert example waveform screenshots here.
+  ![image](https://github.com/user-attachments/assets/0be99641-83e6-4fe7-81b0-b95b1fe30103)
 - **GTKWave Setup**:
   - For reading signals with GTKWave, a pre-saved setup file (`i2c.gtkw`) is available to load signals of interest for the I2C simulation.
 - Waveform files:
   - Verilator: `dump.fst`
   - Icarus: `sim_build/top.fst`
-- Screenshots: Insert example waveform screenshots here.
+![image](https://github.com/user-attachments/assets/6c9a0550-f813-497e-a549-d8e029ce2905)
+![image](https://github.com/user-attachments/assets/c0711eeb-5564-469e-994e-f13cfba606f8)
 
 ### Performance
 Simulation runtime and performance may vary based on the simulator and configurations used.
+
+### Notes
+The simulation results provided include only 5 lines of a single frame due to the slow execution speed. Simulating a complete frame would take approximately 2 hours.
 
 ---
 
 ## Future Improvements
 - Adding more test cases for comprehensive validation.
-- Integration of additional BFMs for protocols beyond I2C.
 - Expanding waveform analysis to include automated signal checks.
 
 ---
