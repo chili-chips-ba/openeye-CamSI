@@ -73,13 +73,13 @@ class CSI:
          bit_d = ~bit_c & 0x1
 
          if self.num_lane == 2:
-            self.signal.value = (bit_b << 3) | (bit_a << 2) | (bit_d << 1) | bit_c
+            self.signal.value = (bit_a << 3) | (bit_b << 2) | (bit_c << 1) | bit_d
          elif self.num_lane == 4:
             bit_e = (byte2 >> bit) & 0x1
             bit_f = ~bit_e & 0x1
             bit_g = (byte3 >> bit) & 0x1
             bit_h = ~bit_g & 0x1
-            self.signal.value = (bit_b << 7) | (bit_a << 6) | (bit_d << 5) | (bit_c << 4) | (bit_f << 3) | (bit_e << 2) | (bit_h << 1) | bit_g
+            self.signal.value = (bit_a << 7) | (bit_b << 6) | (bit_c << 5) | (bit_d << 4) | (bit_e << 3) | (bit_f << 2) | (bit_g << 1) | bit_h
          
          await Timer(self.period_ns, units='ns')
 
@@ -96,7 +96,7 @@ class CSI:
          if self.num_lane == 2:
             await self.send_combined_bytes(byte1, byte0) #Because of the inversion of CSI2 protocol [1,0], not [0,1]
          elif self.num_lane == 4:
-            await self.send_combined_bytes(byte0, byte1, byte2, byte3)
+            await self.send_combined_bytes(byte3, byte2, byte1, byte0)
          
          if (self.raw == 8):
             value0, value1, value2, value3 = map(lambda v: v + 1, (value0, value1, value2, value3))
@@ -231,10 +231,10 @@ class CSI:
       Coroutine to send a full frame.
       """
       await self.start_frame()
-      line_data = 0x22  # Example data for a line
+      line_data = 0xFF  # Example data for a line
 
-      for i in range(10):  # (self.frame_length + self.frame_blank) instead of 5
-         if i > 10:        # (self.frame_length - 1) instead of 2
+      for i in range(5):  # (self.frame_length + self.frame_blank) instead of 5
+         if i > 2:        # (self.frame_length - 1) instead of 2
             line_data = 0x11
          await self.send_line(line_data)
 

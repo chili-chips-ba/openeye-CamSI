@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Thu Jul  4 15:57:47 2024
+[*] Thu Nov 14 21:11:55 2024
 [*]
 [dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/dump.fst"
-[dumpfile_mtime] "Mon Jul  1 21:51:19 2024"
-[dumpfile_size] 4396502
-[savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/csi-2-raw2rgb-hdmi.gtkw"
+[dumpfile_mtime] "Thu Nov 14 20:44:29 2024"
+[dumpfile_size] 6143291
+[savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/csi-2-raw2rgb-fifo-hdmi.gtkw"
 [timestart] 0
 [size] 1588 827
-[pos] -152 30
-*-25.966154 265905000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -158 -112
+*-26.231106 128430160 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] .
 [treeopen] .top.
 [treeopen] .top.u_csi_rx_top.
@@ -56,16 +56,9 @@ top.cam_dphy_dat[1][1:0]
 @28
 top.csi_in_frame
 top.csi_in_line
-@22
-top.csi_word_data[0][7:0]
-top.csi_word_data[1][7:0]
-@28
 top.csi_word_valid
 @200
 -top/u_isp/u_raw2rgb
-@22
-top.u_isp.u_raw2rgb.data_in[0][7:0]
-top.u_isp.u_raw2rgb.data_in[1][7:0]
 @28
 top.u_isp.u_raw2rgb.data_valid
 @22
@@ -89,6 +82,12 @@ top.u_rgb2hdmi.rgb_valid
 top.u_rgb2hdmi.u_afifo.DEPTH
 top.u_rgb2hdmi.u_afifo.raddr[12:0]
 top.u_rgb2hdmi.u_afifo.waddr[12:0]
+@28
+top.u_rgb2hdmi.u_afifo.empty
+top.u_rgb2hdmi.u_afifo.full
+top.u_rgb2hdmi.u_afifo.rd
+@29
+top.u_rgb2hdmi.u_afifo.wr
 @200
 -top/u_hdmi_top
 @28
@@ -99,7 +98,6 @@ top.u_hdmi_top.hdmi_dat_p[2:0]
 top.u_hdmi_top.hsync
 top.u_hdmi_top.vsync
 @24
-top.u_hdmi_top.x[10:0]
 top.u_hdmi_top.y[10:0]
 [pattern_trace] 1
 [pattern_trace] 0

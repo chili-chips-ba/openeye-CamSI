@@ -1,0 +1,35 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Sun Nov 10 17:44:36 2024
+[*]
+[dumpfile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/dump.fst"
+[dumpfile_mtime] "Sun Nov 10 17:35:05 2024"
+[dumpfile_size] 7438200
+[savefile] "/mnt/c/Users/Armin/Desktop/openeye/2.sim/cocotb/top/csi-2-4lane-debug.gtkw"
+[timestart] 69639990
+[size] 1588 827
+[pos] -187 -90
+*-13.003538 69290000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] .
+[treeopen] .top.
+[sst_width] 259
+[signals_width] 214
+[sst_expanded] 1
+[sst_vpaned_height] 232
+@28
+top.areset
+top.cam_dphy_clk[1:0]
+top.cam_dphy_dat[0][1:0]
+top.cam_dphy_dat[1][1:0]
+top.cam_dphy_dat[2][1:0]
+top.cam_dphy_dat[3][1:0]
+top.cam_en
+@29
+top.u_csi_rx_top.bit_clock
+@23
+top.u_csi_rx_top.byte_align_data[0][7:0]
+top.u_csi_rx_top.byte_align_data[1][7:0]
+top.u_csi_rx_top.byte_align_data[2][7:0]
+top.u_csi_rx_top.byte_align_data[3][7:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -57,7 +57,7 @@ module i2c_ctrl (
    output logic        sda_oe,
    input  logic        sda_di,
 
-   input  logic [7:0] pause_duration
+   input  logic [7:0]  pause_duration
 );
 
    typedef enum logic [3:0] {
