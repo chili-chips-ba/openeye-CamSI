@@ -342,12 +342,17 @@ By selecting these values, the integration time is minimized, which is suitable 
 ## Execution Play 5
 ### Prepping for Webcam
 (__Chili.CHIPS*ba team__)
-- [ ] Enable OV2740 camera chip
+- [ ] Enable OV2740 camera chip: 
+   - [ ] Bring up Lukas' new adapter board
+   - [ ] Reverse-engineer I2C settings
+   - [ ] Demonstrate CAM-to-HDMI video path
       
-(__Webcam team__)
+(__Silicon Highway Technologies webcam team__)
 - [ ] Add 3 new ISP functions
-> - [ ] White Balance [ ] Color Correction [ ] Gamma Correction
-- [ ] and JPEG video compression
+   - [ ] White Balance
+   - [ ] Color Correction
+   - [ ] Gamma Correction
+- [ ] JPEG video compression
 
 ## Trenz and CRUVI in retrospect
 
