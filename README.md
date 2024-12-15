@@ -412,6 +412,9 @@ Just for background, here are a few references to what can be done with this tec
   
 The primary objective of this project is to open the door for open-source developers to enter this vast and mostly unexplored application space.
 
+## Public Announcements
+  [2024/12/14](https://www.linkedin.com/posts/chili-chips_sony-imx283-camera-1080p-60fps-stream-with-activity-7273936850312916992-ZF01?utm_source=share&utm_medium=member_desktop)
+
 ## *Acknowledgements*
 We are grateful to:
  - NLnet Foundation's sponsorship for giving us an opportunity to work on this fresh new take at FPGA video processing.
