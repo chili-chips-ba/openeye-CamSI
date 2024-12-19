@@ -53,12 +53,14 @@ module i2c_top
    input  logic  clk,
    input  logic  strobe_400kHz, // 400kHz strobe synchrnous to 'clk'
    input  logic  areset_n,      // active-0 asynchronous reset
+   input  logic  clk_1hz,
 
  //I/O pads
    inout  wire   i2c_scl,
    inout  wire   i2c_sda,
 
  //Misc/Debug
+   output bus7_t i2c_slave,
    output bus8_t debug_pins
 );
 
@@ -86,6 +88,15 @@ module i2c_top
    logic   i2c_sda_oe;
    
    bus8_t  i2c_pause;
+
+   always_ff @(posedge clk_1hz) begin
+      if (areset_n == 1'b0) begin
+         i2c_slave <= '0;
+      end
+      else begin
+         i2c_slave <= 7'(i2c_slave + 7'(1));
+      end
+   end
 
    i2c_ctrl u_ctrl (
       .clk              (clk),            //i 

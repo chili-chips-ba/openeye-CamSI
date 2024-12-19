@@ -58,6 +58,7 @@ module clkrst_gen
 
    output logic  reset,
    output logic  cam_en,
+   output logic  pwd,
    output logic  i2c_areset_n
 );
 
@@ -129,6 +130,7 @@ module clkrst_gen
          rst_delay_cnt <= '0; 
 
          cam_en        <= 1'b0;
+         pwd           <= 1'b1;
          i2c_areset_n  <= 1'b0;
       end 
       else if (strobe_400kHz == 1'b1) begin
@@ -142,16 +144,28 @@ module clkrst_gen
             clk_1hz <= ~clk_1hz;
           
             if (rst_delay_cnt < 4'd8) begin
-                rst_delay_cnt <= 4'(rst_delay_cnt + 4'(1));
-          
-                // Enable CMOS power after 2 secs to give pwr supply
-                // ample time to stabilize. In reality, while only a 
-                // few msec is needed, it's simpler to use this timer
-                cam_en <= (rst_delay_cnt > 4'd1);
-          
-                // I2C exits reset 4 secs after reset is deasserted,
-                //  to then start initializing camera
-                i2c_areset_n <= (rst_delay_cnt > 4'd3);
+               rst_delay_cnt <= 4'(rst_delay_cnt + 4'(1));
+         
+               // Enable CMOS power after 2 secs to give pwr supply
+               // ample time to stabilize. In reality, while only a 
+               // few msec is needed, it's simpler to use this timer
+               cam_en <= (rst_delay_cnt > 4'd1);
+               //pwd    <= (rst_delay_cnt <= 4'd2);
+               if (rst_delay_cnt <= 2) begin
+                  pwd <= 1'b1;
+               end 
+               else if (rst_delay_cnt <= 3) begin
+                  pwd <= 1'b0;
+               end 
+               else if (rst_delay_cnt <= 4) begin
+                  pwd <= 1'b1;
+               end
+               else
+                  pwd <= 1'b0;
+         
+               // I2C exits reset 4 secs after reset is deasserted,
+               //  to then start initializing camera
+               i2c_areset_n <= (rst_delay_cnt > 4'd5);
             end            
          end
       end // if (strobe_400kHz == 1'b1)

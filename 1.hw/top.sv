@@ -69,6 +69,7 @@ module top
    input  lane_diff_t cam_dphy_dat,
 
    output logic       cam_en,
+   output logic       pwd,
       
   //HDMI output, goes directly to connector
    output logic  hdmi_clk_p,
@@ -102,6 +103,7 @@ glbl glbl();
 
       .reset         (reset),         //o
       .cam_en        (cam_en),        //o
+      .pwd           (pwd),           //o
       .i2c_areset_n  (i2c_areset_n)   //o
    );
 
@@ -109,6 +111,7 @@ glbl glbl();
 // I2C Master
 //--------------------------------
    bus8_t debug_i2c;
+   bus7_t i2c_slave;
 
    i2c_top  #(
       .I2C_SLAVE_ADDR (top_pkg::I2C_SLAVE_ADDR),
@@ -118,12 +121,14 @@ glbl glbl();
       .clk           (clk_100),       //i
       .strobe_400kHz (strobe_400kHz), //i
       .areset_n      (i2c_areset_n),  //i
+      .clk_1hz       (clk_1hz),       //i
 
      //I2C_Master to Camera
       .i2c_scl       (i2c_scl),       //io 
       .i2c_sda       (i2c_sda),       //io
 
      //Misc/Debug
+      .i2c_slave     (i2c_slave),     //o[6:0]
       .debug_pins    (debug_i2c)      //o[7:0]
    );
 
@@ -268,12 +273,14 @@ glbl glbl();
 
    assign debug_pins = {
       //clk_180, 
-      debug_fifo,
-      debug_hdmi[7:3],
-      debug_csi[7:1] 
+      //debug_fifo,
+      //debug_hdmi[7:3],
+      //debug_csi[7:1] 
       //y
-      //debug_csi[7:0],
-      //debug_i2c[7:0]
+      //debug_csi[6:0],
+      i2c_slave,
+      cam_en,
+      debug_i2c[7:0]
    };
    
 endmodule: top

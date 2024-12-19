@@ -44,15 +44,15 @@
 
 //----------------Select one of our three supported sensors
 //`define IMX283
-`define IMX219
-//`define OV2740
+//`define IMX219
+`define OV2740
 
 //----------------Include (or not) Ethernet?
-`define ETHERNET
+//`define ETHERNET
 //`undef ETHERNET
 
 //----------------Trenz or Puzhitech board?
-`define PUZHI
+//`define PUZHI
 //`undef PUZHI
 
 //----------------Select monitor resolution
@@ -168,15 +168,12 @@ package top_pkg;
 
 // - - - - - - - - - - - - - - - - - - - -
 `elsif MIPI_2_LANE
-   localparam                       NUM_LANE = 2;
-
-   
-   `ifdef PUZHI
-      localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b00; // based on Puzhi board
-   `else
-      localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b01; // based on Trenz board, adjust as needed (CRUVI A -> 2'b01, CRUVI C -> 2'b10)
-   `endif
-
+   localparam                       NUM_LANE = 2;  
+`ifdef PUZHI
+   localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b00; // based on Puzhi board, adjust as needed
+`else
+   localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b01; // based on Trenz board, adjust as needed (CRUVI A -> 2'b01, CRUVI C -> 2'b10)
+`endif
    localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3};
 
 // - - - - - - - - - - - - - - - - - - - -
