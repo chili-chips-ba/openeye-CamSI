@@ -87,7 +87,7 @@ module i2c_ctrl (
    
    assign bit_cnt_dec = 4'(bit_cnt - 4'd1);
    
-   assign scl_oe = ~((state == CHECK_ACK || state == IDLE) ? 1'b1 : scl_do);
+   assign scl_oe = ~scl_do;
    assign sda_oe = ~((state == CHECK_ACK || state == IDLE) ? 1'b1 : sda_do);
    
    always_ff @(negedge areset_n or posedge clk) begin
@@ -131,6 +131,7 @@ module i2c_ctrl (
             START: if (strobe_400kHz == 1'b1) begin
                unique case (process_cnt)
                   2'd0: begin
+                     scl_do      <= 1'b1;
                      process_cnt <= 2'd1;
                   end
                   2'd1: begin
@@ -138,11 +139,11 @@ module i2c_ctrl (
                      process_cnt <= 2'd2;
                   end
                   2'd2: begin
+                     scl_do      <= 1'b0;
                      bit_cnt     <= 4'd8;
                      process_cnt <= 2'd3;
                   end
-                  2'd3: begin
-                     scl_do      <= 1'b0;
+                  2'd3: begin                     
                      process_cnt <= 2'd0;
                      state       <= post_state;
                      sda_do      <= slave_address_plus_rw[3'd7];
