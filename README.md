@@ -343,8 +343,8 @@ By selecting these values, the integration time is minimized, which is suitable 
 ### Prepping for Webcam
 (__Chili.CHIPS*ba team__)
 - [ ] Enable OV2740 camera chip: 
-   - [ ] Bring up Lukas' new adapter board
-   - [ ] Reverse-engineer I2C settings
+   - [x] Bring up Lukas' new adapter board
+   - [x] Reverse-engineer I2C settings
    - [ ] Demonstrate CAM-to-HDMI video path
       
 (__Silicon Highway Technologies webcam team__)
