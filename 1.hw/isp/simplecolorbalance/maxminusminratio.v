@@ -1,11 +1,11 @@
-// SPDX-FileCopyrightText: 2024 Silicon Highway Technologies
+// SPDX-FileCopyrightText: 2025 Silicon Highway Technologies
 //
 // SPDX-License-Identifier: BSD-3-Clause
 
 //======================================================================== 
 // openeye-CamSI * NLnet-sponsored open-source core for Camera I/F with ISP
 //------------------------------------------------------------------------
-//                   Copyright (C) 2024 Silicon Highway Technologies
+//                   Copyright (C) 2025 Silicon Highway Technologies
 // 
 // Redistribution and use in source and binary forms, with or without 
 // modification, are permitted provided that the following conditions 
@@ -52,7 +52,7 @@ module subtractor_8(a, b, overflow, result);
   reg [N:0] temp;
 
   always @(a or b) begin
-    temp = a + (-b);
+    temp = a + (-{1'b0, b});
   end
 
   assign result = temp[N-1:0];
@@ -112,7 +112,7 @@ module divider(clk, reset, start, divident, divisor, quotient, remainder, out);
   always @(posedge clk)begin
     out <= 1'b0;
 
-    if (reset == 1) begin// initialise when reset is high // 
+    if (reset == 1) begin // initialise when reset is high // 
       dsoreg <= divisor;
 
       divdremlreg[2*N-1:N] <= 0; // higher part //

@@ -1,11 +1,11 @@
-// SPDX-FileCopyrightText: 2024 Silicon Highway Technologies
+// SPDX-FileCopyrightText: 2025 Silicon Highway Technologies
 //
 // SPDX-License-Identifier: BSD-3-Clause
 
 //======================================================================== 
 // openeye-CamSI * NLnet-sponsored open-source core for Camera I/F with ISP
 //------------------------------------------------------------------------
-//                   Copyright (C) 2024 Silicon Highway Technologies
+//                   Copyright (C) 2025 Silicon Highway Technologies
 // 
 // Redistribution and use in source and binary forms, with or without 
 // modification, are permitted provided that the following conditions 
@@ -74,8 +74,8 @@ module mult(clk, reset, multiplicand, multiplier, result);
   wire [23:0] r45 = (msh4 + msh5);
 
   // 2nd level of additions //
-  wire [23:0] r18_r45 = (r18 + r45) & 24'hFFFFFF;
-  wire [23:0] r27_r36 = (r27 + r36) & 24'hFFFFFF;
+  wire [23:0] r18_r45 = (r18 + r45);
+  wire [23:0] r27_r36 = (r27 + r36);
   
   // 3rd and final level of additions //
   wire [23:0] result_wire = (r18_r45 + r27_r36) & 24'hFFFFFF;

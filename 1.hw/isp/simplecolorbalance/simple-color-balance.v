@@ -1,11 +1,11 @@
-// SPDX-FileCopyrightText: 2024 Silicon Highway Technologies
+// SPDX-FileCopyrightText: 2025 Silicon Highway Technologies
 //
 // SPDX-License-Identifier: BSD-3-Clause
 
 //======================================================================== 
 // openeye-CamSI * NLnet-sponsored open-source core for Camera I/F with ISP
 //------------------------------------------------------------------------
-//                   Copyright (C) 2024 Silicon Highway Technologies
+//                   Copyright (C) 2025 Silicon Highway Technologies
 // 
 // Redistribution and use in source and binary forms, with or without 
 // modification, are permitted provided that the following conditions 
@@ -75,7 +75,6 @@ module minmaxpixelvalue(clk, reset, en, resetbounds, pixelv, maxvalue, minvalue)
       end
 	  end
   end
-
 endmodule // maxpixelvalue
 
 module frameedgedetector(clk, reset, framevalid, endofframe);
@@ -108,9 +107,59 @@ module frameedgedetector(clk, reset, framevalid, endofframe);
    
 endmodule; // frameedgedetector
 
-module simplecolorbalance(clk, reset, red_data_in, green_data_in, blue_data_in, line_valid_in, frame_valid_in, line_valid_out, frame_valid_out, red_data_out, green_data_out, blue_data_out);
+module clockoutgenerator(clk, reset, clock_out);
 
   input clk, reset;
+  output clock_out;
+  
+  // clock out //
+  // used to generate clock reference output signal //
+  reg clockout1, clockout2;
+
+  always @(posedge clk) begin
+
+    if (reset == 1) begin
+      clockout1 <= 0;
+    end
+    else begin
+      clockout1 <= ~clockout2;
+    end  
+  end
+  
+  always @(negedge clk) begin
+
+    if (reset == 1) begin
+      clockout2 <= 0;
+    end
+    else begin
+      clockout2 <= clockout1;
+    end 
+
+  end
+  
+  assign clock_out = clockout1 ^ clockout2;
+   
+endmodule
+
+module synchronizer(clk, reset, reset_sync);
+   
+  input clk, reset;
+  output reset_sync;
+  
+  reg resetprime, reset_sync;
+  
+  always @(posedge clk) begin
+    resetprime <= reset;
+  end
+    
+  always @(posedge clk) begin
+    reset_sync <= resetprime;
+  end
+     
+endmodule 
+
+module simplecolorbalance(clk, reset_async, red_data_in, green_data_in, blue_data_in, line_valid_in, frame_valid_in, line_valid_out, frame_valid_out, red_data_out, green_data_out, blue_data_out, clock_out);
+  input clk, reset_async;
   input [7:0] red_data_in;
   input [7:0] green_data_in;
   input [7:0] blue_data_in;
@@ -127,6 +176,10 @@ module simplecolorbalance(clk, reset, red_data_in, green_data_in, blue_data_in, 
   output [7:0] red_data_out;
   output [7:0] green_data_out;
   output [7:0] blue_data_out;
+
+  output clock_out;
+
+  wire reset; // synchronized reset signal //
   
   wire datavalid = line_valid_in & frame_valid_in;
 
@@ -144,6 +197,12 @@ module simplecolorbalance(clk, reset, red_data_in, green_data_in, blue_data_in, 
   wire [7:0] bluemaxvalue, blueminvalue;
 
   wire resetboundsred, resetboundsgreen, resetboundsblue;
+
+  // synchronizer module //
+  synchronizer twoffsyncinst (.clk(clk), .reset(reset_async), .reset_sync(reset));
+
+  // clockout module, used to output the clock //
+  clockoutgenerator clockoutgeninst (.clk(clk), .reset(reset), .clock_out(clock_out));
   
   // resetbounds are reset directly from the respective done signal //
   // NOTE: done signals last only for 1 cycle, see divider module description in maxminuxminratio.v //
@@ -227,19 +286,21 @@ module simplecolorbalance(clk, reset, red_data_in, green_data_in, blue_data_in, 
 
   // red, green, blue min values per frame, used to compute (i - min) //
   always @(posedge clk) begin
+
     if (reset == 1) begin
-          // min, max values reset to 0 //
-          frameredminvalue <= 8'b0; frameredmaxvalue <= 8'b1111_1111;
-          framegreenminvalue <= 8'b0; framegreenmaxvalue <= 8'b1111_1111;
-          frameblueminvalue <= 8'b0; framebluemaxvalue <= 8'b1111_1111;
-      end
-      else if (start == 1) begin
-            // store frame wide min, max values //
-            frameredminvalue <= redminvalue; frameredmaxvalue <= redmaxvalue;
-            framegreenminvalue <= greenminvalue; framegreenmaxvalue <= greenmaxvalue; 
-            frameblueminvalue <= blueminvalue; framebluemaxvalue <= bluemaxvalue; 
-        end
+      // min, max values reset to 0 //
+      frameredminvalue <= 8'b0; frameredmaxvalue <= 8'b1111_1111;
+      framegreenminvalue <= 8'b0; framegreenmaxvalue <= 8'b1111_1111;
+      frameblueminvalue <= 8'b0; framebluemaxvalue <= 8'b1111_1111;
     end
+    else if (start == 1) begin
+        // store frame wide min, max values //
+        frameredminvalue <= redminvalue; frameredmaxvalue <= redmaxvalue;
+        framegreenminvalue <= greenminvalue; framegreenmaxvalue <= greenmaxvalue; 
+        frameblueminvalue <= blueminvalue; framebluemaxvalue <= bluemaxvalue; 
+      end
+
+  end
 
   // compute (max - i) //
   subtractor_8 redsubpixelmaxdist (.a(frameredmaxvalue), .b(red_data_in), .overflow(redpixelmaxdistoverflow), .result(redpixelmaxdist));
