@@ -406,11 +406,52 @@ A demonstration of this configuration is provided below, using a test image gene
 </div>
 
 (__Silicon Highway Technologies webcam team__)
-- [ ] Add 3 new ISP functions
-   - [ ] White Balance
-   - [ ] Color Correction
-   - [ ] Gamma Correction
+- [x] Add 3 new ISP functions
+   - [x] White Balance
+   - [x] Color Correction
+   - [x] Gamma Correction
 - [ ] JPEG video compression
+
+### **Simple Color Balance (SCB)**
+
+The **color balancing IP block** was based on https://www.ipol.im/pub/art/2011/llmps-scb/?utm_source=doi which is a color balance algorithm performing ***white balance*, *color correction* and *gamma correction* simultaneously**. The **Simple Color Balance (SCB)** block was thus implemented from scratch and tested first using behavioural simulations in *Verilator* and *Vivado* and subsequently using post-PNR simulations in the *Vivado Simulation Environment* for the target device.
+
+A hardware implementation must work with “live” images, however, i.e. groups of pixels per frame, flowing through an image pipeline. The hardware implementation of the *SCB* thus works on a frame by frame basis, correcting the colours of frame `n` in frame `(n + 1)`. The gap between frames is sufficient to compute the colour balance frame ratios, i.e. 
+`frameratio = 255/(max RGB – min RGB)` per RGB channel, using dividers. Then, colours are balanced “live”, during frame `(n + 1`), by multiplying the input pixel colour `i` by `(i – min) x frameratio`.
+
+The pixel clock frequency of `36MHz` is sufficient to perform multiplications “live”, as pixels come in and go out through the SCB IP Block. This was checked using post-PNR simulations in Vivado as both timing was closed for the design and entire images were validated to be balanced correctly.
+
+In the following two figures, the effect of the *SCB* algorithm can be seen. On the left is the original image, which appears to be faded out, and on the right is the balanced image, which appears brighter and livelier, due to the color balancing:
+
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/aec2abe9-594f-43c7-a6d0-f2eaaf4e6a84">
+&nbsp; &nbsp; &nbsp; &nbsp;
+  <img src="https://github.com/user-attachments/assets/7f9973be-c9e4-400e-8ff4-6cfb03cb38a5">
+</p>
+
+Similarly, a sequence of frames that represents a video, can be displayed in the following figures. The range of the RGB values changes from frame to frame, and the *SCB* algorithm tries to balance them, based on each previous frame.
+- Input Frames:
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/527ff207-5331-4c40-a34b-1ed341b4690a" width="18%" />
+  <img src="https://github.com/user-attachments/assets/bc37ffe4-7ace-45fb-bc02-e044579ede9a" width="18%" /> 
+  <img src="https://github.com/user-attachments/assets/a91d4c1c-d96a-48ae-99c4-b38b54a1ba86" width="18%" /> 
+  <img src="https://github.com/user-attachments/assets/c8fb4cc7-178d-423f-b505-2e0584a19056" width="18%" /> 
+  <img src="https://github.com/user-attachments/assets/16fd01d7-9381-43c8-a354-a948236908f8" width="18%" /> 
+</p>
+
+- Output Frames:
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/0a874c4d-f052-4829-a3da-9bc904bac58f" width="18%" />
+  <img src="https://github.com/user-attachments/assets/712e3aa3-fe47-4a54-9038-d62fdeaebd5a" width="18%" /> 
+  <img src="https://github.com/user-attachments/assets/1839e3b2-f9a4-472e-8f36-52422991797e" width="18%" /> 
+  <img src="https://github.com/user-attachments/assets/165a87a1-581e-4ee9-afe6-ae1686fefdc7" width="18%" /> 
+  <img src="https://github.com/user-attachments/assets/7a8be7f0-7643-400a-bfc1-416880abc9df" width="18%" /> 
+</p>
+
+In the screenshot below, the processing of one of the frame lines is shown. Previously, one identical frame has already been loaded, to configure the min-max ranges. In the input frame, all RGB values are within the range `[64, 196]`, so the SCB algorithm translates them to the range `[0, 255]`, with minor precision inaccuracies that do not have a large visible impact. The balancing is performed using multipliers which have a single cycle delay, thus this algorithm converts each frame with a single-cycle delay.
+<p align="left">
+  <img width="70%" src="https://github.com/user-attachments/assets/14ace642-50b9-4f24-9c23-7e8b3e501cb5">
+</p>
 
 ## Trenz and CRUVI in retrospect
 
