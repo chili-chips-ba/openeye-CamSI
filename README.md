@@ -410,11 +410,38 @@ A demonstration of this configuration is provided below, using a test image gene
    - [x] White Balance
    - [x] Color Correction
    - [x] Gamma Correction
-- [ ] JPEG video compression
+- [x] JPEG video compression
 
-### **Simple Color Balance (SCB)**
+### *Color Balance and JPEG Image Processing Blocks*
 
-The **color balancing IP block** was based on https://www.ipol.im/pub/art/2011/llmps-scb/?utm_source=doi which is a color balance algorithm performing ***white balance*, *color correction* and *gamma correction* simultaneously**. The **Simple Color Balance (SCB)** block was thus implemented from scratch and tested first using behavioural simulations in *Verilator* and *Vivado* and subsequently using post-PNR simulations in the *Vivado Simulation Environment* for the target device.
+The goal of this part of the project was to implement and test (1) a **color balancing IP block** and (2) a **JPEG image compression IP block**, both to be parts of an image or video pipeline. 
+
+- (1) was based on https://www.ipol.im/pub/art/2011/llmps-scb/?utm_source=doi which is a color balance algorithm performing ***white balance*, *color correction* and *gamma correction* simultaneously**. The **Simple Color Balance (SCB)** block was thus implemented from scratch and tested first using behavioural simulations in *Verilator* and *Vivado* and subsequently using post-PNR simulations in the *Vivado Simulation Environment* for the target device.
+
+- (2) is based on an IP implemented by Robert Metchev in Verilog RTL: https://github.com/brilliantlabsAR/frame-codebase/tree/main/source/fpga/modules/camera/jpeg_encoder. The provided *JPEG* block was tested using behavioural simulation with *Cocotb*.
+
+#### **JPEG**
+The *JPEG* design was tested on `1280x720` images, initially on one single frame, and afterwards on multiple frames, simulating a video. Each frame is successfully converted from a bitmap image to a converted image in the *JPEG* format. To add the required headers, in order to display each *JPEG* image, external python functions are used.
+
+This specific *JPEG* module requires three clocks of different frequencies: the pixel clock, which always runs at `36MHz`, a *JPEG* slow clock and a *JPEG* fast clock. The slow clock can run at `12MHz`, `18MHz`, `24MHz` or `36MHz`, while the fast clock must be at least twice as fast as the slow clock.
+
+The *JPEG* module can take four discrete **Quality Factor (QF)** values as input. These are `10%`, `25%`, `50%` and `100%`. The functionality of the design was verified for each of these values, with visual differences being observed.
+
+Below, two compressed images with different *QF* are displayed. The left image has a `10%` *QF* and the right has a `50%` *QF*:
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/8a81159a-f816-4ac5-9adc-0e1cf650e085" width="40%" />
+  <img src="https://github.com/user-attachments/assets/cb805ff7-9335-4011-9a16-5a0a622ac52c" width="40%" /> 
+</p>
+
+To model the three clocks, we use an **MMCM** (Mixed Mode Clock Manager) to generate them from the `100MHz` clock of the board. For the slow clock, we choose a frequency of `12MHz`, and for the fast clock, we choose a frequency of `72MHz`.
+
+In the simulation screenshot below, two frames are processed and a compressed output file is produced for each one. The signal image_valid_out rises when a compressed image is ready. The *JPEG* data words are sampled from the output signal data_out.
+<p align="left">
+  <img width="60%" src="https://github.com/user-attachments/assets/c511c217-e092-4b61-8fdf-d55cbfe66ff8">
+</p>
+
+#### **Simple Color Balance (SCB)**
+**SCB** IP Block available software code was available from https://www.ipol.im/pub/art/2011/llmps-scb/?utm_source=doi. 
 
 A hardware implementation must work with “live” images, however, i.e. groups of pixels per frame, flowing through an image pipeline. The hardware implementation of the *SCB* thus works on a frame by frame basis, correcting the colours of frame `n` in frame `(n + 1)`. The gap between frames is sufficient to compute the colour balance frame ratios, i.e. 
 `frameratio = 255/(max RGB – min RGB)` per RGB channel, using dividers. Then, colours are balanced “live”, during frame `(n + 1`), by multiplying the input pixel colour `i` by `(i – min) x frameratio`.
