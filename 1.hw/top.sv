@@ -139,7 +139,8 @@ glbl glbl();
     
    csi_rx_top u_csi_rx_top (
       .ref_clock              (clk_200),        //i 
-      .reset                  (reset),          //i 
+      .reset                  (reset),          //i
+      .clk_1hz                (clk_1hz),        //i: 1Hz
                           
      //MIPI DPHY from/to Camera
       .cam_dphy_clk           (cam_dphy_clk),   //i'diff_t
@@ -268,11 +269,12 @@ glbl glbl();
 
    assign debug_pins = {
       //clk_180, 
-      debug_fifo,
-      debug_hdmi[7:3],
-      debug_csi[7:1] 
+      //debug_fifo,
+      //debug_hdmi[6:3],
+      //debug_csi[7:2]
       //y
-      //debug_csi[7:0],
+      debug_hdmi[7:0],
+      debug_csi[7:0]
       //debug_i2c[7:0]
    };
    

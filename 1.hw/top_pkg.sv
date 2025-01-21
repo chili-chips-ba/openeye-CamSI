@@ -47,12 +47,9 @@
 `define IMX219
 //`define OV2740
 
-//----------------Include (or not) Ethernet?
-`define ETHERNET
+//`define ETHERNET
 //`undef ETHERNET
-
-//----------------Trenz or Puzhitech board?
-`define PUZHI
+//`define PUZHI
 //`undef PUZHI
 
 //----------------Select monitor resolution
@@ -118,7 +115,7 @@ package top_pkg;
 
 `elsif IMX219
    `define MIPI_2_LANE
-   `define RAW10
+   `define RAW8
 
 `elsif OV2740
    `define MIPI_2_LANE

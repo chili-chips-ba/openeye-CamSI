@@ -52,6 +52,7 @@ module csi_rx_top
  //clocks and resets
    input  logic           ref_clock, // 200MHz refclk
    input  logic           reset,     // active-1 synchronous reset
+   input  logic           clk_1hz,
 
  //MIPI DPHY from/to Camera
    input  diff_t          cam_dphy_clk,
@@ -74,12 +75,14 @@ module csi_rx_top
 // DPHY-Clock with clock detector
 //--------------------------------
    logic bit_clock;
+   logic dphy_clk_reset;
    logic csi_reset;
    
    csi_rx_phy_clk u_phy_clk (   
       .dphy_clk   (cam_dphy_clk),   //i[1:0]
       .reset      (reset),          //i
-                                 
+
+      .reset_out  (dphy_clk_reset), //o      
       .bit_clock  (bit_clock),      //o buffered dphy clock
       .byte_clock (csi_byte_clk)    //o buferred dphy clock / 4
    );
@@ -88,7 +91,7 @@ module csi_rx_top
       .ref_clock  (ref_clock),      //i 
       .byte_clock (csi_byte_clk),   //i 
 
-      .reset_in   (reset),          //i   
+      .reset_in   (dphy_clk_reset), //i   
       .enable     (cam_en),         //i 
 
       .reset_out  (csi_reset)       //o
@@ -98,6 +101,11 @@ module csi_rx_top
 // DPHY-Data
 //--------------------------------
    lane_data_t deser_data;
+   logic [9:0] delay;
+
+   always_ff @(posedge ref_clock) begin
+      delay <= (delay == 10'd1023) ? 10'd0 : delay + 10'd1;
+   end
    
    for (genvar i=0; i<NUM_LANE; i++) begin: lane
       csi_rx_phy_dat #(
@@ -105,6 +113,7 @@ module csi_rx_top
          .DELAY      (DSKEW     [i])
       ) 
       u_phy_dat (      
+         .delay      (delay[i*5 +: 5]), //i[4:0]
          .reset      (csi_reset),       //i
          .bit_clock  (bit_clock),       //i
          .byte_clock (csi_byte_clk),    //i     

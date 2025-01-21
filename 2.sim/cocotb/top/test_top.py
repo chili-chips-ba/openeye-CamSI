@@ -67,6 +67,7 @@ async def test_1(dut):
    # Current python model of PLL, will later be replaced with a standalone MMCM
    pllt = fpga_pll.fpga_pll(dut, 'top')
    pllh = fpga_pll.fpga_pll(dut, 'hdmi')
+   pllc = fpga_pll.fpga_pll(dut, 'csi_rx')
 
    # Start external clock generation at 100 MHz
    cocotb.start_soon(Clock(dut.clk_ext, 10, units="ns").start())
@@ -80,7 +81,7 @@ async def test_1(dut):
    await RisingEdge(dut.cam_en)
    
    # Configuration parameters based on num_lane
-   num_lane = 4  # Change this to 4 for the other configuration
+   num_lane = 2  # Change this to 4 for the other configuration
 
    if num_lane == 4:
       diff_clock_period_ns = 1.388

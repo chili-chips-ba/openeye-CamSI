@@ -45,6 +45,7 @@ module csi_rx_phy_dat #(
    parameter          INVERT = 1'b0,// 1 to invert (if pairs are swapped on board)
    parameter bit[4:0] DELAY  = 5'd3 // IDELAY delay value for skew compensation
 )(
+   input  logic [4:0] delay,      // delay value for skew compensation
    input  logic       reset,      // async reset, sync'd internally to byte clock
    input  logic       bit_clock,  // DDR bit clocks, buffered from D-PHY clock
    input  logic       byte_clock, // byte clock = input clock /4
@@ -90,7 +91,7 @@ module csi_rx_phy_dat #(
       .CE          (1'b0),       //i: Active high enable inc/dect input
       .INC         (1'b0),       //i: Increment / Decrement tap delay input 
       .IDATAIN     (in_se),      //i: Data input from the I/O           
-      .CNTVALUEIN  (5'(DELAY)),  //i[4:0]: Counter value input
+      .CNTVALUEIN  (5'(delay)),  //i[4:0]: Counter value input
       .CNTVALUEOUT (),           //o[4:0]: Counter value output     
       .CINVCTRL    (1'b0),       //i: Dynamic clock inversion input       
       .LD          (1'b1),       //i: VAR_LOAD mode, load value of CNTVALUEIN
