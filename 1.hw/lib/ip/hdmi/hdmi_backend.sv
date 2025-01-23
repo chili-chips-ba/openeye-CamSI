@@ -144,7 +144,7 @@ module hdmi_backend
           // Blank when outside the visible screen
           //blank <= (hcount >= HSCREEN) | (vcount >= VSCREEN);
           blank      <= (hcount == 12'd0)
-                      | (hcount >= 12'(HSCREEN-1))
+                      | (hcount >= 12'(HSCREEN+1))
                       | (vcount <  11'd3)
                       | (vcount >= 11'(VSCREEN+3));
 

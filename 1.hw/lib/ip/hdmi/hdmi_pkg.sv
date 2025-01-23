@@ -58,20 +58,35 @@ package hdmi_pkg;
 // 1280x720Px60Hz
 //-----------------------------
 `ifdef HDMI_720p60
-   localparam int HFRAME         = 1687; // complete frame X //1650 //1456 //1500
-   localparam int HSCREEN        = 1280; // visible X
-   localparam int HSYNC_START    = HSCREEN;
-   localparam int HSYNC_SIZE     = 407;
-   localparam int HSYNC_END      = HSYNC_START + HSYNC_SIZE;
-   localparam bit HSYNC_POLARITY = HI;    // '+'
-
-   localparam int VFRAME         = 850;  // complete frame Y //750 //850
-   localparam int VSCREEN        = 720;  // visible Y
-   localparam int VSYNC_START    = VSCREEN;
-   localparam int VSYNC_SIZE     = 130;
-   localparam int VSYNC_END      = VSYNC_START + VSYNC_SIZE;
-   localparam bit VSYNC_POLARITY = HI;    // '+'
-
+   `ifdef OV2740
+       localparam int HFRAME         = 1362; // complete frame X //1650 //1456 //1500 //1362
+       localparam int HSCREEN        = 1280; // visible X
+       localparam int HSYNC_START    = HSCREEN;
+       localparam int HSYNC_SIZE     = 82; //82
+       localparam int HSYNC_END      = HSYNC_START + HSYNC_SIZE;
+       localparam bit HSYNC_POLARITY = HI;    // '+'
+    
+       localparam int VFRAME         = 1100;  // complete frame Y //750 //850 //1100
+       localparam int VSCREEN        = 720;  // visible Y
+       localparam int VSYNC_START    = VSCREEN;
+       localparam int VSYNC_SIZE     = 380; // 380
+       localparam int VSYNC_END      = VSYNC_START + VSYNC_SIZE;       
+       localparam bit VSYNC_POLARITY = HI;    // '+' 
+   `else
+       localparam int HFRAME         = 1687; // complete frame X //1650 //1456 //1500
+       localparam int HSCREEN        = 1280; // visible X
+       localparam int HSYNC_START    = HSCREEN;
+       localparam int HSYNC_SIZE     = 407;
+       localparam int HSYNC_END      = HSYNC_START + HSYNC_SIZE;
+       localparam bit HSYNC_POLARITY = HI;    // '+'
+    
+       localparam int VFRAME         = 850;  // complete frame Y //750 //850
+       localparam int VSCREEN        = 720;  // visible Y
+       localparam int VSYNC_START    = VSCREEN;
+       localparam int VSYNC_SIZE     = 130;
+       localparam int VSYNC_END      = VSYNC_START + VSYNC_SIZE;
+       localparam bit VSYNC_POLARITY = HI;    // '+'
+    `endif
 //-----------------------------
 // 1920x1080Px30Hz CVT-RBv2
 //-----------------------------

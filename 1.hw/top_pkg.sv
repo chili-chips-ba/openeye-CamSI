@@ -44,15 +44,15 @@
 
 //----------------Select one of our three supported sensors
 //`define IMX283
-`define IMX219
-//`define OV2740
+//`define IMX219
+`define OV2740
 
 //----------------Include (or not) Ethernet?
-`define ETHERNET
+//`define ETHERNET
 //`undef ETHERNET
 
 //----------------Trenz or Puzhitech board?
-`define PUZHI
+//`define PUZHI
 //`undef PUZHI
 
 //----------------Select monitor resolution
@@ -118,7 +118,7 @@ package top_pkg;
 
 `elsif IMX219
    `define MIPI_2_LANE
-   `define RAW10
+   `define RAW8
 
 `elsif OV2740
    `define MIPI_2_LANE
@@ -152,8 +152,8 @@ package top_pkg;
 // - - - - - - - - - - - - - - - - - - - -
 //OV2740
 `else 
-   localparam bus7_t I2C_SLAVE_ADDR    = 7'd32;
-   localparam int    NUM_REGISTERS     = 155;
+   localparam bus7_t I2C_SLAVE_ADDR    = 7'd16;
+   localparam int    NUM_REGISTERS     = 141;
    localparam string I2C_INIT_MEM_FILE = "i2c_init_OV2740.mem";
 `endif
    
@@ -175,9 +175,14 @@ package top_pkg;
       localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b00; // based on Puzhi board
    `else
       localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b01; // based on Trenz board, adjust as needed (CRUVI A -> 2'b01, CRUVI C -> 2'b10)
-   `endif
+   `endif 
+   
+   `ifdef OV2740
+        localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd5, 5'd5};
+   `else
+        localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3};
+   `endif 
 
-   localparam bus5_t [NUM_LANE-1:0] DSKEW    = {5'd3, 5'd3};
 
 // - - - - - - - - - - - - - - - - - - - -
 // MIPI_1_LANE is default
