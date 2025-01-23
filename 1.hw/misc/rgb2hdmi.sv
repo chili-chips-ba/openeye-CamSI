@@ -70,63 +70,53 @@ module rgb2hdmi
 //--------------------------------
 // Synchronization Logic
 //--------------------------------
-logic            csi_in_line_dly, csi_in_frame_dly;   
-logic [10:0]     csi_line_count;
-logic [5:0]      csi_frame_count;  // Brojač frejmova sada ide do 59
+   logic   csi_in_line_dly, csi_in_frame_dly;   
+   bus11_t csi_line_count;
+   logic [1:0] csi_frame_count;
+   
+   always_ff @(posedge csi_clk) begin 
+      if (reset == 1'b1) begin         
+         csi_in_line_dly <= 1'b0;
+         csi_in_frame_dly <= 1'b0;
+         csi_line_count  <= 11'd0;
+         csi_frame_count   <= 2'd0;
 
-always_ff @(posedge csi_clk) begin 
-   if (reset) begin
-      csi_in_line_dly   <= 1'b0;
-      csi_in_frame_dly  <= 1'b0;
-      csi_line_count    <= 11'd0;
-      csi_frame_count   <= 6'd0;  // Brojač frejmova resetujemo na 0
+         rgb_valid       <= 1'b0;
+         hdmi_reset_n    <= 1'b0;
+      end 
+      else begin          
+         csi_in_line_dly <= csi_in_line;
+         csi_in_frame_dly <= csi_in_frame; 
 
-      // Ostali vaši signali...
-      rgb_valid         <= 1'b0;
-      hdmi_reset_n      <= 1'b0;  // Reset je aktivan odmah na početku
-   end 
-   else begin
-      // ------------------------------------
-      // 1) Formiranje kašnjenja za detekciju ivice
-      // ------------------------------------
-      csi_in_line_dly   <= csi_in_line;
-      csi_in_frame_dly  <= csi_in_frame;
+         // skip first 3 CMOS lines to start calculate RGB values
+         rgb_valid       <= (csi_line_count >= 11'd3);  
 
-      // ------------------------------------
-      // 2) Brojač frejmova (0..59)
-      // ------------------------------------
-      if ({csi_in_frame_dly, csi_in_frame} == 2'b01) begin
-         if (csi_frame_count == 6'd1)
-            csi_frame_count <= 6'd0;
+         if ({csi_in_frame_dly, csi_in_frame} == 2'b01) begin
+            if (csi_frame_count == 2'd1)
+                csi_frame_count <= 2'd0;
+            else
+                csi_frame_count <= 2'(csi_frame_count + 2'd1);
+                csi_line_count <= 11'd0; 
+         end 
+
+         /*if (csi_in_frame == 1'b0) begin 
+            csi_line_count <= 11'd0;
+         end*/
+         // increment Line count with every 'csi_in_line' posedge
+         //   unless outside of the visible screen
+         else if ({csi_in_line_dly, csi_in_line} == 2'b01) begin
+            //if (csi_line_count < 11'd1300) begin
+            csi_line_count <= 11'(csi_line_count + 11'd1);
+            //end
+         end 
+         
+         if ((csi_frame_count == 2'd0) && (csi_line_count == 11'd0))
+            hdmi_reset_n <= 1'b0;  
          else
-            csi_frame_count <= csi_frame_count + 1'b1;
-
-         // Na početku svakog frejma reset linija
-         csi_line_count <= 11'd0; 
-      end
-      else if ( (csi_in_frame == 1'b1) && ({csi_in_line_dly, csi_in_line} == 2'b01) ) begin
-         csi_line_count <= csi_line_count + 1'b1;
-      end
-
-      // ------------------------------------
-      // 3) Generisanje hdmi_reset_n
-      //    - 0 na prvoj liniji svakog "60-tog" frejma
-      //    - Takođe, 0 na prvoj liniji prvog frejma (inicijalni reset)
-      // ------------------------------------
-      if ((csi_frame_count == 6'd0) && (csi_line_count == 11'd0))
-         hdmi_reset_n <= 1'b0;  // Puls reset signala
-      else
-         hdmi_reset_n <= 1'b1;
-
-      // ------------------------------------
-      // 4) Primer za rgb_valid (kako je ranije bio)
-      // ------------------------------------
-      // recimo želite da bude validno nakon 3 linije itd...
-      rgb_valid <= (csi_line_count >= 11'd3);
-   end
-end
-
-
+            hdmi_reset_n <= 1'b1;
+            
+      end // else: !if(reset == 1'b1)
+   end // always_ff @ (posedge csi_clk)
    
 
 //--------------------------------
