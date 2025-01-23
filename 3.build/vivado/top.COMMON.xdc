@@ -18,7 +18,7 @@ create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_
 # create_clock -period 1.388 -name cam_dphy_clk -waveform {0.000 0.694} -add [get_ports {cam_dphy_clk[1]}]
 
 # 456MHz CSI 2-lane clock
-create_clock -period 2.190 -name cam_dphy_clk -waveform {0.000 1.095} -add [get_ports cam_dphy_clk[1]]
+create_clock -period 2.193 -name cam_dphy_clk -waveform {0.000 1.095} -add [get_ports cam_dphy_clk[1]]
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets u_csi_rx_top/u_phy_clk/dphy_clk_in]
 
