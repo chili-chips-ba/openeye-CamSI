@@ -1,26 +1,45 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 10/16/2024 08:51:28 PM
-// Design Name: 
-// Module Name: rgb2udp
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
+// SPDX-FileCopyrightText: 2024 Chili.CHIPS*ba
+//
+// SPDX-License-Identifier: BSD-3-Clause
 
+//======================================================================== 
+// openeye-CamSI * NLnet-sponsored open-source core for Camera I/F with ISP
+//------------------------------------------------------------------------
+//                   Copyright (C) 2024 Chili.CHIPS*ba
+// 
+// Redistribution and use in source and binary forms, with or without 
+// modification, are permitted provided that the following conditions 
+// are met:
+//
+// 1. Redistributions of source code must retain the above copyright 
+// notice, this list of conditions and the following disclaimer.
+//
+// 2. Redistributions in binary form must reproduce the above copyright 
+// notice, this list of conditions and the following disclaimer in the 
+// documentation and/or other materials provided with the distribution.
+//
+// 3. Neither the name of the copyright holder nor the names of its 
+// contributors may be used to endorse or promote products derived
+// from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS 
+// IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED 
+// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A 
+// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
+// HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//              https://opensource.org/license/bsd-3-clause
+//------------------------------------------------------------------------
+// Description: RGB-to-UDP Top level
+//========================================================================
 
-module rgb2udp 
+module rgb2udp_top
    import top_pkg::*;
    import hdmi_pkg::*;   
 (
@@ -292,4 +311,11 @@ module rgb2udp
    assign debug = { 1'b0, 1'b0, 1'b0, 1'b0,  1'b0, tx_last, tx_valid};
 //   assign debug = { 1'b0, 1'b0, 1'b0, 1'b0,  (I_CURRENT_STATE == T_STATES_IMAGE_DATA), (I_CURRENT_STATE == T_STATES_ROW_HI) | (I_CURRENT_STATE == T_STATES_SYNC_FRM1), (I_CURRENT_STATE == T_STATES_INIT) | (I_CURRENT_STATE == T_STATES_END), (I_CURRENT_STATE == T_STATES_IDLE)};
    
-endmodule
+endmodule: rgb2udp_top
+
+/*
+------------------------------------------------------------------------------
+Version History:
+------------------------------------------------------------------------------
+ 2024/12/10 Anel H: Initial creation 
+*/
