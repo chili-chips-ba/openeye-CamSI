@@ -1,6 +1,6 @@
 # Phase1 - openEye/CamSI
 <p align="center">
-   <img width="240" src="0.doc/open-eye-logo.png">
+   <img width="240" src="0.doc/artwork/open-eye-logo.png">
 </p>
 
 ## Objective I
