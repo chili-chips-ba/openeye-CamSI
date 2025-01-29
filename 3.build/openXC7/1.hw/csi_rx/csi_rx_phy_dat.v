@@ -1,4 +1,5 @@
 module csi_rx_phy_dat (
+	delay,
 	reset,
 	bit_clock,
 	byte_clock,
@@ -7,6 +8,7 @@ module csi_rx_phy_dat (
 );
 	parameter INVERT = 1'b0;
 	parameter [4:0] DELAY = 5'd3;
+	input wire [4:0] delay;
 	input wire reset;
 	input wire bit_clock;
 	input wire byte_clock;
@@ -32,7 +34,7 @@ module csi_rx_phy_dat (
 		.IDELAY_TYPE("VAR_LOAD"),
 		.IDELAY_VALUE({27'd0, DELAY}),
 		.PIPE_SEL("FALSE"),
-		.REFCLK_FREQUENCY(199.5),
+		.REFCLK_FREQUENCY(200.0),
 		.SIGNAL_PATTERN("DATA")
 	) u_indelay(
 		.DATAOUT(in_delayed),
@@ -41,6 +43,7 @@ module csi_rx_phy_dat (
 		.CE(1'b0),
 		.INC(1'b0),
 		.IDATAIN(in_se),
+		//.CNTVALUEIN(delay),
 		.CNTVALUEIN(DELAY),
 		.CNTVALUEOUT(),
 		.CINVCTRL(1'b0),

@@ -25,7 +25,10 @@ ${HW_SRC}/lib/ip/hdmi/hdmi_tdms_enc.sv
 ${HW_SRC}/lib/ip/hdmi/hdmi_backend.sv
 ${HW_SRC}/lib/ip/hdmi/hdmi_top.sv
 
-#${HW_SRC}/lib/ip/i2c_master/i2c_init.mem
+#${HW_SRC}/lib/ip/i2c_master/i2c_init_IMX283_1080p.mem
+#${HW_SRC}/lib/ip/i2c_master/i2c_init_IMX283_720p.mem
+#${HW_SRC}/lib/ip/i2c_master/i2c_init_IMX219.mem
+#${HW_SRC}/lib/ip/i2c_master/i2c_init_OV2740.mem
 ${HW_SRC}/lib/ip/i2c_master/i2c_ctrl.sv
 ${HW_SRC}/lib/ip/i2c_master/i2c_top.sv
 

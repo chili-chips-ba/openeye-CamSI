@@ -11,7 +11,7 @@ module csi_rx_clk_det (
 	input wire enable;
 	output reg reset_out;
 	reg [1:0] byte_clk_demet;
-	reg [2:0] byte_clk_cnt;
+	reg [3:0] byte_clk_cnt;
 	reg byte_clk_fail;
 	reg reset_in_demet;
 	always @(posedge ref_clock) reset_in_demet <= reset_in;
@@ -19,13 +19,13 @@ module csi_rx_clk_det (
 		if (reset_in_demet == 1'b1)
 			byte_clk_fail <= 1'b1;
 		else
-			byte_clk_fail <= byte_clk_cnt >= 3'd5;
+			byte_clk_fail <= byte_clk_cnt >= 4'd10;
 	always @(posedge ref_clock) begin
 		byte_clk_demet <= {byte_clk_demet[0], byte_clock};
 		if (^byte_clk_demet == 1'b1)
 			byte_clk_cnt <= 1'sb0;
 		else if (byte_clk_fail == 1'b0)
-			byte_clk_cnt <= byte_clk_cnt + 3'd1;
+			byte_clk_cnt <= byte_clk_cnt + 4'd1;
 	end
 	reg [1:0] rst_cnt;
 	always @(posedge byte_clk_fail or posedge byte_clock)

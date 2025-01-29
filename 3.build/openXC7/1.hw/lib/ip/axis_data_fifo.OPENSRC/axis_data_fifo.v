@@ -7,7 +7,8 @@ module axis_data_fifo (
 	m_axis_aclk,
 	m_axis_tvalid,
 	m_axis_tready,
-	m_axis_tdata
+	m_axis_tdata,
+	debug_fifo
 );
 	parameter DEPTH = 8192;
 	parameter DW = 24;
@@ -20,6 +21,7 @@ module axis_data_fifo (
 	output reg m_axis_tvalid;
 	input wire m_axis_tready;
 	output wire [DW - 1:0] m_axis_tdata;
+	output wire [3:0] debug_fifo;
 	localparam AW = $clog2(DEPTH);
 	reg srst_n_sclk;
 	reg srst_n_sclk_0;
@@ -81,4 +83,5 @@ module axis_data_fifo (
 		.doutb(m_axis_tdata)
 	);
 	always @(posedge m_axis_aclk) m_axis_tvalid <= ~empty;
+	assign debug_fifo = {empty, full, rd, wr};
 endmodule

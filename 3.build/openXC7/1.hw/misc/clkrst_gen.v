@@ -2,6 +2,7 @@ module clkrst_gen (
 	reset_ext,
 	clk_ext,
 	clk_100,
+	clk_180,
 	clk_200,
 	clk_1hz,
 	strobe_400kHz,
@@ -12,6 +13,7 @@ module clkrst_gen (
 	input wire reset_ext;
 	input wire clk_ext;
 	output wire clk_100;
+	output wire clk_180;
 	output wire clk_200;
 	output reg clk_1hz;
 	output reg strobe_400kHz;
@@ -28,8 +30,8 @@ module clkrst_gen (
 		.areset(reset_ext),
 		.clk_in(clk_100),
 		.srst(srst0),
-		.clk_out0(),
-		.clk_out1(clk_200)
+		.clk_out0(clk_200),
+		.clk_out1(clk_180)
 	);
 	always @(posedge srst0 or posedge clk_100)
 		if (srst0 == 1'b1) begin
@@ -40,10 +42,10 @@ module clkrst_gen (
 			reset <= 1'b0;
 			srst1 <= 1'b0;
 		end
-	localparam top_pkg_NUM_CLK_FOR_400kHZ = 125;
-	reg [6:0] cnt_400khz;
-	function automatic [6:0] sv2v_cast_E67DB;
-		input reg [6:0] inp;
+	localparam top_pkg_NUM_CLK_FOR_400kHZ = 250;
+	reg [7:0] cnt_400khz;
+	function automatic [7:0] sv2v_cast_E67DB;
+		input reg [7:0] inp;
 		sv2v_cast_E67DB = inp;
 	endfunction
 	always @(posedge srst1 or posedge clk_100)
@@ -51,7 +53,7 @@ module clkrst_gen (
 			cnt_400khz <= 1'sb0;
 			strobe_400kHz <= 1'b0;
 		end
-		else if (cnt_400khz == sv2v_cast_E67DB(124)) begin
+		else if (cnt_400khz == sv2v_cast_E67DB(249)) begin
 			cnt_400khz <= 1'sb0;
 			strobe_400kHz <= 1'b1;
 		end

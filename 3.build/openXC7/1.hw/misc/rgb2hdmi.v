@@ -10,7 +10,8 @@ module rgb2hdmi (
 	hdmi_frame,
 	hdmi_blank,
 	hdmi_reset_n,
-	hdmi_pix
+	hdmi_pix,
+	debug_fifo
 );
 	input wire csi_clk;
 	input wire reset;
@@ -24,20 +25,24 @@ module rgb2hdmi (
 	input wire hdmi_blank;
 	output reg hdmi_reset_n;
 	output wire [23:0] hdmi_pix;
+	output wire [3:0] debug_fifo;
 	reg csi_in_line_dly;
+	reg csi_in_frame_dly;
 	reg [10:0] csi_line_count;
 	always @(posedge csi_clk)
 		if (reset == 1'b1) begin
 			csi_in_line_dly <= 1'b0;
+			csi_in_frame_dly <= 1'b0;
 			csi_line_count <= 1'sb0;
 			rgb_valid <= 1'b0;
 			hdmi_reset_n <= 1'b0;
 		end
 		else begin
 			csi_in_line_dly <= csi_in_line;
+			csi_in_frame_dly <= csi_in_frame;
 			rgb_valid <= csi_line_count >= 11'd3;
 			hdmi_reset_n <= csi_line_count >= 11'd1;
-			if (csi_in_frame == 1'b0)
+			if ({csi_in_frame_dly, csi_in_frame} == 2'b01)
 				csi_line_count <= 11'd0;
 			else if ({csi_in_line_dly, csi_in_line} == 2'b01) begin
 				if (csi_line_count < 11'd1300)
@@ -53,6 +58,7 @@ module rgb2hdmi (
 		.m_axis_aclk(hdmi_clk),
 		.m_axis_tvalid(),
 		.m_axis_tready(~hdmi_blank),
-		.m_axis_tdata(hdmi_pix)
+		.m_axis_tdata(hdmi_pix),
+		.debug_fifo(debug_fifo)
 	);
 endmodule

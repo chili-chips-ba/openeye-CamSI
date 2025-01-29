@@ -20,7 +20,7 @@ module hdmi_backend (
 	input wire clk_ext;
 	output wire clk_pix;
 	output wire srst_n;
-	output reg [10:0] hcount;
+	output reg [11:0] hcount;
 	output reg [10:0] vcount;
 	input wire [23:0] pix;
 	input wire fifo_empty;
@@ -51,6 +51,10 @@ module hdmi_backend (
 	localparam signed [31:0] hdmi_pkg_VFRAME = 850;
 	localparam signed [31:0] hdmi_pkg_VSCREEN = 720;
 	localparam [0:0] hdmi_pkg_VSYNC_POLARITY = 1'b1;
+	function automatic signed [11:0] sv2v_cast_12_signed;
+		input reg signed [11:0] inp;
+		sv2v_cast_12_signed = inp;
+	endfunction
 	function automatic signed [10:0] sv2v_cast_11_signed;
 		input reg signed [10:0] inp;
 		sv2v_cast_11_signed = inp;
@@ -58,6 +62,10 @@ module hdmi_backend (
 	function automatic [10:0] sv2v_cast_11;
 		input reg [10:0] inp;
 		sv2v_cast_11 = inp;
+	endfunction
+	function automatic [11:0] sv2v_cast_12;
+		input reg [11:0] inp;
+		sv2v_cast_12 = inp;
 	endfunction
 	always @(posedge clk_pix) begin : _tbase_gen
 		if (&{internal_srst_n, hdmi_reset_n} == 1'b0) begin
@@ -69,7 +77,7 @@ module hdmi_backend (
 			hdmi_frame <= 1'b0;
 		end
 		else begin
-			if (hcount == sv2v_cast_11_signed(1686)) begin
+			if (hcount == sv2v_cast_12_signed(1686)) begin
 				hcount <= 1'sb0;
 				if (vcount == sv2v_cast_11_signed(849))
 					vcount <= 1'sb0;
@@ -77,8 +85,8 @@ module hdmi_backend (
 					vcount <= sv2v_cast_11(vcount + 11'sd1);
 			end
 			else
-				hcount <= sv2v_cast_11(hcount + 11'sd1);
-			if ((hcount >= sv2v_cast_11_signed(hdmi_pkg_HSYNC_START)) && (hcount < sv2v_cast_11_signed(hdmi_pkg_HSYNC_END)))
+				hcount <= sv2v_cast_12(hcount + 11'sd1);
+			if ((hcount >= sv2v_cast_12_signed(hdmi_pkg_HSYNC_START)) && (hcount < sv2v_cast_12_signed(hdmi_pkg_HSYNC_END)))
 				hsync <= hdmi_pkg_HSYNC_POLARITY;
 			else
 				hsync <= ~hdmi_pkg_HSYNC_POLARITY;
@@ -86,7 +94,7 @@ module hdmi_backend (
 				vsync <= hdmi_pkg_VSYNC_POLARITY;
 			else
 				vsync <= ~hdmi_pkg_VSYNC_POLARITY;
-			blank <= (((hcount == 11'd0) | (hcount >= sv2v_cast_11_signed(1281))) | (vcount < 11'd3)) | (vcount >= sv2v_cast_11_signed(723));
+			blank <= (((hcount == 12'd0) | (hcount >= sv2v_cast_12_signed(1279))) | (vcount < 11'd3)) | (vcount >= sv2v_cast_11_signed(723));
 			hdmi_frame <= (vcount < 11'd3) | (vcount >= sv2v_cast_11_signed(723));
 		end
 	end
@@ -106,10 +114,7 @@ module hdmi_backend (
 		tdms_pix[17-:8] = pix[15-:8];
 		tdms_pix[7-:8] = pix[7-:8];
 	end
-
-
 	genvar _gv_i_2;
-
 	generate
 		for (_gv_i_2 = 0; _gv_i_2 < 3; _gv_i_2 = _gv_i_2 + 1) begin : _tdms_sdat
 			localparam i = _gv_i_2;
@@ -119,7 +124,6 @@ module hdmi_backend (
 				.raw(tdms_pix[i * 10+:10]),
 				.encoded(tdms_enc[i * 10+:10])
 			);
-
 			fpga_oser10 u_oser_dat(
 				.arst(srst),
 				.clk_par(clk_pix),

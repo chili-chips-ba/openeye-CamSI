@@ -10,7 +10,8 @@ module i2c_ctrl (
 	scl_oe,
 	scl_di,
 	sda_oe,
-	sda_di
+	sda_di,
+	pause_duration
 );
 	input wire clk;
 	input wire strobe_400kHz;
@@ -24,6 +25,7 @@ module i2c_ctrl (
 	input wire scl_di;
 	output wire sda_oe;
 	input wire sda_di;
+	input wire [7:0] pause_duration;
 	reg [3:0] state;
 	reg [3:0] post_state;
 	reg scl_do;
@@ -34,9 +36,19 @@ module i2c_ctrl (
 	wire [3:0] bit_cnt_dec;
 	reg post_serial_data;
 	reg acknowledge_bit;
+	reg [7:0] outer_counter;
+	reg [8:0] inner_counter;
 	assign bit_cnt_dec = bit_cnt - 4'd1;
-	assign scl_oe = ~((state == 4'd3) || (state == 4'd0) ? 1'b1 : scl_do);
+	assign scl_oe = ~scl_do;
 	assign sda_oe = ~((state == 4'd3) || (state == 4'd0) ? 1'b1 : sda_do);
+	function automatic [8:0] sv2v_cast_9;
+		input reg [8:0] inp;
+		sv2v_cast_9 = inp;
+	endfunction
+	function automatic [7:0] sv2v_cast_8;
+		input reg [7:0] inp;
+		sv2v_cast_8 = inp;
+	endfunction
 	always @(negedge areset_n or posedge clk)
 		if (areset_n == 1'b0) begin
 			register_done <= 1'b0;
@@ -49,6 +61,8 @@ module i2c_ctrl (
 			acknowledge_bit <= 1'b0;
 			scl_do <= 1'b1;
 			sda_do <= 1'b1;
+			outer_counter <= 1'sb0;
+			inner_counter <= 1'sb0;
 		end
 		else
 			(* full_case, parallel_case *)
@@ -60,8 +74,8 @@ module i2c_ctrl (
 					slave_address_plus_rw <= {slave_address, 1'b0};
 					scl_do <= 1'b1;
 					sda_do <= 1'b1;
+					register_done <= 1'b0;
 					if (enable == 1'b1) begin
-						register_done <= 1'b0;
 						state <= 4'd1;
 						post_state <= 4'd2;
 					end
@@ -70,17 +84,20 @@ module i2c_ctrl (
 					if (strobe_400kHz == 1'b1)
 						(* full_case, parallel_case *)
 						case (process_cnt)
-							2'd0: process_cnt <= 2'd1;
+							2'd0: begin
+								scl_do <= 1'b1;
+								process_cnt <= 2'd1;
+							end
 							2'd1: begin
 								sda_do <= 1'b0;
 								process_cnt <= 2'd2;
 							end
 							2'd2: begin
+								scl_do <= 1'b0;
 								bit_cnt <= 4'd8;
 								process_cnt <= 2'd3;
 							end
 							2'd3: begin
-								scl_do <= 1'b0;
 								process_cnt <= 2'd0;
 								state <= post_state;
 								sda_do <= slave_address_plus_rw[3'd7];
@@ -242,8 +259,29 @@ module i2c_ctrl (
 								process_cnt <= 2'd3;
 								register_done <= 1'b1;
 							end
-							2'd3: state <= 4'd0;
+							2'd3: begin
+								outer_counter <= pause_duration;
+								inner_counter <= 9'd400;
+								process_cnt <= 2'd0;
+								register_done <= 1'b0;
+								state <= 4'd9;
+							end
 						endcase
+				4'd9:
+					if (strobe_400kHz == 1'b1) begin
+						scl_do <= 1'b1;
+						sda_do <= 1'b1;
+						if (outer_counter > 8'd0) begin
+							if (inner_counter > 9'd0)
+								inner_counter <= sv2v_cast_9(inner_counter - 9'sd1);
+							else begin
+								inner_counter <= 9'd400;
+								outer_counter <= sv2v_cast_8(outer_counter - 8'sd1);
+							end
+						end
+						else
+							state <= 4'd0;
+					end
 				4'd8:
 					if (strobe_400kHz == 1'b1)
 						(* full_case, parallel_case *)

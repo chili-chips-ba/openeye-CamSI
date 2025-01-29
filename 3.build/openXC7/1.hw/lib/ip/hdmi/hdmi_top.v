@@ -10,7 +10,9 @@ module hdmi_top (
 	hdmi_clk_p,
 	hdmi_clk_n,
 	hdmi_dat_p,
-	hdmi_dat_n
+	hdmi_dat_n,
+	x,
+	y
 );
 	input wire clk_ext;
 	output wire clk_pix;
@@ -24,8 +26,8 @@ module hdmi_top (
 	output wire hdmi_clk_n;
 	output wire [2:0] hdmi_dat_p;
 	output wire [2:0] hdmi_dat_n;
-	wire [10:0] x;
-	wire [10:0] y;
+	output wire [11:0] x;
+	output wire [10:0] y;
 	hdmi_backend u_hdmi_backend(
 		.clk_ext(clk_ext),
 		.clk_pix(clk_pix),

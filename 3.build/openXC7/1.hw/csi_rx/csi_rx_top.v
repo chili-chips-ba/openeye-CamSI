@@ -1,6 +1,7 @@
 module csi_rx_top (
 	ref_clock,
 	reset,
+	clk_1hz,
 	cam_dphy_clk,
 	cam_dphy_dat,
 	cam_en,
@@ -13,6 +14,7 @@ module csi_rx_top (
 );
 	input wire ref_clock;
 	input wire reset;
+	input wire clk_1hz;
 	input wire [1:0] cam_dphy_clk;
 	localparam top_pkg_NUM_LANE = 2;
 	input wire [3:0] cam_dphy_dat;
@@ -24,23 +26,27 @@ module csi_rx_top (
 	output wire csi_in_frame;
 	output wire [7:0] debug_pins;
 	wire bit_clock;
+	wire dphy_clk_reset;
 	wire csi_reset;
 	csi_rx_phy_clk u_phy_clk(
 		.dphy_clk(cam_dphy_clk),
 		.reset(reset),
+		.reset_out(dphy_clk_reset),
 		.bit_clock(bit_clock),
 		.byte_clock(csi_byte_clk)
 	);
 	csi_rx_clk_det u_clk_det(
 		.ref_clock(ref_clock),
 		.byte_clock(csi_byte_clk),
-		.reset_in(reset),
+		.reset_in(dphy_clk_reset),
 		.enable(cam_en),
 		.reset_out(csi_reset)
 	);
 	wire [15:0] deser_data;
+	reg [9:0] delay;
+	always @(posedge ref_clock) delay <= (delay == 10'd1023 ? 10'd0 : delay + 10'd1);
 	genvar _gv_i_3;
-	localparam [1:0] top_pkg_DINVERT = 2'b10;
+	localparam [1:0] top_pkg_DINVERT = 2'b01;
 	localparam [9:0] top_pkg_DSKEW = 10'h063;
 	generate
 		for (_gv_i_3 = 0; _gv_i_3 < top_pkg_NUM_LANE; _gv_i_3 = _gv_i_3 + 1) begin : lane
@@ -49,6 +55,7 @@ module csi_rx_top (
 				.INVERT(top_pkg_DINVERT[i]),
 				.DELAY(top_pkg_DSKEW[i * 5+:5])
 			) u_phy_dat(
+				.delay(delay[i * 5+:5]),
 				.reset(csi_reset),
 				.bit_clock(bit_clock),
 				.byte_clock(csi_byte_clk),
@@ -86,7 +93,7 @@ module csi_rx_top (
 		.word_out(word_data),
 		.valid_out(word_valid)
 	);
-	wire [15:0] csi_unpack_dat;
+	/*wire [15:0] csi_unpack_dat;
 	wire csi_unpack_dat_vld;
 	wire csi_sync_seq;
 	wire [1:0] debug_pkt;
@@ -108,5 +115,5 @@ module csi_rx_top (
 	);
 	assign csi_unpack_raw_dat = csi_unpack_dat;
 	assign csi_unpack_raw_dat_vld = csi_unpack_dat_vld;
-	assign debug_pins = {debug_pkt, byte_valid[1:0], csi_sync_seq, 1'b0, csi_in_line, csi_in_frame};
+	assign debug_pins = {csi_in_frame, csi_in_line, csi_unpack_dat_vld, packet_done, word_valid, wait_for_sync, byte_valid[0], csi_reset};*/
 endmodule

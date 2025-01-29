@@ -10,7 +10,6 @@ module fpga_oser10 (
 	input wire clk_ser;
 	input wire [9:0] d;
 	output wire q;
-
 	wire shift1;
 	wire shift2;
 	OSERDESE2 #(

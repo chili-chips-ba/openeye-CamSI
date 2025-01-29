@@ -148,49 +148,49 @@ module raw2rgb_12 (
 			case (line_not_read)
 				2'd3:
 					if (odd_pixel == 1'b0) begin
-						rgb_out1[23:16] <= ((line1_red0 >> 1) + (line1_red1 >> 1)) >> 4;
-						rgb_out1[15:8] <= (((line0_green0 >> 2) + (line0_green1 >> 2)) >> 4) + (((line2_green0 >> 2) + (line2_green1 >> 2)) >> 4);
-						rgb_out1[7:0] <= ((line0_blue0 >> 1) + (line2_blue0 >> 1)) >> 4;
+						rgb_out1[23:16] <= (line1_red0 >> 5) + (line1_red1 >> 5);
+						rgb_out1[15:8] <= (((line0_green0 >> 6) + (line0_green1 >> 6)) + (line2_green0 >> 6)) + (line2_green1 >> 6);
+						rgb_out1[7:0] <= (line0_blue0 >> 5) + (line2_blue0 >> 5);
 					end
 					else begin
 						rgb_out1[23:16] <= line1_red1 >> 4;
-						rgb_out1[15:8] <= (((line0_green1 >> 2) + (line1_green0 >> 2)) >> 4) + (((line1_green1 >> 2) + (line2_green1 >> 2)) >> 4);
-						rgb_out1[7:0] <= (((line0_blue0 >> 2) + (line0_blue1 >> 2)) >> 4) + (((line2_blue0 >> 2) + (line2_blue1 >> 2)) >> 4);
+						rgb_out1[15:8] <= (((line0_green1 >> 6) + (line1_green0 >> 6)) + (line1_green1 >> 6)) + (line2_green1 >> 6);
+						rgb_out1[7:0] <= (((line0_blue0 >> 6) + (line0_blue1 >> 6)) + (line2_blue0 >> 6)) + (line2_blue1 >> 6);
 					end
 				2'd0:
 					if (odd_pixel == 1'b0) begin
-						rgb_out1[23:16] <= (((line1_red0 >> 2) + (line1_red1 >> 2)) >> 4) + (((line3_red0 >> 2) + (line3_red1 >> 2)) >> 4);
-						rgb_out1[15:8] <= (((line1_green0 >> 2) + (line2_green0 >> 2)) >> 4) + (((line2_green1 >> 2) + (line3_green0 >> 2)) >> 4);
+						rgb_out1[23:16] <= (((line1_red0 >> 6) + (line1_red1 >> 6)) + (line3_red0 >> 6)) + (line3_red1 >> 6);
+						rgb_out1[15:8] <= (((line1_green0 >> 6) + (line2_green0 >> 6)) + (line2_green1 >> 6)) + (line3_green0 >> 6);
 						rgb_out1[7:0] <= line2_blue0 >> 4;
 					end
 					else begin
-						rgb_out1[23:16] <= ((line1_red1 >> 1) + (line3_red1 >> 1)) >> 4;
-						rgb_out1[15:8] <= (((line1_green0 >> 2) + (line1_green1 >> 2)) >> 4) + (((line3_green0 >> 2) + (line3_green1 >> 2)) >> 4);
-						rgb_out1[7:0] <= ((line2_blue0 >> 1) + (line2_blue1 >> 1)) >> 4;
+						rgb_out1[23:16] <= (line1_red1 >> 5) + (line3_red1 >> 5);
+						rgb_out1[15:8] <= (((line1_green0 >> 6) + (line1_green1 >> 6)) + (line3_green0 >> 6)) + (line3_green1 >> 6);
+						rgb_out1[7:0] <= (line2_blue0 >> 5) + (line2_blue1 >> 5);
 					end
 				2'd1:
 					if (odd_pixel == 1'b0) begin
-						rgb_out1[23:16] <= ((line3_red0 >> 1) + (line3_red1 >> 1)) >> 4;
-						rgb_out1[15:8] <= (((line2_green0 >> 2) + (line2_green1 >> 2)) >> 4) + (((line0_green0 >> 2) + (line0_green1 >> 2)) >> 4);
-						rgb_out1[7:0] <= ((line2_blue0 >> 1) + (line0_blue0 >> 1)) >> 4;
+						rgb_out1[23:16] <= (line3_red0 >> 5) + (line3_red1 >> 5);
+						rgb_out1[15:8] <= (((line2_green0 >> 6) + (line2_green1 >> 6)) + (line0_green0 >> 6)) + (line0_green1 >> 6);
+						rgb_out1[7:0] <= (line2_blue0 >> 5) + (line0_blue0 >> 5);
 					end
 					else begin
 						rgb_out1[23:16] <= line3_red1 >> 4;
-						rgb_out1[15:8] <= (((line2_green1 >> 2) + (line3_green0 >> 2)) >> 4) + (((line3_green1 >> 2) + (line0_green1 >> 2)) >> 4);
-						rgb_out1[7:0] <= (((line2_blue0 >> 2) + (line2_blue1 >> 2)) >> 4) + (((line0_blue0 >> 2) + (line0_blue1 >> 2)) >> 4);
+						rgb_out1[15:8] <= (((line2_green1 >> 6) + (line3_green0 >> 6)) + (line3_green1 >> 6)) + (line0_green1 >> 6);
+						rgb_out1[7:0] <= (((line2_blue0 >> 6) + (line2_blue1 >> 6)) + (line0_blue0 >> 6)) + (line0_blue1 >> 6);
 					end
 				default:
 					if (odd_pixel == 1'b0) begin
-						rgb_out1[23:16] <= (((line3_red0 >> 2) + (line3_red1 >> 2)) >> 4) + (((line1_red0 >> 2) + (line1_red1 >> 2)) >> 4);
-						rgb_out1[15:8] <= (((line3_green0 >> 2) + (line0_green0 >> 2)) >> 4) + (((line0_green1 >> 2) + (line1_green0 >> 2)) >> 4);
+						rgb_out1[23:16] <= (((line3_red0 >> 6) + (line3_red1 >> 6)) + (line1_red0 >> 6)) + (line1_red1 >> 6);
+						rgb_out1[15:8] <= (((line3_green0 >> 6) + (line0_green0 >> 6)) + (line0_green1 >> 6)) + (line1_green0 >> 6);
 						rgb_out1[7:0] <= line0_blue0 >> 4;
 					end
 					else begin
-						rgb_out1[23:16] <= ((line3_red1 >> 1) + (line1_red1 >> 1)) >> 4;
-						rgb_out1[15:8] <= (((line3_green0 >> 2) + (line3_green1 >> 2)) >> 4) + (((line1_green0 >> 2) + (line1_green1 >> 2)) >> 4);
-						rgb_out1[7:0] <= ((line0_blue0 >> 1) + (line0_blue1 >> 1)) >> 4;
+						rgb_out1[23:16] <= (line3_red1 >> 5) + (line1_red1 >> 5);
+						rgb_out1[15:8] <= (((line3_green0 >> 6) + (line3_green1 >> 6)) + (line1_green0 >> 6)) + (line1_green1 >> 6);
+						rgb_out1[7:0] <= (line0_blue0 >> 5) + (line0_blue1 >> 5);
 					end
 			endcase
-	assign rgb_out = {~rgb_out1[23:16], ~rgb_out1[15:8], rgb_out1[7:0]};
+	assign rgb_out = {~rgb_out1[7:0], rgb_out1[15:8], ~rgb_out1[23:16]};
 	initial _sv2v_0 = 0;
 endmodule
