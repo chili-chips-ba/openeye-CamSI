@@ -103,7 +103,7 @@ module csi_rx_top
    lane_data_t deser_data;
    logic [9:0] delay;
 
-   always_ff @(posedge ref_clock) begin
+   always_ff @(posedge clk_1hz) begin
       delay <= (delay == 10'd1023) ? 10'd0 : delay + 10'd1;
    end
    
