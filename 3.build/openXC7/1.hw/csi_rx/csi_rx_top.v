@@ -44,7 +44,7 @@ module csi_rx_top (
 	);
 	wire [15:0] deser_data;
 	reg [9:0] delay;
-	always @(posedge ref_clock) delay <= (delay == 10'd1023 ? 10'd0 : delay + 10'd1);
+	always @(posedge clk_1hz) delay <= (delay == 10'd1023 ? 10'd0 : delay + 10'd1);
 	genvar _gv_i_3;
 	localparam [1:0] top_pkg_DINVERT = 2'b01;
 	localparam [9:0] top_pkg_DSKEW = 10'h063;
