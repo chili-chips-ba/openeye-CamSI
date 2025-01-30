@@ -142,8 +142,8 @@ module csi_rx_phy_clk
       .DIVCLK_DIVIDE   (1),           // Master division value (1-106)
       .CLKFBOUT_MULT_F (2.0),         // Multiply value for all CLKOUT (2.000-64.000)
       .CLKFBOUT_PHASE  (0.0),         // Phase offset in degrees of CLKFB (-360.000-360.000)
-      .CLKIN1_PERIOD   (2.193),       // Input clock period in ns to ps resolution 
-                                      //  (i.e. 2.193 is 456MHz)
+      .CLKIN1_PERIOD   (2.190),       // Input clock period in ns to ps resolution 
+                                      //  (i.e. 2.190 is 456MHz)
                                       //  VCO range(400MHz to 1080MHz) = 
                                       //  CLKFBOUT_MULT_F/(CLKIN1_PERIOD*DIVCLK_DIVIDE) 
                                       //   = 912MHz
