@@ -19,7 +19,7 @@ SRC_DIR3e = 1.hw/lib/ip/i2c_master
 SRC_DIR4 = 1.hw/misc
 
 SRC_FILES0 := $(wildcard $(CURR_DIR)/$(SRC_DIR0)/*.v)
-SRC_FILES1_COMMON := $(filter-out $(CURR_DIR)/$(SRC_DIR1)/csi_rx_top_1.v $(CURR_DIR)/$(SRC_DIR1)/csi_rx_top_2.v, $(wildcard $(CURR_DIR)/$(SRC_DIR1)/*.v))
+SRC_FILES1_COMMON := $(filter-out $(CURR_DIR)/$(SRC_DIR1)/csi_rx_top.v $(CURR_DIR)/$(SRC_DIR1)/csi_rx_top_1.v $(CURR_DIR)/$(SRC_DIR1)/csi_rx_top_2.v, $(wildcard $(CURR_DIR)/$(SRC_DIR1)/*.v))
 SRC_FILES2 := $(wildcard $(CURR_DIR)/$(SRC_DIR2)/*.v)
 SRC_FILES3a := $(wildcard $(CURR_DIR)/$(SRC_DIR3a)/*.v)
 SRC_FILES3b := $(wildcard $(CURR_DIR)/$(SRC_DIR3b)/*.v)
