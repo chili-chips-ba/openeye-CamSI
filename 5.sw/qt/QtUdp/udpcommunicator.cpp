@@ -17,7 +17,7 @@ void UDPCommunicator::initialize()
     else qInfo() << "IP ADDRESS NOT CHANGED";
 
     int xdim =1280;
-    int ydim =700;
+    int ydim =720;
     image = cv::Mat (ydim, xdim, CV_8UC3);
     frame = 0;
     frame_prev = 0;
@@ -66,23 +66,6 @@ void UDPCommunicator::display()
     }
 }
 
-void UDPCommunicator::sendData()
-{
-    QByteArray Data; // Message for send
-    Data += "SAMP";
-    Data += QString( 93 );
-    Data += QString( 119 );
-    Data += QString( 26 );
-    Data += QString( 214 );
-    Data += QString(7777 & 0xFF);
-    Data += QString(7777 >> 8 & 0xFF);
-    Data.append("i");
-
-    int sebindeo = socket->bind(1234);
-    int envio = socket->writeDatagram(Data, hostAddress, 1234);
-    qDebug() << "Bind: " << sebindeo << "; Send bytes: " << envio << "; Message send: " << Data;
-}
-
 void UDPCommunicator::processPendingDatagrams()
 {
     QHostAddress sender;
@@ -94,36 +77,28 @@ void UDPCommunicator::processPendingDatagrams()
         datagram.clear();
         datagram.resize(socket->pendingDatagramSize());
         socket->readDatagram(datagram.data(), datagram.size(), &sender, &port);
-        if(datagram.size()  == 1282) {
+        if(datagram.size() == 1282) {
             y = (uint16_t)((datagram.data()[0]&0x7f)<<8 | (uint8_t)datagram.data()[1]);
             frame = (uint8_t)(datagram.data()[0] >> 7);
             for(int x=2; x<=1282; x=x+2) {
                 rgb565 = (uint16_t)datagram.data()[x] << 8 | (uint8_t)datagram.data()[x+1];
-                if(frame == 0) {
-                    //image.at<cv::Vec3b>(y,x-2) = rgb888;
-                    //image.at<cv::Vec3b>(y,x-2)[2] = cv::saturate_cast<uchar>((uint16_t)(rgb565&0xF800 | 0x07) >> 8);
-                    //image.at<cv::Vec3b>(y,x-2)[1] = cv::saturate_cast<uchar>((uint16_t)(rgb565&0x07E0 | 0x03) >> 3);
-                    //image.at<cv::Vec3b>(y,x-2)[0] = cv::saturate_cast<uchar>((uint16_t)(rgb565&0x001F | 0x07) << 3);
-                    image.at<cv::Vec3b>(y,x-2)[2] = (uchar)((uint16_t)(rgb565&0xF800 | 0x07) >> 8);
-                    image.at<cv::Vec3b>(y,x-2)[1] = (uchar)((uint16_t)(rgb565&0x07E0 | 0x03) >> 3);
-                    image.at<cv::Vec3b>(y,x-2)[0] = (uchar)((uint16_t)(rgb565&0x001F | 0x07) << 3);
+                if((y%2) == 0) {
+                    image.at<cv::Vec3b>(y,x-2)[2] = (uchar)((uint16_t)(rgb565&0xF800) >> 8);
+                    image.at<cv::Vec3b>(y,x-2)[1] = (uchar)((uint16_t)(rgb565&0x07E0) >> 3);
+                    image.at<cv::Vec3b>(y,x-2)[0] = (uchar)((uint16_t)(rgb565&0x001F) << 3);
                 } else {
-                    //image.at<cv::Vec3b>(y,x-1) = rgb888;
-                    //image.at<cv::Vec3b>(y,x-1)[2] = cv::saturate_cast<uchar>((uint16_t)(rgb565&0xF800 | 0x07) >> 8);
-                    //image.at<cv::Vec3b>(y,x-1)[1] = cv::saturate_cast<uchar>((uint16_t)(rgb565&0x07E0 | 0x03) >> 3);
-                    //image.at<cv::Vec3b>(y,x-1)[0] = cv::saturate_cast<uchar>((uint16_t)(rgb565&0x001F | 0x07) << 3);
-                    image.at<cv::Vec3b>(y,x-1)[2] = (uchar)((uint16_t)(rgb565&0xF800 | 0x07) >> 8);
-                    image.at<cv::Vec3b>(y,x-1)[1] = (uchar)((uint16_t)(rgb565&0x07E0 | 0x03) >> 3);
-                    image.at<cv::Vec3b>(y,x-1)[0] = (uchar)((uint16_t)(rgb565&0x001F | 0x07) << 3);
+                    image.at<cv::Vec3b>(y,x-1)[2] = (uchar)((uint16_t)(rgb565&0xF800) >> 8);
+                    image.at<cv::Vec3b>(y,x-1)[1] = (uchar)((uint16_t)(rgb565&0x07E0) >> 3);
+                    image.at<cv::Vec3b>(y,x-1)[0] = (uchar)((uint16_t)(rgb565&0x001F) << 3);
                 }
             }
-            /*if(y > 690) {
+            /*if(y > 718) {
                 cv::imshow("Image", image);
             }*/
             frame_prev = frame;
-            //qInfo() <<"Message :: frame: " << frame << " row:" << y;
+            //qInfo() <<"frame=" <<frame << "; y=" <<y;
         } else {
-            qInfo() <<"size " << datagram.size();
+            //qInfo() <<"size " << datagram.size();
         }
         //cv::imshow("Image", image);
     }

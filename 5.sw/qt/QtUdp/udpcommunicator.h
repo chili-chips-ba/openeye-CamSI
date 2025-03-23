@@ -28,8 +28,6 @@ private:
 
 private slots:
     void processPendingDatagrams();
-    void sendData();    
-
 
 public slots:
     void display();

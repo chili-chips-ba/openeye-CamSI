@@ -54,7 +54,7 @@ def main():
             for x in range(2, 1280, 2):
                rgb565 = data[x] << 8 | data[x+1]
                rgb888 = (rgb565&0x001F) << 3 | 0x07, (rgb565&0x07E0) >> 3 | 0x03, (rgb565&0xF800) >> 8 | 0x07
-               if(frame == 0):
+               if((y%2) == 0):
                   canvas[y,x-2,:] = rgb888
                else:
                   canvas[y,x-1,:] = rgb888
