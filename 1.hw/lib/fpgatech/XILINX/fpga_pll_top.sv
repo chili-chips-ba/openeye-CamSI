@@ -45,16 +45,21 @@ module fpga_pll_top (
    input  logic clk_in,  // 100MHz
    
    output logic srst,
-   output logic clk_out0,
-   output logic clk_out1 // ~200MHz
+   output logic clk_out0,  // 100MHz
+   output logic clk_out1,  // ~200MHz
+   output logic clk_out2,  // 125MHz
+   output logic clk_out3  // 125MHz, phase 90
 );
 
    logic pll_lock;
    logic clkfb;
    logic uclk_out0;
    logic uclk_out1;
-
-
+   logic uclk_out2;
+   logic uclk_out3;
+   logic uclk_out4;
+   logic uclk_out5;
+   
 `ifdef COCOTB_SIM
    // PLL outputs driven from cocotb
    initial begin
@@ -66,10 +71,16 @@ module fpga_pll_top (
 `else
    MMCME2_BASE #(
       .BANDWIDTH   ("OPTIMIZED"), // Jitter programming (OPTIMIZED, HIGH, LOW)
-      .DIVCLK_DIVIDE   (5),       // Master division value (1-106)
-      .CLKFBOUT_MULT_F (45.0),  // Multiply value for all CLKOUT (2.000-64.000)
-      .CLKFBOUT_PHASE  (0.0),     // Phase offset in degrees of CLKFB (-360.000-360.000)
-      .CLKIN1_PERIOD   (10.000),  // Input clock period in ns to ps resolution 
+
+`ifdef PUZHI
+      .DIVCLK_DIVIDE   (10),       // Master division value (1-106) // Puzhi
+      .CLKIN1_PERIOD   (5.000),  // Input clock period in ns to ps resolution // Puzhi
+`else
+      .DIVCLK_DIVIDE   (5),       // Master division value (1-106) // Trenz
+      .CLKIN1_PERIOD   (10.000),  // Input clock period in ns to ps resolution // Trenz
+`endif
+      .CLKFBOUT_MULT_F (49.875),  // Multiply value for all CLKOUT (2.000-64.000)
+      .CLKFBOUT_PHASE  (0.0),     // Phase offset in degrees of CLKFB (-360.000-360.000) 
                                   //   (i.e. 33.333 is 30 MHz)
                                   //   VCO range(400MHz to 1080MHz) = 
                                   //     CLKFBOUT_MULT_F/(CLKIN1_PERIOD*DIVCLK_DIVIDE)
@@ -77,10 +88,10 @@ module fpga_pll_top (
      //CLKOUT0_DIVIDE - CLKOUT6_DIVIDE: Divide amount for each CLKOUT (1-128)
       .CLKOUT0_DIVIDE_F(4.5),   // Divide amount for CLKOUT0 (1.000-128.000)
 
-      .CLKOUT1_DIVIDE(1),
-      .CLKOUT2_DIVIDE(5), //5=180, 8=112,5        
-      .CLKOUT3_DIVIDE(1),
-      .CLKOUT4_DIVIDE(1),
+      .CLKOUT1_DIVIDE(9.975), // 100 MHz
+      .CLKOUT2_DIVIDE(5),     // 199.5 MHz     
+      .CLKOUT3_DIVIDE(7.98),  // 125 MHz
+      .CLKOUT4_DIVIDE(7.98),  // 125 MHz
       .CLKOUT5_DIVIDE(1),
       .CLKOUT6_DIVIDE(1),
 
@@ -100,29 +111,29 @@ module fpga_pll_top (
       .CLKOUT1_PHASE(0.0),
       .CLKOUT2_PHASE(0.0),
       .CLKOUT3_PHASE(0.0),
-      .CLKOUT4_PHASE(0.0),
+      .CLKOUT4_PHASE(90.0),
       .CLKOUT5_PHASE(0.0),
       .CLKOUT6_PHASE(0.0),
               
       .CLKOUT4_CASCADE("FALSE"), // Cascade CLKOUT4 counter with CLKOUT6 (FALSE, TRUE)
-      .REF_JITTER1(0.0),         // Reference input jitter in UI (0.000-0.999)
+      .REF_JITTER1(0.0),        // Reference input jitter in UI (0.000-0.999)
       .STARTUP_WAIT("FALSE")     // Delays DONE until MMCM is locked (FALSE, TRUE)
    ) 
    uMMCME2_BASE (
       .CLKOUT0   (uclk_out0),    //o: CLKOUT0
       .CLKOUT0B  (),             //o
 
-      .CLKOUT1   (),             //o
+      .CLKOUT1   (uclk_out1),    //o
       .CLKOUT1B  (),             //o
 
-      .CLKOUT2   (uclk_out1),    //o: CLKOUT2
+      .CLKOUT2   (uclk_out2),    //o: CLKOUT2
       .CLKOUT2B  (),             //o
 
-      .CLKOUT3   (),             //o 
+      .CLKOUT3   (uclk_out3),     //o 
       .CLKOUT3B  (),             //o 
 
-      .CLKOUT4   (),             //o                
-      .CLKOUT5   (),             //o 
+      .CLKOUT4   (uclk_out4),     //o                
+      .CLKOUT5   (uclk_out5),     //o 
       .CLKOUT6   (),             //o 
 
       .CLKFBOUT  (clkfb),        //o: Feedback clock
@@ -141,15 +152,25 @@ module fpga_pll_top (
 // Clock buffers
 //----------------------------------------------
    BUFG u_BUFG_clk_out0 (
-      .I(uclk_out0),
+      .I(uclk_out1),
       .O(clk_out0)
    );
    
-   BUFG u_BUFG_clk_out2 (
-      .I(uclk_out1),
+   BUFG u_BUFG_clk_out1 (
+      .I(uclk_out2),
       .O(clk_out1)
    );
 
+   BUFG u_BUFG_clk_out2 (
+      .I(uclk_out3),
+      .O(clk_out2)
+   );
+   
+   BUFG u_BUFG_clk_out4 (
+      .I(uclk_out4),
+      .O(clk_out3)
+   );   
+       
 //----------------------------------------------
 // Reset synchronizer
 //----------------------------------------------
