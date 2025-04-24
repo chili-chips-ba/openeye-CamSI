@@ -78,7 +78,7 @@ module top
    
   //Misc/Debug
    output bus3_t led,
-   output bus16_t debug_pins
+   output bus8_t debug_pins
 );
 
 `ifdef COCOTB_SIM
@@ -95,8 +95,7 @@ glbl glbl();
       .clk_ext       (clk_ext),       //i
                                        
       .clk_100       (clk_100),       //o: 100MHz 
-      .clk_180       (clk_180),       //o: 180MHz
-      .clk_200       (clk_200),       //o: 200MHz 
+      .clk_200       (clk_200),       //o: 200MHz
       .clk_1hz       (clk_1hz),       //o: 1Hz
       .strobe_400kHz (strobe_400kHz), //o: pulse1 at 400kHz
 
@@ -254,28 +253,15 @@ glbl glbl();
    assign led[1] = clk_1hz;
    assign led[2] = csi_in_frame; 
 
-   bus8_t debug_hdmi;
-   assign debug_hdmi = {  
-      hdmi_reset_n,
-      hdmi_frame,
-      hdmi_hsync,
-      hdmi_vsync,
-      hdmi_blank,
-      hdmi_clk,
-      rgb_valid,
-      1'b0
-   };
+//   assign debug_pins = { 
+//       hdmi_blank, 
+//       rgb_reading, 
+//       hdmi_reset_n, 
+//       debug_csi[2:0]
+//   };
 
-   assign debug_pins = {
-      //clk_180, 
-      debug_fifo,
-      debug_hdmi[7:3],
-      debug_csi[7:1] 
-      //y
-      //debug_csi[7:0],
-      //debug_i2c[7:0]
-   };
-   
+assign debug_pins = {hdmi_reset_n, hdmi_hsync, hdmi_vsync, hdmi_frame, rgb_reading,  hdmi_blank, csi_in_line, csi_in_frame};
+
 endmodule: top
 
 /*
