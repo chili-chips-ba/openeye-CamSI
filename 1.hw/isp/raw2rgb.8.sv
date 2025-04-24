@@ -377,12 +377,17 @@ module raw2rgb_8
    end
 */
 
-
+`ifdef PUZHI
+ //this pattern of RGB is for HDMI out on Puzhi board
+   assign rgb_out = {rgb_out1[7:0], 
+                     rgb_out1[15:8], 
+                     rgb_out1[23:16]}; 
+`else
  //this pattern of RGB inversions is for CRUVI A
    assign rgb_out = {~rgb_out1[23:16], 
                      ~rgb_out1[15:8], 
                       rgb_out1[7:0]}; 
-
+`endif
 endmodule: raw2rgb_8
 
 /*
