@@ -95,16 +95,16 @@ module hdmi_backend
     logic  internal_srst_n;
     assign internal_srst_n = srst_n & ~fifo_empty;
 
-    always_ff @(posedge clk_pix) begin: _tbase_gen
-       if (&{internal_srst_n, hdmi_reset_n} == LO) begin
+   always_ff @(posedge clk_pix) begin: _tbase_gen
+      if (&{internal_srst_n, hdmi_reset_n} == LO) begin
           hcount     <= '0;
           vcount     <= '0;
-          hsync      <= HSYNC_POLARITY;
-          vsync      <= VSYNC_POLARITY;
+          hsync      <= ~HSYNC_POLARITY;
+          vsync      <= ~VSYNC_POLARITY;
           blank      <= HI;
           hdmi_frame <= LO;
-       end
-       else begin
+      end
+      else begin
           // Count lines and rows      
           if (hcount == 12'(HFRAME-1)) begin
              hcount    <= '0;
@@ -119,7 +119,33 @@ module hdmi_backend
           else begin
              hcount    <= 12'(hcount + 11'(1)); 
           end
+          
+      `ifdef HDMI2VGA
+          // Horizontal Sync
+          if (hcount < 12'(HSYNC_SIZE)) begin
+             hsync <=  HSYNC_POLARITY;
+          end
+          else begin
+             hsync <= ~HSYNC_POLARITY;
+          end 
+          
+          // Vertical Sync
+          if (vcount < 11'(VSYNC_SIZE)) begin 
+             vsync <=  VSYNC_POLARITY;
+          end
+          else begin
+             vsync <= ~VSYNC_POLARITY;
+          end      
 
+          // Blank when outside the visible screen          
+          blank <= (vcount <= VSYNC_START) 
+                  | (vcount > VSYNC_END) 
+                  | (hcount <= HSYNC_START) 
+                  | (hcount > HSYNC_END);
+                  
+          hdmi_frame <= (vcount > VSYNC_END + 2);
+          
+      `elsif
           // Horizontal Sync
           //if (hcount == 12'd0) begin 
           if (   (hcount >= 12'(HSYNC_START)) 
@@ -139,20 +165,20 @@ module hdmi_backend
           else begin
              vsync <= ~VSYNC_POLARITY;
           end
-                       
 
           // Blank when outside the visible screen
           //blank <= (hcount >= HSCREEN) | (vcount >= VSCREEN);
           blank      <= (hcount == 12'd0)
                       | (hcount >= 12'(HSCREEN+1))
-                      | (vcount <  11'd3)
+                      | (vcount <  11'd3) 
                       | (vcount >= 11'(VSCREEN+3));
 
-          hdmi_frame <= (vcount <  11'd3)
-                      | (vcount >= 11'(VSCREEN+3));
+          hdmi_frame <= (vcount <  11'd3) 
+          | (vcount >= 11'(VSCREEN+3));
+
+      `endif
        end
-
-    end: _tbase_gen
+   end: _tbase_gen
 
 
 //-----------------------------------------------------------

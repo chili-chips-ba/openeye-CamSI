@@ -44,16 +44,20 @@
 
 //----------------Select one of our three supported sensors
 //`define IMX283
-//`define IMX219
-`define OV2740
+`define IMX219
+//`define OV2740
 
 //----------------Include (or not) Ethernet?
 //`define ETHERNET
-//`undef ETHERNET
+`undef ETHERNET
 
 //----------------Trenz or Puzhitech board?
 //`define PUZHI
-//`undef PUZHI
+`undef PUZHI
+
+//----------------Select monitor connection, directly HDMI to HMDI or HDMI to VGA 
+`define HDMI2VGA
+//`undef HDMI2VGA
 
 //----------------Select monitor resolution
 `define HDMI_720p60
@@ -170,11 +174,10 @@ package top_pkg;
 `elsif MIPI_2_LANE
    localparam                       NUM_LANE = 2;
 
-   
    `ifdef PUZHI
       localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b00; // based on Puzhi board
    `else
-      localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b01; // based on Trenz board, adjust as needed (CRUVI A -> 2'b01, CRUVI C -> 2'b10)
+      localparam bit    [NUM_LANE-1:0] DINVERT  = 2'b10; // based on Trenz board, adjust as needed (CMOS IMX219 on CRUVI A -> 2'b01 or on CRUVI C -> 2'b10)
    `endif 
    
    `ifdef OV2740
