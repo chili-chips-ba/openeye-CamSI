@@ -1,0 +1,3 @@
+[submodule "csi-ethernet"]
+	path = csi-ethernet
+	url = https://github.com/chili-chips-ba/openeye-CamSI-ethernet.git
