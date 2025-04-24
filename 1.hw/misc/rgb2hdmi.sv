@@ -41,9 +41,9 @@
 //   - Logic for synchronization of HDMI output to Camera input
 //========================================================================
 
-module rgb2hdmi   
-   import top_pkg::*;  
-   import hdmi_pkg::*;  
+module rgb2hdmi
+   import top_pkg::*;
+   import hdmi_pkg::*;
 (
  //from/to CSI and RGB block
    input  logic csi_clk,
@@ -70,51 +70,60 @@ module rgb2hdmi
 //--------------------------------
 // Synchronization Logic
 //--------------------------------
-   logic   csi_in_line_dly, csi_in_frame_dly;   
+   logic   csi_in_line_dly, csi_in_frame_dly, csi_in_frame_dl2;   
    bus11_t csi_line_count;
-   logic [1:0] csi_frame_count;
+   bus2_t  csi_frame_count;
    
    always_ff @(posedge csi_clk) begin 
       if (reset == 1'b1) begin         
-         csi_in_line_dly <= 1'b0;
+         csi_in_line_dly  <= 1'b0;
          csi_in_frame_dly <= 1'b0;
-         csi_line_count  <= 11'd0;
-         csi_frame_count   <= 2'd0;
-
+         csi_line_count   <= '0;
+         csi_frame_count  <= '0;
+         
          rgb_valid       <= 1'b0;
          hdmi_reset_n    <= 1'b0;
       end 
-      else begin          
+      else begin
          csi_in_line_dly <= csi_in_line;
          csi_in_frame_dly <= csi_in_frame; 
-
+         csi_in_frame_dl2 <= csi_in_frame_dly;
+         
          // skip first 3 CMOS lines to start calculate RGB values
-         rgb_valid       <= (csi_line_count >= 11'd3);  
-
+         rgb_valid       <= (csi_line_count >= 11'd3);
+         
+`ifdef OV2740
          if ({csi_in_frame_dly, csi_in_frame} == 2'b01) begin
             if (csi_frame_count == 2'd1)
                 csi_frame_count <= 2'd0;
             else
                 csi_frame_count <= 2'(csi_frame_count + 2'd1);
                 csi_line_count <= 11'd0; 
-         end 
-
-         /*if (csi_in_frame == 1'b0) begin 
-            csi_line_count <= 11'd0;
-         end*/
-         // increment Line count with every 'csi_in_line' posedge
-         //   unless outside of the visible screen
+         end         
          else if ({csi_in_line_dly, csi_in_line} == 2'b01) begin
-            //if (csi_line_count < 11'd1300) begin
             csi_line_count <= 11'(csi_line_count + 11'd1);
-            //end
          end 
          
          if ((csi_frame_count == 2'd0) && (csi_line_count == 11'd0))
             hdmi_reset_n <= 1'b0;  
          else
             hdmi_reset_n <= 1'b1;
-            
+                     
+`else
+         // Keep HDMI in reset between start of CMOS frame and rising edge on first CMOS line  
+//         hdmi_reset_n    <= (csi_line_count >= 11'd1);
+         hdmi_reset_n    <= ({csi_in_frame_dl2, csi_in_frame} == 2'b01) ? 1'b0 : 1'b1;
+         
+         if ({csi_in_frame_dly, csi_in_frame} == 2'b01) begin //Rising edge of csi_in_frame
+            csi_line_count <= 11'd0;
+         end
+         else if ({csi_in_line_dly, csi_in_line} == 2'b01) begin  //Rising edge of csi_in_line
+            if (csi_line_count < 11'd1300) begin
+               csi_line_count <= 11'(csi_line_count + 11'd1);
+            end
+         end          
+`endif
+
       end // else: !if(reset == 1'b1)
    end // always_ff @ (posedge csi_clk)
    
