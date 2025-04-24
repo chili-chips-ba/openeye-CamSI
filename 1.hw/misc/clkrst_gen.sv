@@ -47,12 +47,13 @@ module clkrst_gen
 (
 // external inputs 
    input  logic  reset_ext,
-   input  logic  clk_ext,
+   input  logic  clk_ext,  // Puzhi = 200MHz, Trenz = 100 MHz
 
 // internal signals
    output logic  clk_100,
-   output logic  clk_180,
    output logic  clk_200,
+   output logic  clk_125,
+   output logic  clk_125_90,
    output logic  clk_1hz,
    output logic  strobe_400kHz, // 400kHz strobe synchronous to 'clk'
 
@@ -60,22 +61,23 @@ module clkrst_gen
    output logic  cam_en,
    output logic  i2c_areset_n
 );
-
    
 //--------------------------------
 // Clock and reset gen
 //--------------------------------
-   BUFG u_ibufio (.I(clk_ext), .O(clk_100));
+//   BUFG u_ibufio (.I(clk_ext), .O(clk_100)); 
 
    logic srst0, srst1;
    
    fpga_pll_top u_pll_top (
       .areset   (reset_ext), //i
-      .clk_in   (clk_100),   //i 100MHz
-
-      .srst     (srst0),     //o
-      .clk_out0 (clk_200),   //o: 200MHz 
-      .clk_out1 (clk_180)    //o: 180MHz
+      .clk_in   (clk_ext),   //i 200MHz Puzhi, 100MHz Trenz
+      
+      .srst     (srst0),     //o      
+      .clk_out0 (clk_100),   //o: 100 MHz
+      .clk_out1 (clk_200),   //o: 199.5 MHz
+      .clk_out2 (clk_125),   //o: 125 MHz
+      .clk_out3 (clk_125_90) //o: 125 MHz, PHASE 90
    );
 
 
