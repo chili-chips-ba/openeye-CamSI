@@ -59,7 +59,7 @@ module csi_rx_phy_clk
 //---------------------------------------------
    IBUFDS #(
       .DIFF_TERM    (DPHY_TERM_EN), // Differential Termination
-      .IBUF_LOW_PWR ("TRUE"),       // Low power="TRUE", HighestPerf="FALSE"
+      .IBUF_LOW_PWR ("FALSE"),       // Low power="TRUE", HighestPerf="FALSE"
       .IOSTANDARD   ("LVDS_25")     // Specify the input I/O standard
    ) 
    u_bufds_clk (      
@@ -75,55 +75,30 @@ module csi_rx_phy_clk
    BUFMR u_bufmr (
       .I(dphy_clk_in), // Clock input  (Connect to IBUFG)
       .O(dphy_clk_buf) // Clock output (connect to BUFIOs/BUFRs)
-    );
+   );
 
-
-/* 
- //BUFIO : Local Clock Buffer for I/O
+// BUFIO : Local Clock Buffer for I/O
    BUFIO u_bufio (
-      .I(dphy_clk_in), // Clock input (connect to an IBUF or BUFMR)
-      .O(dphy_clk_buf) // Clock output (connect to I/O clock loads)
+      .I(dphy_clk_buf),
+      .O(bit_clock)
    );
-*/
-
-/*
- //BUFG : Global Clock Buffer for I/O
-   BUFG u_bufg (
-      .I(dphy_clk_in), // Clock input (connect to an IBUF or BUFMR)
-      .O(dphy_clk_buf) // Clock output (connect to I/O clock loads)
-   );
-*/
-/*
- //BUFR : Regional Clock Buffer
-   BUFR #(
-      .BUFR_DIVIDE ("BYPASS"), // Values: "BYPASS", 1, 2, 3, 4, 5, 6, 7, 8
-      .SIM_DEVICE  (FPGA_DEV)  // Must be set to "7SERIES"
-   ) 
-   u_bypass (
-      .CE  (1'b1),         //i: Active high, clock enable (Divided modes only)
-      .CLR (reset),        //i: Active high, asynchronous clear (Divided modes only)
-      .I   (dphy_clk_in),  //i: Clock buffer input driven by an IBUF, MMCM or local interconnect
-
-      .O   (dphy_clk_buf)  //o: Clock output port
-    );
-*/
 
 //---------------------------------------------BYPASS
- //BUFR : Regional Clock Buffer
-   BUFR #(
-      .BUFR_DIVIDE ("BYPASS"), // Values: "BYPASS", 1, 2, 3, 4, 5, 6, 7, 8
-      .SIM_DEVICE  (FPGA_DEV)  // Must be set to "7SERIES"
-   ) 
-   u_bufr (
-      .CE  (1'b1),         //i: Active high, clock enable (Divided modes only)
-      .CLR (reset),        //i: Active high, asynchronous clear (Divided modes only)
-      .I   (dphy_clk_buf), //i: Clock buffer input driven by an IBUF, MMCM or local interconnect
+// BUFR : Regional Clock Buffer
+//   BUFR #(
+//      .BUFR_DIVIDE ("BYPASS"), // Values: "BYPASS", 1, 2, 3, 4, 5, 6, 7, 8
+//      .SIM_DEVICE  (FPGA_DEV)  // Must be set to "7SERIES"
+//   ) 
+//   u_bufr (
+//      .CE  (1'b1),         //i: Active high, clock enable (Divided modes only)
+//      .CLR (reset),        //i: Active high, asynchronous clear (Divided modes only)
+//      .I   (dphy_clk_buf), //i: Clock buffer input driven by an IBUF, MMCM or local interconnect
 
-      .O   (bit_clock)     //o: Clock output port
-    );  
-     
+//      .O   (bit_clock)     //o: Clock output port
+//    );
+
 //---------------------------------------------DIV4
- //BUFR : Regional Clock Buffer
+// BUFR : Regional Clock Buffer
    BUFR #(
       .BUFR_DIVIDE ("4"),     // Values: "BYPASS", 1, 2, 3, 4, 5, 6, 7, 8
       .SIM_DEVICE  (FPGA_DEV) // Must be set to "7SERIES"
@@ -135,7 +110,7 @@ module csi_rx_phy_clk
 
       .O   (byte_clock)    //o: Clock output port
    );
-   
+
 endmodule: csi_rx_phy_clk
 
 /*
