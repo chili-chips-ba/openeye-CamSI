@@ -60,7 +60,7 @@ module csi_rx_phy_dat #(
 //---------------------------------------------   
    IBUFDS #(
       .DIFF_TERM    (top_pkg::DPHY_TERM_EN), // Differential Termination
-      .IBUF_LOW_PWR ("TRUE"),   // Low power="TRUE", Highest Perf="FALSE"
+      .IBUF_LOW_PWR ("FALSE"),   // Low power="TRUE", Highest Perf="FALSE"
       .IOSTANDARD   ("LVDS_25")
    ) 
    u_ibuf (
@@ -79,7 +79,7 @@ module csi_rx_phy_dat #(
       .IDELAY_TYPE           ("VAR_LOAD"), // FIXED, VARIABLE, VAR_LOAD, VAR_LOAD_PIPE
       .IDELAY_VALUE          ({27'd0,DELAY}), // Input delay tap setting (0-31)
       .PIPE_SEL              ("FALSE"),    // Select pipelined mode: FALSE/TRUE
-      .REFCLK_FREQUENCY      (200.0),      // IDELAYCTRL clock input frequency in MHz:
+      .REFCLK_FREQUENCY      (199.5),      // IDELAYCTRL clock input frequency in MHz:
                                            //  190.0-210.0 or 290.0-310.0
       .SIGNAL_PATTERN        ("DATA")      // DATA, CLOCK input signal
    )
