@@ -48,12 +48,12 @@
 //`define OV2740
 
 //----------------Include (or not) Ethernet?
-//`define ETHERNET
-`undef ETHERNET
+`define ETHERNET
+//`undef ETHERNET
 
 //----------------Trenz or Puzhitech board?
-//`define PUZHI
-`undef PUZHI
+`define PUZHI
+//`undef PUZHI
 
 //----------------Select monitor connection, directly HDMI to HMDI or HDMI to VGA 
 `define HDMI2VGA

@@ -76,19 +76,19 @@ package hdmi_pkg;
    `elsif HDMI2VGA
       localparam int HSCREEN        = 1280; // visible X
       localparam int HSYNC_SIZE     = 5; //5
-      localparam int HSYNC_BACK     = 95; //40
-      localparam int HSYNC_FRONT    = 307; //352
+      localparam int HSYNC_BACK     = 5; //40
+      localparam int HSYNC_FRONT    = 397; //352
       localparam int HSYNC_START    = HSYNC_SIZE + HSYNC_BACK;
       localparam int HSYNC_END      = HSYNC_START + HSCREEN;
-      localparam int HFRAME         = HSYNC_END + HSYNC_FRONT; //1650
+      localparam int HFRAME         = HSYNC_END + HSYNC_FRONT; //1677 or 1687
       localparam bit HSYNC_POLARITY = HI;    // '+'
 
       localparam int VSCREEN        = 720;  // visible Y
-      localparam int VSYNC_SIZE     = 3; //7
-      localparam int VSYNC_BACK     = 1;
-      localparam int VSYNC_FRONT    = 126; //124
+      localparam int VSYNC_SIZE     = 7; //7
+      localparam int VSYNC_BACK     = 0;
+      localparam int VSYNC_FRONT    = 130; //124
       localparam int VSYNC_START    = VSYNC_SIZE + VSYNC_BACK;
-      localparam int VSYNC_END      = VSYNC_START + VSCREEN;
+      localparam int VSYNC_END      = VSCREEN;
       localparam int VFRAME         = VSYNC_END + VSYNC_FRONT;  // complete frame Y = 850
       localparam bit VSYNC_POLARITY = HI;    // '+'   
    `else

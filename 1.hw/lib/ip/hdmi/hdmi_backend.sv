@@ -138,14 +138,14 @@ module hdmi_backend
           end      
 
           // Blank when outside the visible screen          
-          blank <= (vcount <= VSYNC_START) 
-                  | (vcount > VSYNC_END) 
-                  | (hcount <= HSYNC_START) 
-                  | (hcount > HSYNC_END);
+          blank <= (vcount < VSYNC_START) 
+                  | (vcount >= VSYNC_END) 
+                  | (hcount < HSYNC_START) 
+                  | (hcount >= HSYNC_END);
                   
           hdmi_frame <= (vcount > VSYNC_END + 2);
           
-      `elsif
+      `else
           // Horizontal Sync
           //if (hcount == 12'd0) begin 
           if (   (hcount >= 12'(HSYNC_START)) 
