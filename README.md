@@ -363,7 +363,7 @@ As an **additional contribution** to address the OSERDES limitation, we develope
 
 Our implementation follows the same **LSB-first serialization** approach as Xilinx OSERDESE2, where bit 0 of the parallel data is transmitted first, followed by bit 1, bit 2, and so on. This ensures behavioral compatibility with the hardware OSERDES while providing a software-based alternative that maintains the expected data ordering.
 
-Detailed timing diagrams and block structure diagrams are provided to illustrate the implementation behavior and architecture.
+Detailed timing diagrams and block structure are provided to illustrate the implementation behavior and architecture.
 
 <img width="1041" height="1244" alt="softOSERDES_block_structure" src="https://github.com/user-attachments/assets/a993e8d0-4363-424f-bb61-0a96f9080051" />
 <img width="1371" height="371" alt="softOSERDES_timing_diagram" src="https://github.com/user-attachments/assets/c573ce71-b2fa-4dfa-815c-678d09e09273" />
