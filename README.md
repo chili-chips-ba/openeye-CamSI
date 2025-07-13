@@ -337,7 +337,37 @@ By selecting these values, the integration time is minimized, which is suitable 
 ### Porting to openXC7
 - [ ] Port final design from Vivado to openXC7
 - [x] Simulate it with Verilator and cocoTB, in CI/CD system
-- [ ] Document scripts and flows used in this process
+- [x] Document scripts and flows used in this process
+
+This task aimed to port our existing design to the **openXC7 toolchain**, transitioning from proprietary Vivado tools to support open-source FPGA development. The objective was to demonstrate compatibility and identify any limitations that would need to be addressed.
+
+The work involved comprehensive issue analysis and collaborative development with the openXC7 team to identify and resolve compatibility issues, contributing to the development of open-source FPGA tools.
+
+### Resolved Issues
+
+Extensive testing and collaboration with openXC7 developers resulted in identification and resolution of multiple compatibility issues. These issues, along with their solutions and testcases, are documented in the **GitHub repository issues section**. 
+
+### Remaining Challenge: Advanced OSERDES Support
+
+One significant limitation remains: openXC7 currently supports only single OSERDES configurations with maximum 8-to-1 muxing ratio. Our design requires 10-to-1 serialization using Master-Slave OSERDES setup (two cascaded OSERDES), which is not yet supported. The openXC7 team continues working on this advanced use case, with issues remaining open for tracking purposes.
+
+### Additional Contribution: SoftOSERDES Implementation
+
+As an **additional contribution** to address the OSERDES limitation, we developed a **SoftOSERDES module** as a potential workaround. The implementation uses a **10-bit shift register** that processes **2 bits per serial clock cycle** in **LSB-first** order. 
+
+**Key approach:**
+- **Clock domains**: Parallel clock (`clk_par`) for data loading, serial clock (`clk_ser`) 5x faster for shifting
+- **Edge detection**: Captures parallel data on `clk_par` rising edge using edge detection logic
+- **Shift operation**: Right-shift by 2 bits per cycle, sending LSB first to DDR output
+- **DDR output**: Uses ODDR primitive to output one bit on each clock edge (`shift_reg[0]` on rising, `shift_reg[1]` on falling)
+
+Our implementation follows the same **LSB-first serialization** approach as Xilinx OSERDESE2, where bit 0 of the parallel data is transmitted first, followed by bit 1, bit 2, and so on. This ensures behavioral compatibility with the hardware OSERDES while providing a software-based alternative that maintains the expected data ordering.
+
+Detailed timing diagrams and block structure diagrams are provided to illustrate the implementation behavior and architecture.
+
+<img width="1041" height="1244" alt="softOSERDES_block_structure" src="https://github.com/user-attachments/assets/a993e8d0-4363-424f-bb61-0a96f9080051" />
+<img width="1371" height="371" alt="softOSERDES_timing_diagram" src="https://github.com/user-attachments/assets/c573ce71-b2fa-4dfa-815c-678d09e09273" />
+
 
 ## Execution Play 5
 ### Prepping for Webcam
