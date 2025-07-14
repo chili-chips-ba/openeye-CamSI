@@ -189,6 +189,7 @@ It is only at this point, where video is *unpacked*, that we may engage in ISP. 
 
 *Debayer* is the first ISP function we implemented. Without it, the displayed colors would have looked weird. More on it in [Debayer issue](https://github.com/chili-chips-ba/openeye-CamSI/issues/4).
 
+
 ## Execution Play 2
 ### Widening up the pathway
 - [x] Repeat the same for the 4-lane IMX283 camera sensor
@@ -328,56 +329,54 @@ In our configuration we use:
 
 By selecting these values, the integration time is minimized, which is suitable for scenarios with bright lighting conditions or high frame rate requirements.
 
-## Execution Play 3
-### Ethernet streaming
+
+## Execution Play 3 - Ethernet streaming
 - [ ] Add 1GE as second video sink, then move display to remote PC, via UDP VLC
 - [x] Document implementation via block diagram and project repo
 
-## Execution Play 4
-### Porting to openXC7
-- [ ] Port final design from Vivado to openXC7
+
+## Execution Play 4 - Porting to openXC7
+- [x] Port final design from Vivado to openXC7
 - [x] Simulate it with Verilator and cocoTB, in CI/CD system
 - [x] Document scripts and flows used in this process
 
-This task aimed to port our existing design to the **openXC7 toolchain**, transitioning from proprietary Vivado tools to support open-source FPGA development. The objective was to demonstrate compatibility and identify any limitations that would need to be addressed.
+This task is about trying our Vivado-proven RTL with openXC7 toolchain for Xilinx Series7 devices. The main objective is to `identify limitations in the opensource Synth and PnR flow, analyze them, find the root causes, then collaborate with openXC7 team to drive to resolutions`.
 
-The work involved comprehensive issue analysis and collaborative development with the openXC7 team to identify and resolve compatibility issues, contributing to the development of open-source FPGA tools.
+#### Resolved Issues
 
-### Resolved Issues
+Our extensive testing has resulted in uncovering a multitude of problems. They are fully documented and tracked in the relevant [openXC7 issues](https://github.com/chili-chips-ba/openeye-CamSI/issues?q=is%3Aissue%20label%3AopenXC7), along with specific testcase and solution we've arrived to with openXC7 developers.
 
-Extensive testing and collaboration with openXC7 developers resulted in identification and resolution of multiple compatibility issues. These issues, along with their solutions and testcases, are documented in the **GitHub repository issues section**. 
+#### Remaining Challenge: OSERDES10 Support
 
-### Remaining Challenge: Advanced OSERDES Support
+One significant limitation remains: openXC7 currently supports only single OSERDES configurations with maximum 8-to-1 muxing ratio. Our design requires 10-to-1 serialization using Master-Slave OSERDES setup (two cascaded OSERDES), which is yet to be supported. As the openXC7 team continues working on this advanced use case, our [Issue42](https://github.com/chili-chips-ba/openeye-CamSI/issues/42) remains open for tracking purposes.
 
-One significant limitation remains: openXC7 currently supports only single OSERDES configurations with maximum 8-to-1 muxing ratio. Our design requires 10-to-1 serialization using Master-Slave OSERDES setup (two cascaded OSERDES), which is not yet supported. The openXC7 team continues working on this advanced use case, with issues remaining open for tracking purposes.
+#### Bonus Deliverable: SoftOSERDES10 workaround for Issue42
 
-### Additional Contribution: SoftOSERDES Implementation
+Looking to temporarily alleviate OSERDES10 limitation, as an unsolicited/bonus contribution to the project we've developed a plug-and-play compatible _SoftOSERDES10 module_. For it, we use a 10-bit latch with a 5-bitpair shift register, followed by an ODDR primitive (which is supported by openXC7). 
 
-As an **additional contribution** to address the OSERDES limitation, we developed a **SoftOSERDES module** as a potential workaround. The implementation uses a **10-bit shift register** that processes **2 bits per serial clock cycle** in **LSB-first** order. 
-
-**Key approach:**
-- **Clock domains**: Parallel clock (`clk_par`) for data loading, serial clock (`clk_ser`) 5x faster for shifting
+Key takeaways from our approach:
+- **Clock domains**: Parallel clock (`clk_par`) for data loading; Serial clock (`clk_ser`, 5x faster) for shifting
 - **Edge detection**: Captures parallel data on `clk_par` rising edge using edge detection logic
-- **Shift operation**: Right-shift by 2 bits per cycle, sending LSB first to DDR output
-- **DDR output**: Uses ODDR primitive to output one bit on each clock edge (`shift_reg[0]` on rising, `shift_reg[1]` on falling)
+- **Shift operation**: Right-shift by 2 bits per cycle, sending the LSB first to ODDR primitive
+- **DDR output**: The ODDR primitive outputs one bit on each clock edge (`shift_reg[0]` on rising, `shift_reg[1]` on falling)
 
-Our implementation follows the same **LSB-first serialization** approach as Xilinx OSERDESE2, where bit 0 of the parallel data is transmitted first, followed by bit 1, bit 2, and so on. This ensures behavioral compatibility with the hardware OSERDES while providing a software-based alternative that maintains the expected data ordering.
+Our implementation follows the same **LSB-first serialization** as Xilinx OSERDESE2, where bit 0 of the parallel data is transmitted first, followed by bit 1, bit 2, and so on. Along with pinout compatibility, that also ensures behavioral plug-and-play with OSERDES primitive, but implemented mostly in CLBs. Naturally, the Fmax of our hybrid CLB + ODDR approach will not be on par with the true hardware OSERDES.
 
-Detailed timing diagrams and block structure are provided to illustrate the implementation behavior and architecture.
+Detailed timing and block diagrams illustrate this soft, CLB-based approach.
 
 <img width="1041" height="1244" alt="softOSERDES_block_structure" src="https://github.com/user-attachments/assets/a993e8d0-4363-424f-bb61-0a96f9080051" />
 <img width="1371" height="371" alt="softOSERDES_timing_diagram" src="https://github.com/user-attachments/assets/c573ce71-b2fa-4dfa-815c-678d09e09273" />
 
 
-## Execution Play 5
-### Prepping for Webcam
+## Execution Play 5 - Prepping for Webcam
+
 (__Chili.CHIPS*ba team__)
 - [x] Enable OV2740 camera chip: 
    - [x] Bring up Lukas' new adapter board
    - [x] Reverse-engineer I2C settings
    - [x] Demonstrate CAM-to-HDMI video path
 
-### *OV2740 Sensor Configuration for 720p resolution*
+### *OV2740 Sensor Configuration for the 720p resolution*
 
 Configuring the OV2740 sensor for 720p resolution requires precise adjustment of its registers. Each data entry comprises a six-digit code: the first four digits specify the register address, while the final two digits denote the value to be written.
 
@@ -450,7 +449,7 @@ The goal of this part of the project was to implement and test (1) a **color bal
 
 - (2) is based on an IP implemented by Robert Metchev in Verilog RTL: https://github.com/brilliantlabsAR/frame-codebase/tree/main/source/fpga/modules/camera/jpeg_encoder. The provided *JPEG* block was tested using behavioural simulation with *Cocotb*.
 
-#### **JPEG**
+### **JPEG**
 The *JPEG* design was tested on `1280x720` images, initially on one single frame, and afterwards on multiple frames, simulating a video. Each frame is successfully converted from a bitmap image to a converted image in the *JPEG* format. To add the required headers, in order to display each *JPEG* image, external python functions are used.
 
 This specific *JPEG* module requires three clocks of different frequencies: the pixel clock, which always runs at `36MHz`, a *JPEG* slow clock and a *JPEG* fast clock. The slow clock can run at `12MHz`, `18MHz`, `24MHz` or `36MHz`, while the fast clock must be at least twice as fast as the slow clock.
@@ -470,7 +469,7 @@ In the simulation screenshot below, two frames are processed and a compressed ou
   <img width="60%" src="https://github.com/user-attachments/assets/c511c217-e092-4b61-8fdf-d55cbfe66ff8">
 </p>
 
-#### **Simple Color Balance (SCB)**
+### **Simple Color Balance (SCB)**
 **SCB** IP Block available software code was available from https://www.ipol.im/pub/art/2011/llmps-scb/?utm_source=doi. 
 
 A hardware implementation must work with “live” images, however, i.e. groups of pixels per frame, flowing through an image pipeline. The hardware implementation of the *SCB* thus works on a frame by frame basis, correcting the colours of frame `n` in frame `(n + 1)`. The gap between frames is sufficient to compute the colour balance frame ratios, i.e. 
@@ -510,6 +509,7 @@ In the screenshot below, the processing of one of the frame lines is shown. Prev
   <img width="70%" src="https://github.com/user-attachments/assets/14ace642-50b9-4f24-9c23-7e8b3e501cb5">
 </p>
 
+
 ## Trenz and CRUVI in retrospect
 
 The hardware platform originally selected for this project proved to be a capital miss and source of most of our troubles. 
@@ -541,8 +541,10 @@ While [Puzhitech](http://www.puzhitech.com/en) board already comes with 15-pin 0
 <img width="400" src="0.doc/Puzhitech/Images/FPC-0.5mm--to--DIP-100mil.png">
 </p>
 
+
 # Phase2 - USB Webcam
 - See: https://nlnet.nl/project/FPGA-ISP-UVM-USB2 (2024-02-099)
+
 
 # Phase3 - openCam/Event
 
@@ -573,8 +575,10 @@ Just for background, here are a few references to what can be done with this tec
   
 The primary objective of this project is to open the door for open-source developers to enter this vast and mostly unexplored application space.
 
+
 ## Public Announcements
   [2024/12/14](https://www.linkedin.com/posts/chili-chips_sony-imx283-camera-1080p-60fps-stream-with-activity-7273936850312916992-ZF01?utm_source=share&utm_medium=member_desktop)
+
 
 ## *Acknowledgements*
 We are grateful to:
