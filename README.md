@@ -336,11 +336,18 @@ By selecting these values, the integration time is minimized, which is suitable 
 
 
 ## Execution Play 4 - Porting to openXC7
+- [x] Create snap-free installation workflow
 - [x] Port final design from Vivado to openXC7
-- [x] Simulate it with Verilator and cocoTB, in CI/CD system
+- [x] Simulate it with Verilator and cocoTB, in CI/CD system  
 - [x] Document scripts and flows used in this process
 
-This task is about trying our Vivado-proven RTL with openXC7 toolchain for Xilinx Series7 devices. The main objective is to `identify limitations in the opensource Synth and PnR flow, analyze them, find the root causes, then collaborate with openXC7 team to drive to resolutions`.
+This task validates our Vivado-proven RTL with the openXC7 toolchain for Xilinx Series7 devices. The main objective is to `identify limitations in the opensource synthesis and PnR flow, analyze them, find root causes, then collaborate with the openXC7 team to drive resolutions`.
+
+#### Installation openXC7 Without Snap
+
+A complete local installation method is provided for setting up the **openXC7 FPGA toolchain** without relying on Snap packages. This approach ensures full control over the environment and avoids Snap-related system constraints.
+
+➡️ Full documentation: [Installation Guide](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/3.build/openXC7/README.md)
 
 #### Resolved Issues
 
