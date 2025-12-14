@@ -307,5 +307,5 @@ Toolchain components: ISC License (Yosys, nextpnr, prjxray)
 ---
 
 **Maintained by:** [Chili Chips](https://github.com/chili-chips-ba)  
-**Version:** 2.0  
-**Last Updated:** November 2025
+**Version:** 2.1 
+**Last Updated:** December 2025
