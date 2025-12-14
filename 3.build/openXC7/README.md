@@ -14,20 +14,18 @@ This guide provides a snap-free installation method for the openXC7 toolchain, b
 - **prjxray** - Bitstream generation tools (fasm2frames, xc7frames2bit)
 - **prjxray-db** - Device databases for Artix7, Kintex7, Spartan7, Zynq7
 
-**Installation:** /opt/openxc7
-
+**Installation:** `/opt/openxc7`  
 **Disk Space:** ~10GB (source + build artifacts + installation)
 
-⚠️ **Important Notes**
+⚠️ **Important Notes** 
+
 - Do **NOT** run install script as root
 - **ALWAYS** source environment before building: `source /opt/openxc7/setup_env.sh`
 
 ---
 
 ## Quick Installation
-
 **Scripts Location:** All installation scripts are located in `3.build/openXC7/scripts/` directory.
-
 ```bash
 cd 3.build/openXC7/scripts/
 
@@ -46,10 +44,14 @@ source /opt/openxc7/setup_env.sh
 ./post_install_fix_EN.sh
 ```
 
-**⚠️ Yosys Version Update:**
+
+
+
+
+## ⚠️ Yosys Version Update:
+
 
 The initial installation installs Yosys v0.38. To upgrade to the latest version (v0.60), run the update script:
-
 ```bash
 # Update Yosys to v0.60
 chmod +x yosys_update.sh
@@ -57,30 +59,30 @@ chmod +x yosys_update.sh
 
 # Re-source environment
 source /opt/openxc7/setup_env.sh
+
 ```
 
-**Note:** Without running the update script, Yosys will remain at v0.38.
+
+> **Note:** Without running the update script, Yosys will remain at v0.38.
 
 For persistent environment setup:
-
 ```bash
 echo 'source /opt/openxc7/setup_env.sh' >> ~/.bashrc
 ```
 
 ---
-
 ## System Requirements
 
 **Supported Platforms**
-- Ubuntu 20.04 LTS or newer
-- Fedora 38 or newer
-- Arch Linux (rolling)
-- Debian 11 or newer
-- RHEL/CentOS 8 or newer
+- Ubuntu 20.04 LTS or newer  
+- Fedora 38 or newer  
+- Arch Linux (rolling)  
+- Debian 11 or newer  
+- RHEL/CentOS 8 or newer  
 
 > **Disclaimer:** While multiple Linux distributions are listed as supported, this project has been **tested only on Ubuntu**, specifically on **Ubuntu 22.04.5 LTS**.
 
-**Privileges:** sudo access required for installation to /opt/openxc7
+**Privileges:** sudo access required for installation to `/opt/openxc7`
 
 ---
 
@@ -129,15 +131,14 @@ If installation completes but files are missing, run the post-install fix script
 ./post_install_fix_EN.sh
 ```
 
-This addresses edge cases where make install doesn't copy:
-- Python scripts (bbaexport.py, etc.)
-- Constraint files (constids.inc)
-- Chip metadata (nextpnr-xilinx-meta)
+This addresses edge cases where `make install` doesn't copy:
+- Python scripts (`bbaexport.py`, etc.)
+- Constraint files (`constids.inc`)
+- Chip metadata (`nextpnr-xilinx-meta`)
 
 ---
 
 ## Project Configuration
-
 ### Build Workflow
 
 ```bash
@@ -147,6 +148,7 @@ cd /your/project # in this case: openeye-CamSI/3.build/openXC7
 
 # Full build
 make all
+
 ```
 
 ### Chipdb Generation
@@ -158,12 +160,11 @@ make chipdb/xc7a100tcsg324-2.bin
 ```
 
 **Process:**
-1. bbaexport.py extracts device data from prjxray-db
-2. bbasm compiles into binary database format
+1. `bbaexport.py` extracts device data from prjxray-db
+2. `bbasm` compiles into binary database format
 3. nextpnr-xilinx uses this for place and route
 
 **Note:** Regenerate chipdb after updating nextpnr-xilinx:
-
 ```bash
 rm -rf chipdb && make chipdb/your-part.bin
 ```
@@ -175,7 +176,6 @@ rm -rf chipdb && make chipdb/your-part.bin
 ### Linux - openFPGALoader
 
 Installation:
-
 ```bash
 sudo apt-get install libftdi1-2 libftdi1-dev libhidapi-hidraw0 \
     libhidapi-dev libudev-dev zlib1g-dev cmake pkg-config make g++
@@ -187,7 +187,6 @@ sudo make install
 ```
 
 Programming:
-
 ```bash
 openFPGALoader -b arty your_design.bit
 # or via Makefile
@@ -243,7 +242,6 @@ FileNotFoundError: '.../nextpnr-xilinx-meta/artix7/wire_intents.json'
 ### Build Performance
 
 Utilize all CPU cores:
-
 ```bash
 export MAKEFLAGS="-j$(nproc)"
 make all
@@ -275,20 +273,17 @@ Expected result: All tests pass with no failures.
 ```
 
 Removes:
-- /opt/openxc7 installation
-- /tmp/openxc7_build build artifacts
+- `/opt/openxc7` installation
+- `/tmp/openxc7_build` build artifacts
 - Shell configuration entries
 
 ---
 
 ## Supported Devices
 
-**Artix-7:** xc7a{12t,15t,25t,35t,50t,75t,100t,200t}
-
-**Kintex-7:** xc7k{70t,160t,325t,410t,420t,480t}
-
-**Spartan-7:** xc7s{6,15,25,50,75,100}
-
+**Artix-7:** xc7a{12t,15t,25t,35t,50t,75t,100t,200t}  
+**Kintex-7:** xc7k{70t,160t,325t,410t,420t,480t}  
+**Spartan-7:** xc7s{6,15,25,50,75,100}  
 **Zynq-7:** xc7z{007s,010,012s,014s,015,020,030,035,045,100}
 
 ---
@@ -306,14 +301,11 @@ Removes:
 
 ## License
 
-Installation scripts: Free to use
-
+Installation scripts: Free to use  
 Toolchain components: ISC License (Yosys, nextpnr, prjxray)
 
 ---
 
-**Maintained by:** [Chili Chips](https://github.com/chili-chips-ba)
-
-**Version:** 2.1
-
-**Last Updated:** December 2025
+**Maintained by:** [Chili Chips](https://github.com/chili-chips-ba)  
+**Version:** 2.0  
+**Last Updated:** November 2025
