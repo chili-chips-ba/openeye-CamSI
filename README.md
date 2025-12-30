@@ -1,9 +1,12 @@
 # Phase1 - openEye/CamSI
+Also see our [openEye/CamSI-Ethernet](https://github.com/chili-chips-ba/openeye-CamSI-ethernet) repo.
+
 <p align="center">
    <img width="20%" src="0.doc/artwork/open-eye-logo.png">
 </p>
 
 ## Objective I
+
 ### Upgrade openCam Performance and Functionality
 The goals of this development are to deliver complete video pipeline for three popular hi-rez imaging/camera sensors:
  - `2-lane RPiV2.1`, based on Sony IMX219, in `1280x720P@60Hz` RGB888 - `HD`
@@ -334,6 +337,7 @@ By selecting these values, the integration time is minimized, which is suitable 
 - [x] ✔ Add 1GE as second video sink, then move display to remote PC, via UDP VLC
 - [x] ✔ Document implementation via block diagram and project repo
 
+For additional detail, see our [openEye/CamSI-Ethernet](https://github.com/chili-chips-ba/openeye-CamSI-ethernet) repo.
 
 ## Execution Play 4 - Porting to openXC7
 - [x] ✔ Create snap-free installation workflow
@@ -341,9 +345,12 @@ By selecting these values, the integration time is minimized, which is suitable 
 - [x] ✔ Simulate it with Verilator and cocoTB, in CI/CD system  
 - [x] ✔ Document scripts and flows used in this process
 
-This task validates our Vivado-proven RTL with the openXC7 toolchain for Xilinx Series7 devices. The main objective is to `identify limitations in the opensource synthesis and PnR flow, analyze them, find root causes, then collaborate with the openXC7 team to drive resolutions`.
+This task validates our Vivado-proven RTL with the openXC7 toolchain for Xilinx Series7 devices. The objectives are:
+ - identify limitations in the opensource synthesis and PnR flow
+ - document and analyze them
+ - then collaborate with the openXC7 team to find the root causes and drive to resolutions.
 
-#### Installation openXC7 Without Snap
+#### openXC7 installation without Snap
 
 A complete local installation method is provided for setting up the **openXC7 FPGA toolchain** without relying on Snap packages. This approach ensures full control over the environment and avoids Snap-related system constraints.
 
@@ -375,15 +382,14 @@ Detailed timing and block diagrams illustrate this soft, CLB-based approach.
 <img width="1371" height="371" alt="softOSERDES_timing_diagram" src="https://github.com/user-attachments/assets/c573ce71-b2fa-4dfa-815c-678d09e09273" />
 
 
-## Execution Play 5 - Prepping for Webcam
+## Execution Play 5.1 - Prepping for Webcam (by Chili.CHIPS*ba team)
 
-(__Chili.CHIPS*ba team__)
 - [x] ✔ Enable OV2740 camera chip: 
    - [x] ✔ Bring up Lukas' new adapter board
    - [x] ✔ Reverse-engineer I2C settings
    - [x] ✔ Demonstrate CAM-to-HDMI video path
 
-### *OV2740 Sensor Configuration for the 720p resolution*
+#### *OV2740 Sensor Configuration for the 720p resolution*
 
 Configuring the OV2740 sensor for 720p resolution requires precise adjustment of its registers. Each data entry comprises a six-digit code: the first four digits specify the register address, while the final two digits denote the value to be written.
 
@@ -441,40 +447,20 @@ A demonstration of this configuration is provided below, using a test image gene
   <img src="https://github.com/user-attachments/assets/c8ec47aa-e985-4fd1-bf54-0f016279d965" alt="OV2740_test_image" width="500px">
 </div>
 
-(__Silicon Highway Technologies webcam team__)
+
+## Execution Play 5.2 - Prepping for Webcam (by Silicon Highway Technologies webcam team)
+
 - [x] ✔ Add 3 new ISP functions
    - [x] ✔ White Balance
    - [x] ✔ Color Correction
    - [x] ✔ Gamma Correction
 - [x] ✔ JPEG video compression
 
-### *Color Balance and JPEG Image Processing Blocks*
-
 The goal of this part of the project was to implement and test (1) a **color balancing IP block** and (2) a **JPEG image compression IP block**, both to be parts of an image or video pipeline. 
 
 - (1) was based on https://www.ipol.im/pub/art/2011/llmps-scb/?utm_source=doi which is a color balance algorithm performing ***white balance*, *color correction* and *gamma correction* simultaneously**. The **Simple Color Balance (SCB)** block was thus implemented from scratch and tested first using behavioural simulations in *Verilator* and *Vivado* and subsequently using post-PNR simulations in the *Vivado Simulation Environment* for the target device.
 
 - (2) is based on an IP implemented by Robert Metchev in Verilog RTL: https://github.com/brilliantlabsAR/frame-codebase/tree/main/source/fpga/modules/camera/jpeg_encoder. The provided *JPEG* block was tested using behavioural simulation with *Cocotb*.
-
-### **JPEG**
-The *JPEG* design was tested on `1280x720` images, initially on one single frame, and afterwards on multiple frames, simulating a video. Each frame is successfully converted from a bitmap image to a converted image in the *JPEG* format. To add the required headers, in order to display each *JPEG* image, external python functions are used.
-
-This specific *JPEG* module requires three clocks of different frequencies: the pixel clock, which always runs at `36MHz`, a *JPEG* slow clock and a *JPEG* fast clock. The slow clock can run at `12MHz`, `18MHz`, `24MHz` or `36MHz`, while the fast clock must be at least twice as fast as the slow clock.
-
-The *JPEG* module can take four discrete **Quality Factor (QF)** values as input. These are `10%`, `25%`, `50%` and `100%`. The functionality of the design was verified for each of these values, with visual differences being observed.
-
-Below, two compressed images with different *QF* are displayed. The left image has a `10%` *QF* and the right has a `50%` *QF*:
-<p float="left">
-  <img src="https://github.com/user-attachments/assets/8a81159a-f816-4ac5-9adc-0e1cf650e085" width="40%" />
-  <img src="https://github.com/user-attachments/assets/cb805ff7-9335-4011-9a16-5a0a622ac52c" width="40%" /> 
-</p>
-
-To model the three clocks, we use an **MMCM** (Mixed Mode Clock Manager) to generate them from the `100MHz` clock of the board. For the slow clock, we choose a frequency of `12MHz`, and for the fast clock, we choose a frequency of `72MHz`.
-
-In the simulation screenshot below, two frames are processed and a compressed output file is produced for each one. The signal image_valid_out rises when a compressed image is ready. The *JPEG* data words are sampled from the output signal data_out.
-<p align="left">
-  <img width="60%" src="https://github.com/user-attachments/assets/c511c217-e092-4b61-8fdf-d55cbfe66ff8">
-</p>
 
 ### **Simple Color Balance (SCB)**
 **SCB** IP Block available software code was available from https://www.ipol.im/pub/art/2011/llmps-scb/?utm_source=doi. 
@@ -516,7 +502,27 @@ In the screenshot below, the processing of one of the frame lines is shown. Prev
   <img width="70%" src="https://github.com/user-attachments/assets/14ace642-50b9-4f24-9c23-7e8b3e501cb5">
 </p>
 
+### **JPEG**
+The *JPEG* design was tested on `1280x720` images, initially on one single frame, and afterwards on multiple frames, simulating a video. Each frame is successfully converted from a bitmap image to a converted image in the *JPEG* format. To add the required headers, in order to display each *JPEG* image, external python functions are used.
 
+This specific *JPEG* module requires three clocks of different frequencies: the pixel clock, which always runs at `36MHz`, a *JPEG* slow clock and a *JPEG* fast clock. The slow clock can run at `12MHz`, `18MHz`, `24MHz` or `36MHz`, while the fast clock must be at least twice as fast as the slow clock.
+
+The *JPEG* module can take four discrete **Quality Factor (QF)** values as input. These are `10%`, `25%`, `50%` and `100%`. The functionality of the design was verified for each of these values, with visual differences being observed.
+
+Below, two compressed images with different *QF* are displayed. The left image has a `10%` *QF* and the right has a `50%` *QF*:
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/8a81159a-f816-4ac5-9adc-0e1cf650e085" width="40%" />
+  <img src="https://github.com/user-attachments/assets/cb805ff7-9335-4011-9a16-5a0a622ac52c" width="40%" /> 
+</p>
+
+To model the three clocks, we use an **MMCM** (Mixed Mode Clock Manager) to generate them from the `100MHz` clock of the board. For the slow clock, we choose a frequency of `12MHz`, and for the fast clock, we choose a frequency of `72MHz`.
+
+In the simulation screenshot below, two frames are processed and a compressed output file is produced for each one. The signal image_valid_out rises when a compressed image is ready. The *JPEG* data words are sampled from the output signal data_out.
+<p align="left">
+  <img width="60%" src="https://github.com/user-attachments/assets/c511c217-e092-4b61-8fdf-d55cbfe66ff8">
+</p>
+
+---
 ## Trenz and CRUVI in retrospect
 
 The hardware platform originally selected for this project proved to be a capital miss and source of most of our troubles. 
