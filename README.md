@@ -1,6 +1,6 @@
 # Phase1 - openEye/CamSI
 <p align="center">
-   <img width="240" src="0.doc/artwork/open-eye-logo.png">
+   <img width="20%" src="0.doc/artwork/open-eye-logo.png">
 </p>
 
 ## Objective I
@@ -54,37 +54,37 @@ We have indeed come across quite a few board problems and idiosyncrasies, spendi
 
 ## Execution Play 1
 ### Laying a foundation
-- [x] Familiarize with [Trenz](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/Trenz) hardware platform: Connectivity, clocking, power, etc. 
-- [x] Bring up Blinky on Trenz
+- [x] ✔ Familiarize with [Trenz](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/Trenz) hardware platform: Connectivity, clocking, power, etc. 
+- [x] ✔ Bring up Blinky on Trenz
 >___
-- [x] Standalone HDMI image generation: 1280x720P@60Hz  RGB888 (HD)
-- [x] Standalone HDMI image generation: 1920x1080P@30Hz RGB888 (FHD@30Hz)
-- [x] Standalone HDMI image generation: 1920x1080P@60Hz RGB888 (FHD@60Hz). Established that FHD@60Hz is physically impossible with given silicon
+- [x] ✔ Standalone HDMI image generation: 1280x720P@60Hz  RGB888 (HD)
+- [x] ✔ Standalone HDMI image generation: 1920x1080P@30Hz RGB888 (FHD@30Hz)
+- [x] ✔ Standalone HDMI image generation: 1920x1080P@60Hz RGB888 (FHD@60Hz). Established that FHD@60Hz is physically impossible with given silicon
 >___
-- [x] Experiments with IMX219 configuration and resolution options
-- [x] Sniff Raspberry Pie interactions with Camera
-- [x] Familiarize with *libcamera* drivers
+- [x] ✔ Experiments with IMX219 configuration and resolution options
+- [x] ✔ Sniff Raspberry Pie interactions with Camera
+- [x] ✔ Familiarize with *libcamera* drivers
 >___  
-- [x] Experiments with LVDS and termination schemes.
+- [x] ✔ Experiments with LVDS and termination schemes.
       How to do better than XAPP894, sharing insights with Lukas
 >___
-- [x] Test opensource [4-lane adapter](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/CRUVI-camera-adapter), sharing feedback with Edmund
-- [x] Full redesign, fixing [bugs](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/CRUVI-camera-adapter/Technical-Note.TN-mipi.REV1.pdf) and expanding scope, to now include 2 and 4 lanes
+- [x] ✔ Test opensource [4-lane adapter](https://github.com/chili-chips-ba/openeye-CamSI/tree/main/0.doc/CRUVI-camera-adapter), sharing feedback with Edmund
+- [x] ✔ Full redesign, fixing [bugs](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/CRUVI-camera-adapter/Technical-Note.TN-mipi.REV1.pdf) and expanding scope, to now include 2 and 4 lanes
 >___
-- [x] Clock Detection logic without standard LP I/O
-- [x] SYNC Decoding logic and Byte Alignement
-- [x] Word Alignement
-- [x] Header Decoding and Stripping
-- [x] Acquire static image from Camera, transfer it to DualPort BRAM, then HDMI
+- [x] ✔ Clock Detection logic without standard LP I/O
+- [x] ✔ SYNC Decoding logic and Byte Alignement
+- [x] ✔ Word Alignement
+- [x] ✔ Header Decoding and Stripping
+- [x] ✔ Acquire static image from Camera, transfer it to DualPort BRAM, then HDMI
 >___
-- [x] Uncovered & debugged crosstalk problems on VHDPlus CRUVI adapter
-- [x] Found Trenz [signal inversions and inconsistencies](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/CRUVI-camera-adapter/CRUVI-Pinout-4-and-2-lanes.xlsx), then shared with Antti
+- [x] ✔ Uncovered & debugged crosstalk problems on VHDPlus CRUVI adapter
+- [x] ✔ Found Trenz [signal inversions and inconsistencies](https://github.com/chili-chips-ba/openeye-CamSI/blob/main/0.doc/CRUVI-camera-adapter/CRUVI-Pinout-4-and-2-lanes.xlsx), then shared with Antti
 >___
-- [x] HD video transfer from Camera to HDMI - At first jerky, with visible frame loss
-- [x] Found CDC bug in opensource AsyncFIFO, sharing insights with IP owners
+- [x] ✔ HD video transfer from Camera to HDMI - At first jerky, with visible frame loss
+- [x] ✔ Found CDC bug in opensource AsyncFIFO, sharing insights with IP owners
 >___
-- [x] Debayering logic for Color Space Conversion     
-- [x] Synchronization logic for smooth video streaming, w/o external storage
+- [x] ✔ Debayering logic for Color Space Conversion     
+- [x] ✔ Synchronization logic for smooth video streaming, w/o external storage
 >___
 
 For this first play, the hardware was used in the following config:
@@ -192,12 +192,12 @@ It is only at this point, where video is *unpacked*, that we may engage in ISP. 
 
 ## Execution Play 2
 ### Widening up the pathway
-- [x] Repeat the same for the 4-lane IMX283 camera sensor
-- [x] Step-by-step introduce the following 3 ISP elements:
-  - [x] Debayer
-  - [x] Dead Pixel Management
-  - [x] Manual Exposure Control 
-- [x] Implement another (lower) resolution of our choice
+- [x] ✔ Repeat the same for the 4-lane IMX283 camera sensor
+- [x] ✔ Step-by-step introduce the following 3 ISP elements:
+  - [x] ✔ Debayer
+  - [x] ✔ Dead Pixel Management
+  - [x] ✔ Manual Exposure Control 
+- [x] ✔ Implement another (lower) resolution of our choice
 
 ### *IMX283 Sensor Configuration for Different Resolutions*
 
@@ -331,15 +331,15 @@ By selecting these values, the integration time is minimized, which is suitable 
 
 
 ## Execution Play 3 - Ethernet streaming
-- [ ] Add 1GE as second video sink, then move display to remote PC, via UDP VLC
-- [x] Document implementation via block diagram and project repo
+- [x] ✔ Add 1GE as second video sink, then move display to remote PC, via UDP VLC
+- [x] ✔ Document implementation via block diagram and project repo
 
 
 ## Execution Play 4 - Porting to openXC7
-- [x] Create snap-free installation workflow
-- [x] Port final design from Vivado to openXC7
-- [x] Simulate it with Verilator and cocoTB, in CI/CD system  
-- [x] Document scripts and flows used in this process
+- [x] ✔ Create snap-free installation workflow
+- [x] ✔ Port final design from Vivado to openXC7
+- [x] ✔ Simulate it with Verilator and cocoTB, in CI/CD system  
+- [x] ✔ Document scripts and flows used in this process
 
 This task validates our Vivado-proven RTL with the openXC7 toolchain for Xilinx Series7 devices. The main objective is to `identify limitations in the opensource synthesis and PnR flow, analyze them, find root causes, then collaborate with the openXC7 team to drive resolutions`.
 
@@ -378,10 +378,10 @@ Detailed timing and block diagrams illustrate this soft, CLB-based approach.
 ## Execution Play 5 - Prepping for Webcam
 
 (__Chili.CHIPS*ba team__)
-- [x] Enable OV2740 camera chip: 
-   - [x] Bring up Lukas' new adapter board
-   - [x] Reverse-engineer I2C settings
-   - [x] Demonstrate CAM-to-HDMI video path
+- [x] ✔ Enable OV2740 camera chip: 
+   - [x] ✔ Bring up Lukas' new adapter board
+   - [x] ✔ Reverse-engineer I2C settings
+   - [x] ✔ Demonstrate CAM-to-HDMI video path
 
 ### *OV2740 Sensor Configuration for the 720p resolution*
 
@@ -442,11 +442,11 @@ A demonstration of this configuration is provided below, using a test image gene
 </div>
 
 (__Silicon Highway Technologies webcam team__)
-- [x] Add 3 new ISP functions
-   - [x] White Balance
-   - [x] Color Correction
-   - [x] Gamma Correction
-- [x] JPEG video compression
+- [x] ✔ Add 3 new ISP functions
+   - [x] ✔ White Balance
+   - [x] ✔ Color Correction
+   - [x] ✔ Gamma Correction
+- [x] ✔ JPEG video compression
 
 ### *Color Balance and JPEG Image Processing Blocks*
 
