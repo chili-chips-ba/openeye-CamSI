@@ -590,6 +590,7 @@ The primary objective of this project is to open the door for open-source develo
 
 
 ## Public Announcements
+  [2026/05/02](https://www.linkedin.com/posts/chili-chips_fpga-share-7456476683760480256-Ay5s?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAJv-TcBSi_5ff0VNMrInrT-xg44YF3jnyU)
   [2024/12/14](https://www.linkedin.com/posts/chili-chips_sony-imx283-camera-1080p-60fps-stream-with-activity-7273936850312916992-ZF01?utm_source=share&utm_medium=member_desktop)
 
 
