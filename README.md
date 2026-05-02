@@ -2,7 +2,7 @@
 Also see our [openEye/CamSI-Ethernet](https://github.com/chili-chips-ba/openeye-CamSI-ethernet) repo.
 
 <p align="center">
-   <img width="20%" src="0.doc/artwork/open-eye-logo.png">
+   <img width="30%" src="0.doc/artwork/openeye.phex.png">
 </p>
 
 ## Objective I
