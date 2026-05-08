@@ -1,5 +1,8 @@
-# Phase1 - openEye/CamSI
-Also see our [openEye/CamSI-Ethernet](https://github.com/chili-chips-ba/openeye-CamSI-ethernet) repo.
+[![NLnet Foundation](https://img.shields.io/badge/funded%20by-NLnet%20Foundation-74AA00)](https://nlnet.nl/)
+[![GitHub stars](https://img.shields.io/github/stars/chili-chips-ba/openeye-CamSI?style=social)](https://github.com/chili-chips-ba/openeye-CamSI/stargazers)
+
+# openEye-CamSI
+Also see our [openEye-CamSI-Ethernet](https://github.com/chili-chips-ba/openeye-CamSI-ethernet) repo.
 
 <p align="center">
    <img width="30%" src="0.doc/artwork/openeye.phex.png">
